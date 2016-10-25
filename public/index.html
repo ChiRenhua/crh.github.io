@@ -158,7 +158,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle">To Be A Lean Developer!</p>
+  <p class="site-subtitle">Stay Hungry.Stay Foolish</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -265,6 +265,138 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/" itemprop="url">
+                  iOS--离屏渲染带来的性能问题和解决办法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-22T12:53:12+08:00" content="2016-10-22">
+              2016-10-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发总结</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是离屏渲染"><a href="#什么是离屏渲染" class="headerlink" title="什么是离屏渲染"></a>什么是离屏渲染</h2><p>&emsp;&emsp;离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离屏渲染是为了优化而生，只不过错误的使用才会导致卡顿的产生。  </p>
+<h2 id="什么操作会产生离屏渲染"><a href="#什么操作会产生离屏渲染" class="headerlink" title="什么操作会产生离屏渲染"></a>什么操作会产生离屏渲染</h2><p>&emsp;&emsp;以下操在使用不当时可能会触发离屏渲染：  </p>
+<p>&emsp;&emsp;1. shouldRasterize（光栅化）<br>&emsp;&emsp;2. masks（遮罩）<br>&emsp;&emsp;3. shadows（阴影）<br>&emsp;&emsp;4. edge antialiasing（抗锯齿）<br>&emsp;&emsp;5. group opacity（不透明）  </p>
+<p>&emsp;&emsp;以设置圆角为例，通常我们设置圆角的方法很简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">view.layer.cornerRadius = 5;</div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;只需要一行代码就可以轻松的设置圆角，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png" alt="image01"><br>&emsp;&emsp;但是如果我们在当前view上又覆盖多个view，那么如果覆盖的view超出了圆角的范围，那么圆角的设置就失效了，为了避免这种情况的发生，我们可以为其加上一个属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">view.layer.masksToBounds = YES;</div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;执行代码，发现所有的子view都已经被设置了圆角，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png" alt="image02"></p>
+<p>&emsp;&emsp;图片层次图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png" alt="image03"><br>&emsp;&emsp;看起来很完美，但是这个时候已经出发了离屏渲染，如果这个view足够多的话，就会造成非常明显的卡顿现象。  </p>
+<h2 id="如何避免触发离屏渲染"><a href="#如何避免触发离屏渲染" class="headerlink" title="如何避免触发离屏渲染"></a>如何避免触发离屏渲染</h2><p>&emsp;&emsp;还是以设置圆角为例，目前来看优化的方式有两种：</p>
+<h3 id="1-静态内容视图"><a href="#1-静态内容视图" class="headerlink" title="1.静态内容视图"></a>1.静态内容视图</h3><p>&emsp;&emsp;对于静态的视图，由于其内部结构和内容不会发生改变，所以可以通过设置“Rasterization”属性的方式来优化性能。</p>
+<h3 id="2-动态内容视图"><a href="#2-动态内容视图" class="headerlink" title="2.动态内容视图"></a>2.动态内容视图</h3><p>&emsp;&emsp;对于动态的视图，现在主流的解决方案是在view的最外层盖上一个圆角的遮罩，来达到设置圆角的目的，如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png" alt="image04"><br>&emsp;&emsp;这种方法简单粗暴，而且效果非常好，但是缺点就是对背景颜色有要求，因为是在view的最外层覆盖了一个圆角view，所以就要求圆角view的颜色必须和当前视图所在view的背景颜色一致，如果背景颜色是动态改变或者不是纯色背景，那就不适合这种方法。<br>&emsp;&emsp;下面给出一个生成圆角遮罩图的方法：  </p>
+<p><pre>- (UIImage <em> ) drawRoundedCornerImageWithRadius:(CGFloat)radius Rectsize:(CGSize)rectSize BackgroundColor:(UIColor</em> ) backgroundColor {<br>    UIGraphicsBeginImageContextWithOptions(rectSize, NO, [UIScreen mainScreen].scale);<br>    CGContextRef currentContext = UIGraphicsGetCurrentContext();<br>    UIBezierPath <em>bezierPath = [[UIBezierPath alloc]init];<br>    CGPoint hLeftUpPoint = CGPointMake(radius, 0);<br>    CGPoint hRightUpPoint = CGPointMake(rectSize.width - radius, 0);<br>    CGPoint hLeftDownPoint = CGPointMake(radius, rectSize.height);<br>    CGPoint vLeftUpPoint = CGPointMake(0, radius);<br>    CGPoint vRightDownPoint = CGPointMake(rectSize.width, rectSize.height - radius);<br>    CGPoint centerLeftUp = CGPointMake(radius, radius);<br>    CGPoint centerRightUp = CGPointMake(rectSize.width - radius, radius);<br>    CGPoint centerLeftDown = CGPointMake(radius, rectSize.height - radius);<br>    CGPoint centerRightDown = CGPointMake(rectSize.width - radius, rectSize.height - radius);<br>    [bezierPath moveToPoint:hLeftUpPoint];<br>    [bezierPath addLineToPoint:hRightUpPoint];<br>    [bezierPath addArcWithCenter:centerRightUp radius:radius startAngle:M_PI </em> 3 / 2 endAngle:M_PI <em> 2 clockwise:true];<br>    [bezierPath addLineToPoint:vRightDownPoint];<br>    [bezierPath addArcWithCenter:centerRightDown radius:radius startAngle:0 endAngle:M_PI / 2 clockwise:true];<br>    [bezierPath addLineToPoint:hLeftDownPoint];<br>    [bezierPath addArcWithCenter:centerLeftDown radius:radius startAngle:M_PI / 2 endAngle:M_PI clockwise:true];<br>    [bezierPath addLineToPoint:vLeftUpPoint];<br>    [bezierPath addArcWithCenter:centerLeftUp radius:radius startAngle:M_PI endAngle:M_PI </em> 3 / 2 clockwise:true];<br>    [bezierPath addLineToPoint:hLeftUpPoint];<br>    [bezierPath closePath];<br>    [bezierPath moveToPoint:CGPointZero];<br>    [bezierPath addLineToPoint:CGPointMake(0, rectSize.height)];<br>    [bezierPath addLineToPoint:CGPointMake(rectSize.width, rectSize.height)];<br>    [bezierPath addLineToPoint:CGPointMake(rectSize.width, 0)];<br>    [bezierPath moveToPoint:CGPointZero];<br>    [bezierPath closePath];<br>    [backgroundColor setFill];<br>    [bezierPath fill];<br>    CGContextDrawPath(currentContext, kCGPathFillStroke);<br>    UIImage * antiRoundedCornerImage = UIGraphicsGetImageFromCurrentImageContext();<br>    UIGraphicsEndImageContext();<br>    return antiRoundedCornerImage;<br>}</pre>  </p>
+<h2 id="再优化"><a href="#再优化" class="headerlink" title="再优化"></a>再优化</h2><p>&emsp;&emsp;覆盖一个圆角view已经可以非常完美的应付绝大多数情况的离屏渲染，但是每个view在生成的时候都要去调用一遍生成圆角的方法去重新绘制一个圆角view，也是一种性能的浪费，所以可以在这个基础上对画好的圆角view做一个缓存，如果后续的view需要一样的圆角view那就不需要重新绘制，只需要去内存中取已经画好的圆角view就可以了。  </p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.jianshu.com/p/ca51c9d3575b" target="_blank" rel="external">离屏渲染优化详解：实例示范+性能测试</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -1069,7 +1201,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -90,19 +90,21 @@
 
 
 
-<meta name="description" content="NSUserDefaults原理&amp;emsp;&amp;emsp;NSUserDefaults是iOS为我们提供的一种轻量级的本地存储方式，其工作原理非常简单，就是将数据存储到本地的plist文件中。其实建立plist文件我们自己也可以完成，只不过自己去操作文件的创建、读取等会比较麻烦，使用“NSUserDefaults”则可以完全省略掉这些步骤，只需要进行简单的读写就可以了。
-NSUserDefaults">
+<meta name="description" content="什么是离屏渲染&amp;emsp;&amp;emsp;离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS--NSUserDefaults用法总结">
-<meta property="og:url" content="https://chirenhua.github.io/2016/09/16/iOS-NSUserDefaults用法总结/index.html">
+<meta property="og:title" content="iOS--离屏渲染带来的性能问题和解决办法">
+<meta property="og:url" content="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/index.html">
 <meta property="og:site_name" content="Renhua's Blog">
-<meta property="og:description" content="NSUserDefaults原理&amp;emsp;&amp;emsp;NSUserDefaults是iOS为我们提供的一种轻量级的本地存储方式，其工作原理非常简单，就是将数据存储到本地的plist文件中。其实建立plist文件我们自己也可以完成，只不过自己去操作文件的创建、读取等会比较麻烦，使用“NSUserDefaults”则可以完全省略掉这些步骤，只需要进行简单的读写就可以了。
-NSUserDefaults">
-<meta property="og:updated_time" content="2016-09-16T14:14:52.000Z">
+<meta property="og:description" content="什么是离屏渲染&amp;emsp;&amp;emsp;离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png">
+<meta property="og:updated_time" content="2016-10-22T08:20:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS--NSUserDefaults用法总结">
-<meta name="twitter:description" content="NSUserDefaults原理&amp;emsp;&amp;emsp;NSUserDefaults是iOS为我们提供的一种轻量级的本地存储方式，其工作原理非常简单，就是将数据存储到本地的plist文件中。其实建立plist文件我们自己也可以完成，只不过自己去操作文件的创建、读取等会比较麻烦，使用“NSUserDefaults”则可以完全省略掉这些步骤，只需要进行简单的读写就可以了。
-NSUserDefaults">
+<meta name="twitter:title" content="iOS--离屏渲染带来的性能问题和解决办法">
+<meta name="twitter:description" content="什么是离屏渲染&amp;emsp;&amp;emsp;离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png">
 
 
 
@@ -123,9 +125,9 @@ NSUserDefaults">
 
 
 
-  <link rel="canonical" href="https://chirenhua.github.io/2016/09/16/iOS-NSUserDefaults用法总结/"/>
+  <link rel="canonical" href="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/"/>
 
-  <title> iOS--NSUserDefaults用法总结 | Renhua's Blog </title>
+  <title> iOS--离屏渲染带来的性能问题和解决办法 | Renhua's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -288,7 +290,7 @@ NSUserDefaults">
             
             
               
-                iOS--NSUserDefaults用法总结
+                iOS--离屏渲染带来的性能问题和解决办法
               
             
           </h1>
@@ -300,8 +302,8 @@ NSUserDefaults">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T21:00:41+08:00" content="2016-09-16">
-              2016-09-16
+            <time itemprop="dateCreated" datetime="2016-10-22T12:53:12+08:00" content="2016-10-22">
+              2016-10-22
             </time>
           </span>
 
@@ -330,8 +332,8 @@ NSUserDefaults">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/iOS-NSUserDefaults用法总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/iOS-NSUserDefaults用法总结/" itemprop="commentsCount"></span>
+                <a href="/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -354,73 +356,20 @@ NSUserDefaults">
       
 
       
-        <h2 id="NSUserDefaults原理"><a href="#NSUserDefaults原理" class="headerlink" title="NSUserDefaults原理"></a>NSUserDefaults原理</h2><p>&emsp;&emsp;NSUserDefaults是iOS为我们提供的一种轻量级的本地存储方式，其工作原理非常简单，就是将数据存储到本地的plist文件中。其实建立plist文件我们自己也可以完成，只不过自己去操作文件的创建、读取等会比较麻烦，使用“NSUserDefaults”则可以完全省略掉这些步骤，只需要进行简单的读写就可以了。</p>
-<h2 id="NSUserDefaults支持的数据类型"><a href="#NSUserDefaults支持的数据类型" class="headerlink" title="NSUserDefaults支持的数据类型"></a>NSUserDefaults支持的数据类型</h2><p>&emsp;&emsp;因为NSUserDefaults是创建的plist类型的文件，所以它支持的数据类型也必须是plist文件能够存储的数据类型，分别是：<strong>NSNumber（NSInteger、float、double），NSString，NSDate，NSArray，NSDictionary，BOOL</strong>。需要注意的是，就算是存储的对象是“NSArray”类型的，那也要保证“NSArray”中存储的数据必须是plist文件支持的类型。如果需要存储plist不支持的数据类型，比如说一张图片或者一个自定义对象（下文会提到），可以先将其归档为“NSDate”类型，在存储到plist文件中。</p>
-<h2 id="NSUserDefaults用法"><a href="#NSUserDefaults用法" class="headerlink" title="NSUserDefaults用法"></a>NSUserDefaults用法</h2><p>&emsp;&emsp;NSUserDefaults是一个单例，我们可以在程序的任何地方获取到它的唯一实例化对象：</p>
-<pre>NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];</pre>  
-&emsp;&emsp;存储一个数据：  
-<pre>[userDefault setObject:@"测试" forKey:@"test"];</pre>  
-&emsp;&emsp;由于NSUserDefaults是隔一段时间将数据写到本地，所以为了保险起见，建议加上下面的代码，确保数据及时的存储。  
-<pre>[userDefault synchronize];</pre>  
-&emsp;&emsp;取出一个数据也是非常的简单：  
-<pre>NSString *str = [userDefault objectForKey:@"test"];</pre>
+        <h2 id="什么是离屏渲染"><a href="#什么是离屏渲染" class="headerlink" title="什么是离屏渲染"></a>什么是离屏渲染</h2><p>&emsp;&emsp;离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离屏渲染是为了优化而生，只不过错误的使用才会导致卡顿的产生。  </p>
+<h2 id="什么操作会产生离屏渲染"><a href="#什么操作会产生离屏渲染" class="headerlink" title="什么操作会产生离屏渲染"></a>什么操作会产生离屏渲染</h2><p>&emsp;&emsp;以下操在使用不当时可能会触发离屏渲染：  </p>
+<p>&emsp;&emsp;1. shouldRasterize（光栅化）<br>&emsp;&emsp;2. masks（遮罩）<br>&emsp;&emsp;3. shadows（阴影）<br>&emsp;&emsp;4. edge antialiasing（抗锯齿）<br>&emsp;&emsp;5. group opacity（不透明）  </p>
+<p>&emsp;&emsp;以设置圆角为例，通常我们设置圆角的方法很简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">view.layer.cornerRadius = 5;</div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;只需要一行代码就可以轻松的设置圆角，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png" alt="image01"><br>&emsp;&emsp;但是如果我们在当前view上又覆盖多个view，那么如果覆盖的view超出了圆角的范围，那么圆角的设置就失效了，为了避免这种情况的发生，我们可以为其加上一个属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">view.layer.masksToBounds = YES;</div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;执行代码，发现所有的子view都已经被设置了圆角，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png" alt="image02"></p>
+<p>&emsp;&emsp;图片层次图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png" alt="image03"><br>&emsp;&emsp;看起来很完美，但是这个时候已经出发了离屏渲染，如果这个view足够多的话，就会造成非常明显的卡顿现象。  </p>
+<h2 id="如何避免触发离屏渲染"><a href="#如何避免触发离屏渲染" class="headerlink" title="如何避免触发离屏渲染"></a>如何避免触发离屏渲染</h2><p>&emsp;&emsp;还是以设置圆角为例，目前来看优化的方式有两种：</p>
+<h3 id="1-静态内容视图"><a href="#1-静态内容视图" class="headerlink" title="1.静态内容视图"></a>1.静态内容视图</h3><p>&emsp;&emsp;对于静态的视图，由于其内部结构和内容不会发生改变，所以可以通过设置“Rasterization”属性的方式来优化性能。</p>
+<h3 id="2-动态内容视图"><a href="#2-动态内容视图" class="headerlink" title="2.动态内容视图"></a>2.动态内容视图</h3><p>&emsp;&emsp;对于动态的视图，现在主流的解决方案是在view的最外层盖上一个圆角的遮罩，来达到设置圆角的目的，如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png" alt="image04"><br>&emsp;&emsp;这种方法简单粗暴，而且效果非常好，但是缺点就是对背景颜色有要求，因为是在view的最外层覆盖了一个圆角view，所以就要求圆角view的颜色必须和当前视图所在view的背景颜色一致，如果背景颜色是动态改变或者不是纯色背景，那就不适合这种方法。<br>&emsp;&emsp;下面给出一个生成圆角遮罩图的方法：  </p>
+<p><pre>- (UIImage <em> ) drawRoundedCornerImageWithRadius:(CGFloat)radius Rectsize:(CGSize)rectSize BackgroundColor:(UIColor</em> ) backgroundColor {<br>    UIGraphicsBeginImageContextWithOptions(rectSize, NO, [UIScreen mainScreen].scale);<br>    CGContextRef currentContext = UIGraphicsGetCurrentContext();<br>    UIBezierPath <em>bezierPath = [[UIBezierPath alloc]init];<br>    CGPoint hLeftUpPoint = CGPointMake(radius, 0);<br>    CGPoint hRightUpPoint = CGPointMake(rectSize.width - radius, 0);<br>    CGPoint hLeftDownPoint = CGPointMake(radius, rectSize.height);<br>    CGPoint vLeftUpPoint = CGPointMake(0, radius);<br>    CGPoint vRightDownPoint = CGPointMake(rectSize.width, rectSize.height - radius);<br>    CGPoint centerLeftUp = CGPointMake(radius, radius);<br>    CGPoint centerRightUp = CGPointMake(rectSize.width - radius, radius);<br>    CGPoint centerLeftDown = CGPointMake(radius, rectSize.height - radius);<br>    CGPoint centerRightDown = CGPointMake(rectSize.width - radius, rectSize.height - radius);<br>    [bezierPath moveToPoint:hLeftUpPoint];<br>    [bezierPath addLineToPoint:hRightUpPoint];<br>    [bezierPath addArcWithCenter:centerRightUp radius:radius startAngle:M_PI </em> 3 / 2 endAngle:M_PI <em> 2 clockwise:true];<br>    [bezierPath addLineToPoint:vRightDownPoint];<br>    [bezierPath addArcWithCenter:centerRightDown radius:radius startAngle:0 endAngle:M_PI / 2 clockwise:true];<br>    [bezierPath addLineToPoint:hLeftDownPoint];<br>    [bezierPath addArcWithCenter:centerLeftDown radius:radius startAngle:M_PI / 2 endAngle:M_PI clockwise:true];<br>    [bezierPath addLineToPoint:vLeftUpPoint];<br>    [bezierPath addArcWithCenter:centerLeftUp radius:radius startAngle:M_PI endAngle:M_PI </em> 3 / 2 clockwise:true];<br>    [bezierPath addLineToPoint:hLeftUpPoint];<br>    [bezierPath closePath];<br>    [bezierPath moveToPoint:CGPointZero];<br>    [bezierPath addLineToPoint:CGPointMake(0, rectSize.height)];<br>    [bezierPath addLineToPoint:CGPointMake(rectSize.width, rectSize.height)];<br>    [bezierPath addLineToPoint:CGPointMake(rectSize.width, 0)];<br>    [bezierPath moveToPoint:CGPointZero];<br>    [bezierPath closePath];<br>    [backgroundColor setFill];<br>    [bezierPath fill];<br>    CGContextDrawPath(currentContext, kCGPathFillStroke);<br>    UIImage * antiRoundedCornerImage = UIGraphicsGetImageFromCurrentImageContext();<br>    UIGraphicsEndImageContext();<br>    return antiRoundedCornerImage;<br>}</pre>  </p>
+<h2 id="再优化"><a href="#再优化" class="headerlink" title="再优化"></a>再优化</h2><p>&emsp;&emsp;覆盖一个圆角view已经可以非常完美的应付绝大多数情况的离屏渲染，但是每个view在生成的时候都要去调用一遍生成圆角的方法去重新绘制一个圆角view，也是一种性能的浪费，所以可以在这个基础上对画好的圆角view做一个缓存，如果后续的view需要一样的圆角view那就不需要重新绘制，只需要去内存中取已经画好的圆角view就可以了。  </p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.jianshu.com/p/ca51c9d3575b" target="_blank" rel="external">离屏渲染优化详解：实例示范+性能测试</a></p>
 
-<h2 id="使用NSUserDefaults存储自定义对象"><a href="#使用NSUserDefaults存储自定义对象" class="headerlink" title="使用NSUserDefaults存储自定义对象"></a>使用NSUserDefaults存储自定义对象</h2><h3 id="1-将自定义类型转换为NSDate类型"><a href="#1-将自定义类型转换为NSDate类型" class="headerlink" title="1.将自定义类型转换为NSDate类型"></a>1.将自定义类型转换为NSDate类型</h3><p>&emsp;&emsp;其实不建议将数据这样存储，多数据复杂类型还是建议存到数据库中，如果非要这样存储的话，可以先将自定义类型归档为NSDate类型，因为plist文件是支持存储NSDate类型数据的，然后再通过NSUserDefaults进行存储。下面举个例子：<br>&emsp;&emsp;假如我们要把书籍的对象存储起来。首先要在“.h”文件中声明“NSCoding”协议，并在“.m”文件中实现“encodeWithCoder”和“initWithCoder”两个方法。<br>&emsp;&emsp;.h文件：</p>
-<pre>//
-//  Book.h
-//  Book
-//
-//  Created by Renhuachi on 16/3/22.
-//  Copyright © 2016年 software. All rights reserved.
-//
-
-＃import < Foundation/Foundation.h >
-
-@interface Book : NSObject <nscoding>
-＃pragma mark - 属性
-@property (nonatomic,copy) NSString *authorName;
-@property (nonatomic,copy) NSString *bookName;
-
-@end</nscoding></pre>  
-&emsp;&emsp;.m文件  
-<pre>//
-//  Book.m
-//  Book
-//
-//  Created by Renhuachi on 16/3/22.
-//  Copyright © 2016年 software. All rights reserved.
-//
-
-＃import "Book.h"
-
-@implementation Book
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super init]) {
-        _authorName = [aDecoder decodeObjectForKey:@"authorName"];
-        _bookName = [aDecoder decodeObjectForKey:@"bookName"];
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:_authorName forKey:@"authorName"];
-    [aCoder encodeObject:_bookName forKey:@"bookName"];
-}
-@end</pre>
-
-<h3 id="2-利用NSUserDefaults存储自定义类"><a href="#2-利用NSUserDefaults存储自定义类" class="headerlink" title="2.利用NSUserDefaults存储自定义类"></a>2.利用NSUserDefaults存储自定义类</h3><p>&emsp;&emsp;首先创建一个Book类型的对象，并将其归档为NSDate类型，然后存储到NSUserDefaults中。  </p>
-<pre>Book *book = [[Book alloc]init];
-book.authorName = @"书名";
-book.bookName = @"作者";
-
-NSData *data = [NSKeyedArchiver archivedDataWithRootObject:book];
-NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-[userDefaults setObject:data forKey:@"book"];</pre>  
-&emsp;&emsp;从NSUserDefaults中还原数据也很简单。  
-<pre>NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-NSdData *data = [user objectForKey:@"book"];  
-Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
       
     </div>
 
@@ -472,17 +421,13 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/29/iOS-使用UISearchController创建搜索框/" rel="next" title="iOS--使用UISearchController创建搜索框">
-                <i class="fa fa-chevron-left"></i> iOS--使用UISearchController创建搜索框
+              <a href="/2016/09/16/iOS-NSUserDefaults用法总结/" rel="next" title="iOS--NSUserDefaults用法总结">
+                <i class="fa fa-chevron-left"></i> iOS--NSUserDefaults用法总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/" rel="prev" title="iOS--离屏渲染带来的性能问题和解决办法">
-                iOS--离屏渲染带来的性能问题和解决办法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -508,8 +453,8 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/16/iOS-NSUserDefaults用法总结/"
-           data-title="iOS--NSUserDefaults用法总结" data-url="https://chirenhua.github.io/2016/09/16/iOS-NSUserDefaults用法总结/">
+      <div class="ds-thread" data-thread-key="2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/"
+           data-title="iOS--离屏渲染带来的性能问题和解决办法" data-url="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/">
       </div>
     
   </div>
@@ -642,7 +587,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NSUserDefaults原理"><span class="nav-number">1.</span> <span class="nav-text">NSUserDefaults原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NSUserDefaults支持的数据类型"><span class="nav-number">2.</span> <span class="nav-text">NSUserDefaults支持的数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NSUserDefaults用法"><span class="nav-number">3.</span> <span class="nav-text">NSUserDefaults用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用NSUserDefaults存储自定义对象"><span class="nav-number">4.</span> <span class="nav-text">使用NSUserDefaults存储自定义对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-将自定义类型转换为NSDate类型"><span class="nav-number">4.1.</span> <span class="nav-text">1.将自定义类型转换为NSDate类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-利用NSUserDefaults存储自定义类"><span class="nav-number">4.2.</span> <span class="nav-text">2.利用NSUserDefaults存储自定义类</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是离屏渲染"><span class="nav-number">1.</span> <span class="nav-text">什么是离屏渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么操作会产生离屏渲染"><span class="nav-number">2.</span> <span class="nav-text">什么操作会产生离屏渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免触发离屏渲染"><span class="nav-number">3.</span> <span class="nav-text">如何避免触发离屏渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-静态内容视图"><span class="nav-number">3.1.</span> <span class="nav-text">1.静态内容视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-动态内容视图"><span class="nav-number">3.2.</span> <span class="nav-text">2.动态内容视图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再优化"><span class="nav-number">4.</span> <span class="nav-text">再优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
           </div>
         </section>
