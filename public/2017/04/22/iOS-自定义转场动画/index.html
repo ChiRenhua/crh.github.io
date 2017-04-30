@@ -1,0 +1,1005 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="概述&amp;emsp;&amp;emsp;在iOS7中，苹果爸爸为开发者提供了一套全新的API去实现转场动画，开发者可以通过更灵活的方式去设计动画效果。同时，iOS7还支持用手势切换VC，比如你在某个应用中push了一个新的页面，那么你可以通过在屏幕左侧向右滑动来执行返回操作。
+API&amp;emsp;&amp;emsp;实现动画的主要API：&amp;emsp;&amp;emsp;1. @protocol UIViewControl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS--自定义转场动画">
+<meta property="og:url" content="https://chirenhua.github.io/2017/04/22/iOS-自定义转场动画/index.html">
+<meta property="og:site_name" content="Renhua's Blog">
+<meta property="og:description" content="概述&amp;emsp;&amp;emsp;在iOS7中，苹果爸爸为开发者提供了一套全新的API去实现转场动画，开发者可以通过更灵活的方式去设计动画效果。同时，iOS7还支持用手势切换VC，比如你在某个应用中push了一个新的页面，那么你可以通过在屏幕左侧向右滑动来执行返回操作。
+API&amp;emsp;&amp;emsp;实现动画的主要API：&amp;emsp;&amp;emsp;1. @protocol UIViewControl">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/iOS_TranslationAnimate.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled2.gif">
+<meta property="og:updated_time" content="2017-04-22T13:22:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS--自定义转场动画">
+<meta name="twitter:description" content="概述&amp;emsp;&amp;emsp;在iOS7中，苹果爸爸为开发者提供了一套全新的API去实现转场动画，开发者可以通过更灵活的方式去设计动画效果。同时，iOS7还支持用手势切换VC，比如你在某个应用中push了一个新的页面，那么你可以通过在屏幕左侧向右滑动来执行返回操作。
+API&amp;emsp;&amp;emsp;实现动画的主要API：&amp;emsp;&amp;emsp;1. @protocol UIViewControl">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/iOS_TranslationAnimate.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://chirenhua.github.io/2017/04/22/iOS-自定义转场动画/"/>
+
+  <title> iOS--自定义转场动画 | Renhua's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Renhua's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Stay Hungry.Stay Foolish</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS--自定义转场动画
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-04-22T15:25:17+08:00" content="2017-04-22">
+              2017-04-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发总结</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/04/22/iOS-自定义转场动画/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/22/iOS-自定义转场动画/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/iOS_TranslationAnimate.jpg" alt="TranslateAnimateLogo">  </p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>&emsp;&emsp;在iOS7中，苹果爸爸为开发者提供了一套全新的API去实现转场动画，开发者可以通过更灵活的方式去设计动画效果。同时，iOS7还支持用手势切换VC，比如你在某个应用中push了一个新的页面，那么你可以通过在屏幕左侧向右滑动来执行返回操作。</p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>&emsp;&emsp;实现动画的主要API：<br>&emsp;&emsp;1. @protocol UIViewControllerContextTransitioning<br>&emsp;&emsp;2. @protocol UIViewControllerAnimatedTransitioning<br>&emsp;&emsp;3. @protocol UIViewControllerTransitioningDelegate  </p>
+<h3 id="UIViewControllerContextTransitioning"><a href="#UIViewControllerContextTransitioning" class="headerlink" title="UIViewControllerContextTransitioning"></a>UIViewControllerContextTransitioning</h3><p>&emsp;&emsp;这个接口在切换VC过程中为我们提供了上下文，通过它我们可以获取到执行切换时，两个VC的详细信息。在实现跳转动画的方法中，系统会为我们提供这个上下文，所以开发者并不需要去实现这个接口。  </p>
+<h3 id="UIViewControllerAnimatedTransitioning"><a href="#UIViewControllerAnimatedTransitioning" class="headerlink" title="UIViewControllerAnimatedTransitioning"></a>UIViewControllerAnimatedTransitioning</h3><p>&emsp;&emsp;这个接口是在VC切换过程中起着非常重要的角色，因为它负责处理切换过程中的事件，也就是说我们要实现的动画效果等，都是在这里实现的。这里我们需要实现下面的两个方法。<br>&emsp;&emsp;<code>-(NSTimeInterval)transitionDuration:(id &lt; UIViewControllerContextTransitioning &gt;)transitionContext;</code><br>&emsp;&emsp;返回切换过程所需要的时间。<br>&emsp;&emsp;<code>-(void)animateTransition:(id &lt; UIViewControllerContextTransitioning &gt;)transitionContext;</code><br>&emsp;&emsp;切换时会调用此方法，动画效果都在这个方法里完成。  </p>
+<h3 id="UIViewControllerTransitioningDelegate"><a href="#UIViewControllerTransitioningDelegate" class="headerlink" title="UIViewControllerTransitioningDelegate"></a>UIViewControllerTransitioningDelegate</h3><p>&emsp;&emsp;对于想要执行自定义动画的VC需要实现这个接口，共有四个方法。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerAnimatedTransitioning &gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source;</code><br>&emsp;&emsp;跳转新页面的动画。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerAnimatedTransitioning &gt;)animationControllerForDismissedController:(UIViewController *)dismissed;</code><br>&emsp;&emsp;当前页面消失的动画。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerInteractiveTransitioning &gt;)interactionControllerForPresentation:(id &lt; UIViewControllerAnimatedTransitioning &gt;)animator;</code><br>&emsp;&emsp;手势控制页面跳转的动画。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerInteractiveTransitioning &gt;)interactionControllerForDismissal:(id &lt; UIViewControllerAnimatedTransitioning &gt;)animator;</code><br>&emsp;&emsp;手势控制页面消失的动画。  </p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><h3 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h3><p>&emsp;&emsp;我们先来尝试着实现如下图效果的页面切换。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled.gif" alt="translateAnimate"><br>&emsp;&emsp;首先我们新建一个处理动画效果的类，这个类要实现“UIViewControllerAnimatedTransitioning”接口。<br>TranslationAnimateManager.h    </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, TransitionType) &#123;</div><div class="line">    TransitionTypePresent,</div><div class="line">    TransitionTypeDismiss</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TranslationAnimateManager</span> : <span class="title">NSObject</span> &lt;<span class="title">UIViewControllerAnimatedTransitioning</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">//根据定义的枚举初始化的两个方法</span></div><div class="line">+ (<span class="keyword">instancetype</span>)transitionWithTransitionType:(TransitionType)type;</div><div class="line">- (<span class="keyword">instancetype</span>)initWithTransitionType:(TransitionType)type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span>   </div><div class="line"></div><div class="line">```  </div><div class="line">TranslationAnimateManager.m    </div><div class="line"></div><div class="line">``` objc</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TranslationAnimateManager</span> ()</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) TransitionType type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">TranslationAnimateManager</span></span></div><div class="line"></div><div class="line">+ (<span class="keyword">instancetype</span>)transitionWithTransitionType:(TransitionType)type &#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">id</span> sharedInstance = <span class="literal">nil</span>;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">        sharedInstance = [[<span class="keyword">self</span> alloc] initWithTransitionType:type];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> sharedInstance;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)initWithTransitionType:(TransitionType)type &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        <span class="keyword">self</span>.type = type;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0.5</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext &#123;</div><div class="line">    <span class="keyword">switch</span> (<span class="keyword">self</span>.type) &#123;</div><div class="line">        <span class="keyword">case</span> TransitionTypePresent:</div><div class="line">            [<span class="keyword">self</span> presentAnimation:transitionContext];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">            </div><div class="line">        <span class="keyword">case</span> TransitionTypeDismiss:</div><div class="line">            [<span class="keyword">self</span> dismissAnimation:transitionContext];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//实现present动画逻辑代码</span></div><div class="line">- (<span class="keyword">void</span>)presentAnimation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *fromVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *toVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    </div><div class="line">    <span class="built_in">UIView</span> *toView = toVC.view;</div><div class="line">    <span class="built_in">UIView</span> *fromView = fromVC.view;</div><div class="line">    <span class="built_in">UIView</span> *containerView = [transitionContext containerView];</div><div class="line">    </div><div class="line">    <span class="built_in">UIView</span> *toViewSnapshot = [<span class="built_in">UIView</span> new];</div><div class="line">    toViewSnapshot.contentImage =  toView.snapshotImage;</div><div class="line">    toViewSnapshot.frame = containerView.bounds;</div><div class="line">    </div><div class="line">    <span class="built_in">CATransform3D</span> scale = <span class="built_in">CATransform3DIdentity</span>;</div><div class="line">    toViewSnapshot.layer.transform = <span class="built_in">CATransform3DScale</span>(scale, <span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">1</span>);<span class="comment">//</span></div><div class="line">    [containerView addSubview:toViewSnapshot];</div><div class="line">    [containerView sendSubviewToBack:toViewSnapshot];</div><div class="line">    <span class="built_in">CGRect</span> upSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, fromView.frame.size.width, fromView.frame.size.height  * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *upHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    upHandView.contentImage = fromView.snapshotImage;</div><div class="line">    upHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    upHandView.frame = upSnapshotRegion;</div><div class="line">    [containerView addSubview:upHandView];</div><div class="line">    </div><div class="line">    <span class="built_in">CGRect</span> downSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, fromView.frame.size.height * <span class="number">0.5</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *downHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    downHandView.contentImage = upHandView.contentImage;</div><div class="line">    downHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    downHandView.frame = downSnapshotRegion;</div><div class="line">    [containerView addSubview:downHandView];</div><div class="line">    </div><div class="line">    fromView.hidden = <span class="literal">YES</span>;</div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.5</span></div><div class="line">                          delay:<span class="number">0.0</span></div><div class="line">                        options:<span class="built_in">UIViewAnimationOptionCurveEaseOut</span></div><div class="line">                     animations:^&#123;</div><div class="line">                         upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, - upHandView.frame.size.height);</div><div class="line">                         downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, downHandView.frame.size.height);</div><div class="line">                         toViewSnapshot.center = toView.center;</div><div class="line">                         toViewSnapshot.frame = toView.frame;</div><div class="line">                     &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">                         fromView.hidden = <span class="literal">NO</span>;</div><div class="line">                         <span class="keyword">if</span> ([transitionContext transitionWasCancelled]) &#123;</div><div class="line">                             [containerView addSubview:fromView];</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:fromView];</div><div class="line">                         &#125; <span class="keyword">else</span> &#123;</div><div class="line">                             [containerView addSubview:toView];</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:toView];</div><div class="line">                         &#125;</div><div class="line">                         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line">                     &#125;];</div><div class="line">&#125;</div><div class="line"><span class="comment">//实现dismiss动画逻辑代码</span></div><div class="line">- (<span class="keyword">void</span>)dismissAnimation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *fromVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *toVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIView</span> *toView = toVC.view;</div><div class="line">    <span class="built_in">UIView</span> *fromView = fromVC.view;</div><div class="line">    <span class="built_in">UIView</span> *containerView = [transitionContext containerView];</div><div class="line">    [containerView addSubview:fromView];</div><div class="line">    toView.frame = [transitionContext finalFrameForViewController:toVC];</div><div class="line">    toView.frame = <span class="built_in">CGRectOffset</span>(toView.frame, toView.frame.size.width, <span class="number">0</span>);</div><div class="line">    [containerView addSubview:toView];</div><div class="line">    <span class="built_in">CGRect</span> upSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *upHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    upHandView.contentImage = toView.snapshotImage;</div><div class="line">    upHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    upHandView.frame = upSnapshotRegion;</div><div class="line">    upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, - upHandView.frame.size.height);</div><div class="line">    [containerView addSubview:upHandView];</div><div class="line">    <span class="built_in">CGRect</span> downSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, fromView.frame.size.height * <span class="number">0.5</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *downHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    downHandView.contentImage = upHandView.contentImage;</div><div class="line">    downHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    downHandView.frame = downSnapshotRegion;</div><div class="line">    downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, downHandView.frame.size.height);</div><div class="line">    [containerView addSubview:downHandView];</div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.5</span></div><div class="line">                          delay:<span class="number">0.0</span></div><div class="line">                        options:<span class="built_in">UIViewAnimationOptionCurveEaseOut</span></div><div class="line">                     animations:^&#123;</div><div class="line">                         upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, upHandView.frame.size.height);</div><div class="line">                         downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, - downHandView.frame.size.height);</div><div class="line">                         <span class="built_in">CATransform3D</span> scale = <span class="built_in">CATransform3DIdentity</span>;</div><div class="line">                         fromView.layer.transform = <span class="built_in">CATransform3DScale</span>(scale, <span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">1</span>);<span class="comment">//</span></div><div class="line">                     &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">                         <span class="keyword">if</span> ([transitionContext transitionWasCancelled]) &#123;</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:fromView];</div><div class="line">                         &#125; <span class="keyword">else</span> &#123;</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:toView];</div><div class="line">                             toView.frame = containerView.bounds;</div><div class="line">                         &#125;</div><div class="line">                         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line">                     &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)_xw_removeOtherViews:(<span class="built_in">UIView</span>*)viewToKeep &#123;</div><div class="line">    <span class="built_in">UIView</span> *containerView = viewToKeep.superview;</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">UIView</span> *view <span class="keyword">in</span> containerView.subviews) &#123;</div><div class="line">        <span class="keyword">if</span> (view != viewToKeep) &#123;</div><div class="line">            [view removeFromSuperview];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;然后我们再新建一个初始VC，就叫“FromViewController”。这个页面只需要负责点击按钮跳转即可，省下什么都不用做。    </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">FromViewController</span> ()</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) ToViewController *toVC;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">FromViewController</span></span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="keyword">self</span>.view.backgroundColor = [<span class="built_in">UIColor</span> brownColor];</div><div class="line">    </div><div class="line">    <span class="built_in">UIButton</span> *button = [[<span class="built_in">UIButton</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="keyword">self</span>.view.bounds.size.width / <span class="number">2</span> - <span class="number">50</span>, <span class="keyword">self</span>.view.bounds.size.height / <span class="number">2</span> - <span class="number">15</span>, <span class="number">100</span>, <span class="number">30</span>)];</div><div class="line">    [button setTitle:<span class="string">@"点我跳转"</span> forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">    [button setBackgroundColor:[<span class="built_in">UIColor</span> blackColor]];</div><div class="line">    [button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(buttonClick) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</div><div class="line">    button.layer.cornerRadius = <span class="number">15</span>;</div><div class="line">    [<span class="keyword">self</span>.view addSubview:button];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)buttonClick &#123;</div><div class="line">    <span class="keyword">self</span>.toVC = [[ToViewController alloc] init];</div><div class="line">    [<span class="keyword">self</span> presentViewController:<span class="keyword">self</span>.toVC animated:<span class="literal">YES</span> completion:<span class="literal">nil</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;接下来我们再创建一个新的页面叫做“ToViewController”，是跳转后的界面，因为要实现自定的跳转动画，所以这个页面要实现“UIViewControllerTransitioningDelegate”接口。  </p>
+<pre><code class="objc"><span class="class"><span class="keyword">@interface</span> <span class="title">ToViewController</span> ()&lt;<span class="title">UIViewControllerTransitioningDelegate</span>&gt;</span>
+
+<span class="keyword">@end</span>
+
+<span class="class"><span class="keyword">@implementation</span> <span class="title">ToViewController</span></span>
+
+- (<span class="keyword">id</span>)init {
+    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) {
+    }
+    <span class="keyword">return</span> <span class="keyword">self</span>;
+}
+
+- (<span class="keyword">void</span>)viewDidLoad {
+    [<span class="keyword">super</span> viewDidLoad];
+    <span class="keyword">self</span>.transitioningDelegate = <span class="keyword">self</span>;
+    <span class="keyword">self</span>.modalPresentationStyle = <span class="built_in">UIModalPresentationCustom</span>;
+    <span class="keyword">self</span>.view.backgroundColor = [<span class="built_in">UIColor</span> grayColor];
+
+    <span class="built_in">UIButton</span> *button = [[<span class="built_in">UIButton</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="keyword">self</span>.view.bounds.size.width / <span class="number">2</span> - <span class="number">50</span>, <span class="keyword">self</span>.view.bounds.size.height / <span class="number">2</span> - <span class="number">15</span>, <span class="number">100</span>, <span class="number">30</span>)];
+    [button setTitle:<span class="string">@"点我回退"</span> forState:<span class="built_in">UIControlStateNormal</span>];
+    [button setBackgroundColor:[<span class="built_in">UIColor</span> blackColor]];
+    [button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(buttonClick) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];
+    button.layer.cornerRadius = <span class="number">15</span>;
+    [<span class="keyword">self</span>.view addSubview:button];
+}
+
+- (<span class="keyword">void</span>)buttonClick {
+    [<span class="keyword">self</span> dismissViewControllerAnimated:<span class="literal">YES</span> completion:<span class="literal">nil</span>];
+}
+
+- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForPresentedController:(<span class="built_in">UIViewController</span> *)presented presentingController:(<span class="built_in">UIViewController</span> *)presenting sourceController:(<span class="built_in">UIViewController</span> *)source {
+    <span class="keyword">return</span> [TranslationAnimateManager transitionWithTransitionType:TransitionTypePresent];
+}
+
+- (<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForDismissedController:(<span class="built_in">UIViewController</span> *)dismissed{
+    <span class="comment">//这里我们初始化dismissType</span>
+    <span class="keyword">return</span> [[TranslationAnimateManager alloc ]initWithTransitionType:TransitionTypeDismiss];
+}
+</code></pre>
+<p>&emsp;&emsp;至此，我们就完成了第一部分自定义跳转动画，赶快运行起来试试吧～  </p>
+<h3 id="第二部分"><a href="#第二部分" class="headerlink" title="第二部分"></a>第二部分</h3><p>&emsp;&emsp;现在我们点击按钮可以让页面按照我们写好的动画跳转到下一个页面，但是还有一个手势控制我们没有实现，利用手势控制我们可以实现更加友好的界面操作。<br>&emsp;&emsp;我们再创建一个类，继承自“UIPercentDrivenInteractiveTransition”，用来监听我们的手势操作。  </p>
+<pre><code class="obj">@interface SwipeInteractiveTransition ()
+
+@property (nonatomic, assign) BOOL shouldComplete;
+@property (nonatomic, strong) UIViewController *presentingVC;
+@property (nonatomic, strong) UIViewController *targetVC;
+
+@end
+
+@implementation SwipeInteractiveTransition
+
++ (instancetype)sharedInstance {
+    static id sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
+
+-(void)wireToViewController:(UIViewController *)viewController
+{
+    self.presentingVC = viewController;
+    [self prepareGestureRecognizerInView:viewController.view];
+}
+
+- (void)writeTargetViewController:(UIViewController *)viewController {
+    self.targetVC = viewController;
+}
+
+- (void)prepareGestureRecognizerInView:(UIView*)view {
+    UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    [view addGestureRecognizer:gesture];
+}
+
+-(CGFloat)completionSpeed
+{
+    return 1 - self.percentComplete;
+}
+
+- (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer {
+    CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view.superview];
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan: {
+            self.interacting = YES;
+            self.targetVC = [[ToViewController alloc] init];
+            [self.presentingVC presentViewController:self.targetVC animated:YES completion:nil];
+        }
+            break;
+        case UIGestureRecognizerStateChanged: {
+            NSInteger y =  translation.y;
+            CGFloat fraction = y / 200.0;
+            fraction = fminf(fmaxf(fraction, 0.0), 1.0);
+            self.shouldComplete = (fraction &gt; 0.1);
+
+            [self updateInteractiveTransition:fraction];
+            break;
+        }
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled: {
+            self.interacting = NO;
+            if (!self.shouldComplete || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+                [self cancelInteractiveTransition];
+            } else {
+                [self finishInteractiveTransition];
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+@end
+</code></pre>
+<p>&emsp;&emsp;然后在“FromViewController”中，我们添加如下代码注册手势监听：  </p>
+<pre><code class="objc"><span class="keyword">self</span>.toVC = [[ToViewController alloc] init];
+SwipeInteractiveTransition *swipeInteractiveTransition = [SwipeInteractiveTransition sharedInstance];
+[swipeInteractiveTransition wireToViewController:<span class="keyword">self</span>];
+[swipeInteractiveTransition writeTargetViewController:<span class="keyword">self</span>.toVC];
+</code></pre>
+<p>&emsp;&emsp;在“ToViewController”中，我们要实现下面的方法：  </p>
+<pre><code class="objc">-(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerInteractiveTransitioning</span>&gt;)interactionControllerForPresentation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animator {
+    <span class="keyword">return</span> [SwipeInteractiveTransition sharedInstance].interacting ? [SwipeInteractiveTransition sharedInstance] : <span class="literal">nil</span>;
+}
+</code></pre>
+<p>&emsp;&emsp;如果没有手势触发或者手势触发失败，这个方法会返回空，此时系统会自动调用<code>- (id &lt;UIViewControllerAnimatedTransitioning&gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source</code>这个方法去执行跳转动画。<br>&emsp;&emsp;我们看下完成后的效果。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled2.gif" alt="translateAnimate2"><br>&emsp;&emsp;看着还是很nice的。其实苹果为我们提供的动画接口还是很强大的，如果利用好了可以做出很多酷炫的效果和新颖的交互。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/WeChat.jpg" alt="Renhua Chi WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/AliPay.jpg" alt="Renhua Chi Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/12/Instruments-Core-Animation下Debug-Options的介绍和优化方法/" rel="next" title="Instruments--Core Animation下Debug Options的介绍和优化方法">
+                <i class="fa fa-chevron-left"></i> Instruments--Core Animation下Debug Options的介绍和优化方法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/22/iOS-自定义转场动画/"
+           data-title="iOS--自定义转场动画" data-url="https://chirenhua.github.io/2017/04/22/iOS-自定义转场动画/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg"
+               alt="Renhua Chi" />
+          <p class="site-author-name" itemprop="name">Renhua Chi</p>
+          <p class="site-description motion-element" itemprop="description">求知若渴，虚心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ChiRenhua" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2779978175?refer_flag=1001030101_&is_all=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friends
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://komey.utdme.com/" title="Komey" target="_blank">Komey</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://zhilong.me" title="Alex" target="_blank">Alex</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.i3geek.com" title="i3geek" target="_blank">i3geek</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">2.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UIViewControllerContextTransitioning"><span class="nav-number">2.1.</span> <span class="nav-text">UIViewControllerContextTransitioning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UIViewControllerAnimatedTransitioning"><span class="nav-number">2.2.</span> <span class="nav-text">UIViewControllerAnimatedTransitioning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UIViewControllerTransitioningDelegate"><span class="nav-number">2.3.</span> <span class="nav-text">UIViewControllerTransitioningDelegate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">3.</span> <span class="nav-text">Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一部分"><span class="nav-number">3.1.</span> <span class="nav-text">第一部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二部分"><span class="nav-number">3.2.</span> <span class="nav-text">第二部分</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Renhua Chi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chirenhua"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
