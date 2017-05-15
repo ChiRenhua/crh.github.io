@@ -141,10 +141,10 @@ TranslationAnimateManager.m
                          fromView.hidden = NO;
                          if ([transitionContext transitionWasCancelled]) {
                              [containerView addSubview:fromView];
-                             [self _xw_removeOtherViews:fromView];
+                             [self removeOtherViews:fromView];
                          } else {
                              [containerView addSubview:toView];
-                             [self _xw_removeOtherViews:toView];
+                             [self removeOtherViews:toView];
                          }
                          [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
                      }];
@@ -184,16 +184,16 @@ TranslationAnimateManager.m
                          fromView.layer.transform = CATransform3DScale(scale, 0.9, 0.9, 1);//
                      } completion:^(BOOL finished) {
                          if ([transitionContext transitionWasCancelled]) {
-                             [self _xw_removeOtherViews:fromView];
+                             [self removeOtherViews:fromView];
                          } else {
-                             [self _xw_removeOtherViews:toView];
+                             [self removeOtherViews:toView];
                              toView.frame = containerView.bounds;
                          }
                          [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
                      }];
 }
 
-- (void)_xw_removeOtherViews:(UIView*)viewToKeep {
+- (void)removeOtherViews:(UIView*)viewToKeep {
     UIView *containerView = viewToKeep.superview;
     for (UIView *view in containerView.subviews) {
         if (view != viewToKeep) {

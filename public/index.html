@@ -287,6 +287,132 @@
             
               
                 
+                <a class="post-title-link" href="/2017/05/15/Xcode-真机编译iOS7方法/" itemprop="url">
+                  Xcode-真机编译iOS7方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-15T21:00:30+08:00" content="2017-05-15">
+              2017-05-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Xcode工具/" itemprop="url" rel="index">
+                    <span itemprop="name">Xcode工具</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/15/Xcode-真机编译iOS7方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/15/Xcode-真机编译iOS7方法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Xcode-%E7%9C%9F%E6%9C%BA%E7%BC%96%E8%AF%91iOS7%E6%96%B9%E6%B3%95/ios-7-logo.png" alt="iOS7_Logo">  </p>
+<h2 id="真机编译iOS7的方法"><a href="#真机编译iOS7的方法" class="headerlink" title="真机编译iOS7的方法"></a>真机编译iOS7的方法</h2><p>步骤炒鸡简单：   </p>
+<ol>
+<li>将iOS7.0/iOS7.1的SDK放到Xcode这个目录下(iOS7 SDK请百度自行下载)：<br>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport；</li>
+<li>进入目录：<br>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk  打开“iPhoneOS.sdk”文件夹和“SDKSettings.plist”文件的读写权限；  </li>
+<li>打开“SDKSettings.plist”文件，按图添加7.0/7.1（⚠️一定要按照从小到大的顺序添加）然后重启Xcode就可以了。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Xcode-%E7%9C%9F%E6%9C%BA%E7%BC%96%E8%AF%91iOS7%E6%96%B9%E6%B3%95/iOS7_debug.png" alt="iOS7_Debug"></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/04/22/iOS-自定义转场动画/" itemprop="url">
                   iOS--自定义转场动画
                 </a>
@@ -364,7 +490,7 @@
 <h3 id="UIViewControllerAnimatedTransitioning"><a href="#UIViewControllerAnimatedTransitioning" class="headerlink" title="UIViewControllerAnimatedTransitioning"></a>UIViewControllerAnimatedTransitioning</h3><p>&emsp;&emsp;这个接口是在VC切换过程中起着非常重要的角色，因为它负责处理切换过程中的事件，也就是说我们要实现的动画效果等，都是在这里实现的。这里我们需要实现下面的两个方法。<br>&emsp;&emsp;<code>-(NSTimeInterval)transitionDuration:(id &lt; UIViewControllerContextTransitioning &gt;)transitionContext;</code><br>&emsp;&emsp;返回切换过程所需要的时间。<br>&emsp;&emsp;<code>-(void)animateTransition:(id &lt; UIViewControllerContextTransitioning &gt;)transitionContext;</code><br>&emsp;&emsp;切换时会调用此方法，动画效果都在这个方法里完成。  </p>
 <h3 id="UIViewControllerTransitioningDelegate"><a href="#UIViewControllerTransitioningDelegate" class="headerlink" title="UIViewControllerTransitioningDelegate"></a>UIViewControllerTransitioningDelegate</h3><p>&emsp;&emsp;对于想要执行自定义动画的VC需要实现这个接口，共有四个方法。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerAnimatedTransitioning &gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source;</code><br>&emsp;&emsp;跳转新页面的动画。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerAnimatedTransitioning &gt;)animationControllerForDismissedController:(UIViewController *)dismissed;</code><br>&emsp;&emsp;当前页面消失的动画。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerInteractiveTransitioning &gt;)interactionControllerForPresentation:(id &lt; UIViewControllerAnimatedTransitioning &gt;)animator;</code><br>&emsp;&emsp;手势控制页面跳转的动画。<br>&emsp;&emsp;<code>-(id&lt; UIViewControllerInteractiveTransitioning &gt;)interactionControllerForDismissal:(id &lt; UIViewControllerAnimatedTransitioning &gt;)animator;</code><br>&emsp;&emsp;手势控制页面消失的动画。  </p>
 <h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><h3 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h3><p>&emsp;&emsp;我们先来尝试着实现如下图效果的页面切换。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled.gif" alt="translateAnimate"><br>&emsp;&emsp;首先我们新建一个处理动画效果的类，这个类要实现“UIViewControllerAnimatedTransitioning”接口。<br>TranslationAnimateManager.h    </p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, TransitionType) &#123;</div><div class="line">    TransitionTypePresent,</div><div class="line">    TransitionTypeDismiss</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TranslationAnimateManager</span> : <span class="title">NSObject</span> &lt;<span class="title">UIViewControllerAnimatedTransitioning</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">//根据定义的枚举初始化的两个方法</span></div><div class="line">+ (<span class="keyword">instancetype</span>)transitionWithTransitionType:(TransitionType)type;</div><div class="line">- (<span class="keyword">instancetype</span>)initWithTransitionType:(TransitionType)type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span>   </div><div class="line"></div><div class="line">```  </div><div class="line">TranslationAnimateManager.m    </div><div class="line"></div><div class="line">``` objc</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TranslationAnimateManager</span> ()</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) TransitionType type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">TranslationAnimateManager</span></span></div><div class="line"></div><div class="line">+ (<span class="keyword">instancetype</span>)transitionWithTransitionType:(TransitionType)type &#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">id</span> sharedInstance = <span class="literal">nil</span>;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">        sharedInstance = [[<span class="keyword">self</span> alloc] initWithTransitionType:type];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> sharedInstance;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)initWithTransitionType:(TransitionType)type &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        <span class="keyword">self</span>.type = type;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0.5</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext &#123;</div><div class="line">    <span class="keyword">switch</span> (<span class="keyword">self</span>.type) &#123;</div><div class="line">        <span class="keyword">case</span> TransitionTypePresent:</div><div class="line">            [<span class="keyword">self</span> presentAnimation:transitionContext];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">            </div><div class="line">        <span class="keyword">case</span> TransitionTypeDismiss:</div><div class="line">            [<span class="keyword">self</span> dismissAnimation:transitionContext];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//实现present动画逻辑代码</span></div><div class="line">- (<span class="keyword">void</span>)presentAnimation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *fromVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *toVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    </div><div class="line">    <span class="built_in">UIView</span> *toView = toVC.view;</div><div class="line">    <span class="built_in">UIView</span> *fromView = fromVC.view;</div><div class="line">    <span class="built_in">UIView</span> *containerView = [transitionContext containerView];</div><div class="line">    </div><div class="line">    <span class="built_in">UIView</span> *toViewSnapshot = [<span class="built_in">UIView</span> new];</div><div class="line">    toViewSnapshot.contentImage =  toView.snapshotImage;</div><div class="line">    toViewSnapshot.frame = containerView.bounds;</div><div class="line">    </div><div class="line">    <span class="built_in">CATransform3D</span> scale = <span class="built_in">CATransform3DIdentity</span>;</div><div class="line">    toViewSnapshot.layer.transform = <span class="built_in">CATransform3DScale</span>(scale, <span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">1</span>);<span class="comment">//</span></div><div class="line">    [containerView addSubview:toViewSnapshot];</div><div class="line">    [containerView sendSubviewToBack:toViewSnapshot];</div><div class="line">    <span class="built_in">CGRect</span> upSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, fromView.frame.size.width, fromView.frame.size.height  * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *upHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    upHandView.contentImage = fromView.snapshotImage;</div><div class="line">    upHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    upHandView.frame = upSnapshotRegion;</div><div class="line">    [containerView addSubview:upHandView];</div><div class="line">    </div><div class="line">    <span class="built_in">CGRect</span> downSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, fromView.frame.size.height * <span class="number">0.5</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *downHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    downHandView.contentImage = upHandView.contentImage;</div><div class="line">    downHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    downHandView.frame = downSnapshotRegion;</div><div class="line">    [containerView addSubview:downHandView];</div><div class="line">    </div><div class="line">    fromView.hidden = <span class="literal">YES</span>;</div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.5</span></div><div class="line">                          delay:<span class="number">0.0</span></div><div class="line">                        options:<span class="built_in">UIViewAnimationOptionCurveEaseOut</span></div><div class="line">                     animations:^&#123;</div><div class="line">                         upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, - upHandView.frame.size.height);</div><div class="line">                         downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, downHandView.frame.size.height);</div><div class="line">                         toViewSnapshot.center = toView.center;</div><div class="line">                         toViewSnapshot.frame = toView.frame;</div><div class="line">                     &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">                         fromView.hidden = <span class="literal">NO</span>;</div><div class="line">                         <span class="keyword">if</span> ([transitionContext transitionWasCancelled]) &#123;</div><div class="line">                             [containerView addSubview:fromView];</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:fromView];</div><div class="line">                         &#125; <span class="keyword">else</span> &#123;</div><div class="line">                             [containerView addSubview:toView];</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:toView];</div><div class="line">                         &#125;</div><div class="line">                         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line">                     &#125;];</div><div class="line">&#125;</div><div class="line"><span class="comment">//实现dismiss动画逻辑代码</span></div><div class="line">- (<span class="keyword">void</span>)dismissAnimation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *fromVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *toVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIView</span> *toView = toVC.view;</div><div class="line">    <span class="built_in">UIView</span> *fromView = fromVC.view;</div><div class="line">    <span class="built_in">UIView</span> *containerView = [transitionContext containerView];</div><div class="line">    [containerView addSubview:fromView];</div><div class="line">    toView.frame = [transitionContext finalFrameForViewController:toVC];</div><div class="line">    toView.frame = <span class="built_in">CGRectOffset</span>(toView.frame, toView.frame.size.width, <span class="number">0</span>);</div><div class="line">    [containerView addSubview:toView];</div><div class="line">    <span class="built_in">CGRect</span> upSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *upHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    upHandView.contentImage = toView.snapshotImage;</div><div class="line">    upHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    upHandView.frame = upSnapshotRegion;</div><div class="line">    upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, - upHandView.frame.size.height);</div><div class="line">    [containerView addSubview:upHandView];</div><div class="line">    <span class="built_in">CGRect</span> downSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, fromView.frame.size.height * <span class="number">0.5</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *downHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    downHandView.contentImage = upHandView.contentImage;</div><div class="line">    downHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    downHandView.frame = downSnapshotRegion;</div><div class="line">    downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, downHandView.frame.size.height);</div><div class="line">    [containerView addSubview:downHandView];</div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.5</span></div><div class="line">                          delay:<span class="number">0.0</span></div><div class="line">                        options:<span class="built_in">UIViewAnimationOptionCurveEaseOut</span></div><div class="line">                     animations:^&#123;</div><div class="line">                         upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, upHandView.frame.size.height);</div><div class="line">                         downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, - downHandView.frame.size.height);</div><div class="line">                         <span class="built_in">CATransform3D</span> scale = <span class="built_in">CATransform3DIdentity</span>;</div><div class="line">                         fromView.layer.transform = <span class="built_in">CATransform3DScale</span>(scale, <span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">1</span>);<span class="comment">//</span></div><div class="line">                     &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">                         <span class="keyword">if</span> ([transitionContext transitionWasCancelled]) &#123;</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:fromView];</div><div class="line">                         &#125; <span class="keyword">else</span> &#123;</div><div class="line">                             [<span class="keyword">self</span> _xw_removeOtherViews:toView];</div><div class="line">                             toView.frame = containerView.bounds;</div><div class="line">                         &#125;</div><div class="line">                         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line">                     &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)_xw_removeOtherViews:(<span class="built_in">UIView</span>*)viewToKeep &#123;</div><div class="line">    <span class="built_in">UIView</span> *containerView = viewToKeep.superview;</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">UIView</span> *view <span class="keyword">in</span> containerView.subviews) &#123;</div><div class="line">        <span class="keyword">if</span> (view != viewToKeep) &#123;</div><div class="line">            [view removeFromSuperview];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, TransitionType) &#123;</div><div class="line">    TransitionTypePresent,</div><div class="line">    TransitionTypeDismiss</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TranslationAnimateManager</span> : <span class="title">NSObject</span> &lt;<span class="title">UIViewControllerAnimatedTransitioning</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">//根据定义的枚举初始化的两个方法</span></div><div class="line">+ (<span class="keyword">instancetype</span>)transitionWithTransitionType:(TransitionType)type;</div><div class="line">- (<span class="keyword">instancetype</span>)initWithTransitionType:(TransitionType)type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span>   </div><div class="line"></div><div class="line">```  </div><div class="line">TranslationAnimateManager.m    </div><div class="line"></div><div class="line">``` objc</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">TranslationAnimateManager</span> ()</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) TransitionType type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">TranslationAnimateManager</span></span></div><div class="line"></div><div class="line">+ (<span class="keyword">instancetype</span>)transitionWithTransitionType:(TransitionType)type &#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">id</span> sharedInstance = <span class="literal">nil</span>;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">        sharedInstance = [[<span class="keyword">self</span> alloc] initWithTransitionType:type];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> sharedInstance;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)initWithTransitionType:(TransitionType)type &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        <span class="keyword">self</span>.type = type;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0.5</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext &#123;</div><div class="line">    <span class="keyword">switch</span> (<span class="keyword">self</span>.type) &#123;</div><div class="line">        <span class="keyword">case</span> TransitionTypePresent:</div><div class="line">            [<span class="keyword">self</span> presentAnimation:transitionContext];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">            </div><div class="line">        <span class="keyword">case</span> TransitionTypeDismiss:</div><div class="line">            [<span class="keyword">self</span> dismissAnimation:transitionContext];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//实现present动画逻辑代码</span></div><div class="line">- (<span class="keyword">void</span>)presentAnimation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *fromVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *toVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    </div><div class="line">    <span class="built_in">UIView</span> *toView = toVC.view;</div><div class="line">    <span class="built_in">UIView</span> *fromView = fromVC.view;</div><div class="line">    <span class="built_in">UIView</span> *containerView = [transitionContext containerView];</div><div class="line">    </div><div class="line">    <span class="built_in">UIView</span> *toViewSnapshot = [<span class="built_in">UIView</span> new];</div><div class="line">    toViewSnapshot.contentImage =  toView.snapshotImage;</div><div class="line">    toViewSnapshot.frame = containerView.bounds;</div><div class="line">    </div><div class="line">    <span class="built_in">CATransform3D</span> scale = <span class="built_in">CATransform3DIdentity</span>;</div><div class="line">    toViewSnapshot.layer.transform = <span class="built_in">CATransform3DScale</span>(scale, <span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">1</span>);<span class="comment">//</span></div><div class="line">    [containerView addSubview:toViewSnapshot];</div><div class="line">    [containerView sendSubviewToBack:toViewSnapshot];</div><div class="line">    <span class="built_in">CGRect</span> upSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, fromView.frame.size.width, fromView.frame.size.height  * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *upHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    upHandView.contentImage = fromView.snapshotImage;</div><div class="line">    upHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    upHandView.frame = upSnapshotRegion;</div><div class="line">    [containerView addSubview:upHandView];</div><div class="line">    </div><div class="line">    <span class="built_in">CGRect</span> downSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, fromView.frame.size.height * <span class="number">0.5</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *downHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    downHandView.contentImage = upHandView.contentImage;</div><div class="line">    downHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    downHandView.frame = downSnapshotRegion;</div><div class="line">    [containerView addSubview:downHandView];</div><div class="line">    </div><div class="line">    fromView.hidden = <span class="literal">YES</span>;</div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.5</span></div><div class="line">                          delay:<span class="number">0.0</span></div><div class="line">                        options:<span class="built_in">UIViewAnimationOptionCurveEaseOut</span></div><div class="line">                     animations:^&#123;</div><div class="line">                         upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, - upHandView.frame.size.height);</div><div class="line">                         downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, downHandView.frame.size.height);</div><div class="line">                         toViewSnapshot.center = toView.center;</div><div class="line">                         toViewSnapshot.frame = toView.frame;</div><div class="line">                     &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">                         fromView.hidden = <span class="literal">NO</span>;</div><div class="line">                         <span class="keyword">if</span> ([transitionContext transitionWasCancelled]) &#123;</div><div class="line">                             [containerView addSubview:fromView];</div><div class="line">                             [<span class="keyword">self</span> removeOtherViews:fromView];</div><div class="line">                         &#125; <span class="keyword">else</span> &#123;</div><div class="line">                             [containerView addSubview:toView];</div><div class="line">                             [<span class="keyword">self</span> removeOtherViews:toView];</div><div class="line">                         &#125;</div><div class="line">                         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line">                     &#125;];</div><div class="line">&#125;</div><div class="line"><span class="comment">//实现dismiss动画逻辑代码</span></div><div class="line">- (<span class="keyword">void</span>)dismissAnimation:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *fromVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *toVC = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIView</span> *toView = toVC.view;</div><div class="line">    <span class="built_in">UIView</span> *fromView = fromVC.view;</div><div class="line">    <span class="built_in">UIView</span> *containerView = [transitionContext containerView];</div><div class="line">    [containerView addSubview:fromView];</div><div class="line">    toView.frame = [transitionContext finalFrameForViewController:toVC];</div><div class="line">    toView.frame = <span class="built_in">CGRectOffset</span>(toView.frame, toView.frame.size.width, <span class="number">0</span>);</div><div class="line">    [containerView addSubview:toView];</div><div class="line">    <span class="built_in">CGRect</span> upSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *upHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    upHandView.contentImage = toView.snapshotImage;</div><div class="line">    upHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    upHandView.frame = upSnapshotRegion;</div><div class="line">    upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, - upHandView.frame.size.height);</div><div class="line">    [containerView addSubview:upHandView];</div><div class="line">    <span class="built_in">CGRect</span> downSnapshotRegion = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, fromView.frame.size.height * <span class="number">0.5</span>, fromView.frame.size.width, fromView.frame.size.height * <span class="number">0.5</span>);</div><div class="line">    <span class="built_in">UIView</span> *downHandView = [<span class="built_in">UIView</span> new];</div><div class="line">    downHandView.contentImage = upHandView.contentImage;</div><div class="line">    downHandView.layer.contentsRect = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1</span>, <span class="number">0.5</span>);</div><div class="line">    downHandView.frame = downSnapshotRegion;</div><div class="line">    downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, downHandView.frame.size.height);</div><div class="line">    [containerView addSubview:downHandView];</div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:<span class="number">0.5</span></div><div class="line">                          delay:<span class="number">0.0</span></div><div class="line">                        options:<span class="built_in">UIViewAnimationOptionCurveEaseOut</span></div><div class="line">                     animations:^&#123;</div><div class="line">                         upHandView.frame = <span class="built_in">CGRectOffset</span>(upHandView.frame, <span class="number">0</span>, upHandView.frame.size.height);</div><div class="line">                         downHandView.frame = <span class="built_in">CGRectOffset</span>(downHandView.frame, <span class="number">0</span>, - downHandView.frame.size.height);</div><div class="line">                         <span class="built_in">CATransform3D</span> scale = <span class="built_in">CATransform3DIdentity</span>;</div><div class="line">                         fromView.layer.transform = <span class="built_in">CATransform3DScale</span>(scale, <span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">1</span>);<span class="comment">//</span></div><div class="line">                     &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">                         <span class="keyword">if</span> ([transitionContext transitionWasCancelled]) &#123;</div><div class="line">                             [<span class="keyword">self</span> removeOtherViews:fromView];</div><div class="line">                         &#125; <span class="keyword">else</span> &#123;</div><div class="line">                             [<span class="keyword">self</span> removeOtherViews:toView];</div><div class="line">                             toView.frame = containerView.bounds;</div><div class="line">                         &#125;</div><div class="line">                         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line">                     &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)removeOtherViews:(<span class="built_in">UIView</span>*)viewToKeep &#123;</div><div class="line">    <span class="built_in">UIView</span> *containerView = viewToKeep.superview;</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">UIView</span> *view <span class="keyword">in</span> containerView.subviews) &#123;</div><div class="line">        <span class="keyword">if</span> (view != viewToKeep) &#123;</div><div class="line">            [view removeFromSuperview];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;然后我们再新建一个初始VC，就叫“FromViewController”。这个页面只需要负责点击按钮跳转即可，省下什么都不用做。    </p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">FromViewController</span> ()</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) ToViewController *toVC;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">FromViewController</span></span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="keyword">self</span>.view.backgroundColor = [<span class="built_in">UIColor</span> brownColor];</div><div class="line">    </div><div class="line">    <span class="built_in">UIButton</span> *button = [[<span class="built_in">UIButton</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="keyword">self</span>.view.bounds.size.width / <span class="number">2</span> - <span class="number">50</span>, <span class="keyword">self</span>.view.bounds.size.height / <span class="number">2</span> - <span class="number">15</span>, <span class="number">100</span>, <span class="number">30</span>)];</div><div class="line">    [button setTitle:<span class="string">@"点我跳转"</span> forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">    [button setBackgroundColor:[<span class="built_in">UIColor</span> blackColor]];</div><div class="line">    [button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(buttonClick) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</div><div class="line">    button.layer.cornerRadius = <span class="number">15</span>;</div><div class="line">    [<span class="keyword">self</span>.view addSubview:button];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)buttonClick &#123;</div><div class="line">    <span class="keyword">self</span>.toVC = [[ToViewController alloc] init];</div><div class="line">    [<span class="keyword">self</span> presentViewController:<span class="keyword">self</span>.toVC animated:<span class="literal">YES</span> completion:<span class="literal">nil</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;接下来我们再创建一个新的页面叫做“ToViewController”，是跳转后的界面，因为要实现自定的跳转动画，所以这个页面要实现“UIViewControllerTransitioningDelegate”接口。  </p>
@@ -627,130 +753,6 @@ SwipeInteractiveTransition *swipeInteractiveTransition = [SwipeInteractiveTransi
 <h2 id="Color-Offscreen-Rendered-Yellow（离屏渲染）"><a href="#Color-Offscreen-Rendered-Yellow（离屏渲染）" class="headerlink" title="Color Offscreen-Rendered Yellow（离屏渲染）"></a>Color Offscreen-Rendered Yellow（离屏渲染）</h2><p>&emsp;&emsp;参考文章：<a href="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/">iOS-离屏渲染带来的性能问题和解决办法</a></p>
 <h2 id="Color-Compositing-Fast-Path-Blue-快速路径"><a href="#Color-Compositing-Fast-Path-Blue-快速路径" class="headerlink" title="Color Compositing Fast-Path Blue (快速路径)"></a>Color Compositing Fast-Path Blue (快速路径)</h2><p>&emsp;&emsp;标记由硬件绘制的路径为蓝色，蓝色越多越好.</p>
 <h2 id="Flash-Updated-Regions-重绘区域"><a href="#Flash-Updated-Regions-重绘区域" class="headerlink" title="Flash Updated Regions (重绘区域)"></a>Flash Updated Regions (重绘区域)</h2><p>&emsp;&emsp;这个选项会对重绘的内容高亮成黄色,重绘就是指使用Core Graphics绘制，绘制会损耗一定的性能，因此重绘区域应该越小越好，对于未发生变化的内容则不应该重绘。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/05/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-02-05T14:50:18+08:00" content="2017-02-05">
-              2017-02-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/02/05/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/05/hello-world/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hello%20world/home-bg-o.jpg" alt="hello world"><br>&emsp;&emsp;作为一个程序员，“Hello World”可以说为我打开了新世界的大门。第一个程序，第一个网站，第一个脚本…都是从“Hello World”开始的。因为我已经决定要重新开启我的博客生涯，所以我的第一篇博文就叫“Hello World”！</p>
-<p>&emsp;&emsp;人这一辈子最开心的事莫过于做自己喜欢的事情，很幸运，我的工作也是我的爱好，这也是支撑着我在周末来公司加班写博客的动力哈哈哈。</p>
-<p>&emsp;&emsp;我觉得编程就像画画一样，键盘是画笔，代码是墨，编译器是画纸。我们在键盘上敲敲敲，就像拿着笔在纸上挥毫一样，最终我们都会创造出一个个无法复刻的作品。所以说编程是门艺术，一点都没错。</p>
-<p>&emsp;&emsp;第一篇博客就不写太多，我要去创造我的艺术品啦～</p>
-<p>&emsp;&emsp;“Hello World”！</p>
 
           
         
@@ -1549,6 +1551,130 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/24/hello-world/" itemprop="url">
+                  Hello World
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-24T21:58:57+08:00" content="2016-08-24">
+              2016-08-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/24/hello-world/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/24/hello-world/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hello%20world/home-bg-o.jpg" alt="hello world"><br>&emsp;&emsp;作为一个程序员，“Hello World”可以说为我打开了新世界的大门。第一个程序，第一个网站，第一个脚本…都是从“Hello World”开始的。因为我已经决定要重新开启我的博客生涯，所以我的第一篇博文就叫“Hello World”！</p>
+<p>&emsp;&emsp;人这一辈子最开心的事莫过于做自己喜欢的事情，很幸运，我的工作也是我的爱好，这也是支撑着我在周末来公司加班写博客的动力哈哈哈。</p>
+<p>&emsp;&emsp;我觉得编程就像画画一样，键盘是画笔，代码是墨，编译器是画纸。我们在键盘上敲敲敲，就像拿着笔在纸上挥毫一样，最终我们都会创造出一个个无法复刻的作品。所以说编程是门艺术，一点都没错。</p>
+<p>&emsp;&emsp;第一篇博客就不写太多，我要去创造我的艺术品啦～</p>
+<p>&emsp;&emsp;“Hello World”！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1590,7 +1716,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1607,7 +1733,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
