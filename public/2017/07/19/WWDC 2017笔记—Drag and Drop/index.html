@@ -1,0 +1,925 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Drag and Drop&amp;emsp;&amp;emsp;今年的WWDC，苹果推出了一个新的功能—Drag and Drop，通过这个功能，用户可以将数据（一张图片或者一段文字）从一个地方拖拽到另一个地方，这个操作可以在同一个APP里，也可以跨APP，非常方便。但是目前只有iPad能够完美支持，iPhone上暂时还不支持跨应用的拖拽，所有操作都被限制在同一个APP内。&amp;emsp;&amp;emsp;看名字可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Renhua's Blog">
+<meta property="og:url" content="https://chirenhua.github.io/2017/07/19/WWDC 2017笔记—Drag and Drop/index.html">
+<meta property="og:site_name" content="Renhua's Blog">
+<meta property="og:description" content="Drag and Drop&amp;emsp;&amp;emsp;今年的WWDC，苹果推出了一个新的功能—Drag and Drop，通过这个功能，用户可以将数据（一张图片或者一段文字）从一个地方拖拽到另一个地方，这个操作可以在同一个APP里，也可以跨APP，非常方便。但是目前只有iPad能够完美支持，iPhone上暂时还不支持跨应用的拖拽，所有操作都被限制在同一个APP内。&amp;emsp;&amp;emsp;看名字可">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%20Logo.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2001.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2002.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2003.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2004.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2005.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2008.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2009.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2010.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2007.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2006.png">
+<meta property="og:updated_time" content="2017-07-19T10:48:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Renhua's Blog">
+<meta name="twitter:description" content="Drag and Drop&amp;emsp;&amp;emsp;今年的WWDC，苹果推出了一个新的功能—Drag and Drop，通过这个功能，用户可以将数据（一张图片或者一段文字）从一个地方拖拽到另一个地方，这个操作可以在同一个APP里，也可以跨APP，非常方便。但是目前只有iPad能够完美支持，iPhone上暂时还不支持跨应用的拖拽，所有操作都被限制在同一个APP内。&amp;emsp;&amp;emsp;看名字可">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%20Logo.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://chirenhua.github.io/2017/07/19/WWDC 2017笔记—Drag and Drop/"/>
+
+  <title>  | Renhua's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Renhua's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Stay Hungry.Stay Foolish</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-07-19T16:29:19+08:00" content="2017-07-19">
+              2017-07-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/19/WWDC 2017笔记—Drag and Drop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/19/WWDC 2017笔记—Drag and Drop/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%20Logo.png" alt="Drag and Drop Logo">  </p>
+<h1 id="Drag-and-Drop"><a href="#Drag-and-Drop" class="headerlink" title="Drag and Drop"></a>Drag and Drop</h1><p>&emsp;&emsp;今年的WWDC，苹果推出了一个新的功能—Drag and Drop，通过这个功能，用户可以将数据（一张图片或者一段文字）从一个地方拖拽到另一个地方，这个操作可以在同一个APP里，也可以跨APP，非常方便。但是目前只有iPad能够完美支持，iPhone上暂时还不支持跨应用的拖拽，所有操作都被限制在同一个APP内。<br>&emsp;&emsp;看名字可以知道，Drag and Drop主要分为两部分，这两部分是相对独立的，APP可以只实现Drag或者只实现Drop，可以了两者都实现。那么接下我会分别介绍Drag、Drop以及在TableView和CollectionView下Drag and Drop实现上的差异。  </p>
+<h2 id="一-Drag"><a href="#一-Drag" class="headerlink" title="一. Drag"></a>一. Drag</h2><p>&emsp;&emsp;Drag and Drop的整个流程是基于用户与View之间的交互。我们知道，如果想要为一个View添加点击事件，需要为View添加一个UITapGestureRecognizer。与之类似，如果想要让View支持Drag，需要为View添加UIDragInteraction。那么这个UIDragInteraction是什么？  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2001.png" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;通过上面这张图我们可以看出，UIDragInteraction其实就是用户和Drag操作之间的中介，我们可以通过实现其代理方法，为Drag提供数据，或者接收整个Drag流程中各种状态的信息。因为UIDragInteraction中集成了手势，所以在实现Drag的过程中需要打开View的userInteractionEnabled属性。<br>&emsp;&emsp;下面这段代码展示了如何为一个imageView添加UIDragInteraction：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2002.png" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;现在这个imageView已经可以支持Drag了，但是这并不表明它可以相应Drag，因为还没有实现相应的代理方法。下面我会列出所有的代理方法，分别说明都是做什么的。  </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSArray</span>&lt;<span class="built_in">UIDragItem</span> *&gt; *)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction itemsForBeginningSession:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个是Drag里最重要的一个方法，这个方法会为Drag提供数据，如果返回nil，那么Drag会被终止掉。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">nullable</span> <span class="built_in">UITargetedDragPreview</span> *)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction previewForLiftingItem:(<span class="built_in">UIDragItem</span> *)item session:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在Drag执行过程中，我们会看到一个View被我们拖着走，这个View是可以通过此方法进行替换的。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction willAnimateLiftWithAnimator:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragAnimating</span>&gt;)animator session:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在触发Drag时，我们需要长按View，此时我们会看到View有一个抬起的状态，在这个抬起的动画将要执行时，会触发此方法。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction sessionWillBegin:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;Drag已经被触发，准备开始拖动View的时候会触发此方法。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction sessionAllowsMoveOperation:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;是否允许Drop以Move的方式响应次方法，这个方法只有在同一个APP里进行操作才会生效，因为在不同的APP里Drop只能以copy的方式来响应。这个方法默认返回YES。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction sessionIsRestrictedToDraggingApplication:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;决定当前的Drag是否受限于只能被当前APP响应，默认返回NO。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction prefersFullSizePreviewsForSession:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个方法用来告诉Drag是否需要展示全尺寸的预览图，默认返回NO，如果预览图如果太大系统会替我们进行缩放。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction sessionDidMove:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;用户的手指开始移动时会触发此方法，此时可以通过[UIDragSession locationInView:]来获取当前手指的位置。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction session:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session willEndWithOperation:(<span class="built_in">UIDropOperation</span>)operation;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;Drag将要执行完毕时会触发此方法。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction session:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session didEndWithOperation:(<span class="built_in">UIDropOperation</span>)operation;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;Drag已经执行完毕，并且结束动画已经展示完后会触发此方法。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction sessionDidTransferItems:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;Drop端如果以copy或者move来响应当前Drag时，会对数据进行转移，当转移操作完成时会触发此方法。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSArray</span>&lt;<span class="built_in">UIDragItem</span> *&gt; *)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction itemsForAddingToSession:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session withTouchAtPoint:(<span class="built_in">CGPoint</span>)point;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个方法允许用户继续点击View，为现有的Drag添加新的数据。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">nullable</span> <span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction sessionForAddingItems:(<span class="built_in">NSArray</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;&gt; *)sessions withTouchAtPoint:(<span class="built_in">CGPoint</span>)point;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;因为我们可以一次拖动多个Drag出来，所以这个方法可以决定你选中的数据需要添加到哪个Drag 上。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction session:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragSession</span>&gt;)session willAddItems:(<span class="built_in">NSArray</span>&lt;<span class="built_in">UIDragItem</span> *&gt; *)items forInteraction:(<span class="built_in">UIDragInteraction</span> *)addingInteraction;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个方法会在你点击View添加新的数据之前触发。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">nullable</span> <span class="built_in">UITargetedDragPreview</span> *)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction previewForCancellingItem:(<span class="built_in">UIDragItem</span> *)item withDefault:(<span class="built_in">UITargetedDragPreview</span> *)defaultPreview;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当一个Drag操作被取消时，我们可以通过这个方法来更改取消时的View。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dragInteraction:(<span class="built_in">UIDragInteraction</span> *)interaction item:(<span class="built_in">UIDragItem</span> *)item willAnimateCancelWithAnimator:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragAnimating</span>&gt;)animator;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当一个Drag操作被取消时，会在执行取消动画前触发此方法。 </p>
+<h2 id="二-Drop"><a href="#二-Drop" class="headerlink" title="二. Drop"></a>二. Drop</h2><p>&emsp;&emsp;Drop是在手指松开后执行的操作，通过下面的图我们可以发现它的结构跟Drag如出一辙。同样都是为View添加Interaction，然后通过Delegate来管理整个流程。  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2003.png" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;先看下Drop的生命周期：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2004.png" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;首先当数据被拖动到Drop的区域时，会通过“canHandleSession”方法询问Drop是否想响应这次Drag，如果Drop对数据不感兴趣或者不打算响应，那么这次Drag会在手指松开的时候被取消掉。如果可以响应会触发“sessionDidEnter”方法通知用户的手指已经拖动到Drop的可响应区域内。<br>&emsp;&emsp;当用户手指在Drop区域移动时会不停的触发“sessionDidUpdate”方法来询问打算通过何种方法响应Drag，如果“sessionDidUpdate”返回的是cancel，那么在松开手指时，此次Drag会被取消掉，如果返回copy或者move，那么在手指松开时会触发“performDrop”方法，这时才开始真正的对数据进行处理。<br>&emsp;&emsp;当用户手指移动到Drop区域外时会触发“sessionDidExit”方法，此时松开手指Drop是无法被响应的，当手指重新移动回Drop区域时会重新触发“sessionDidEnter”方法，继续后面的流程。<br>&emsp;&emsp;接下来我们看下UIDropInteractionDelegate下的所有方法：  </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction canHandleSession:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个方法就是Drop生命周期中的第一步，返回一个BOOL值来说明对传递过来的数据是否感兴趣，如果这个方法没有被实现，那么这个方法默认返回YES。但是返回YES并不代表Drop一定会接受这个数据。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction sessionDidEnter:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;手指移动到Drop的响应区域时会触发此方法。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">UIDropProposal</span> *)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction sessionDidUpdate:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个方法必须实现，它会在“sessionDidEnter”之后触发，我们需要指定其返回值“UIDropProposal”下的“operation”属性，operation有四个值，分别是：“UIDropOperationCancel”、 “UIDropOperationForbidden”、 “UIDropOperationCopy”、 “UIDropOperationMove”我们可以通过下面的图看到其对应的效果。 </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2005.png" alt="Drag and Drop">  </p>
+<p><strong>· UIDropOperationCancel：</strong>Drag会被取消掉，不会触发后续的“performDrop”方法。<br><strong>· UIDropOperationCopy：</strong>数据会进行拷贝操作，但是一般用于不同APP之间的Drag and Drop，如果用户在当前位置松开手指，会触发“performDrop”方法。<br><strong>· UIDropOperationMove：</strong>只有当“allowsMoveOperation”方法返回YES时，此Operation才会生效，并且按照苹果在注释中的说法，系统并没有对这个Operation赋予特殊的含义，开发者需要自己对数据源进行删除操作，同时在新的位置添加数据，好让数据看起来是移动（Move）了。- -！<br><strong>· UIDropOperationForbidden：</strong>Drag会被取消掉，同时在Drop Session的右上角会有一个禁止的提示，来提醒用户当前Drop在这个位置是被禁止的。具体什么时候返回“Forbidden”由开发者自行判断，比如当一个“String”类型的数据被拖拽到一个“ImageView”里时，就可以返回“Forbidden”。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction performDrop:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当用户在Drop的响应区域松开手指时会触发此方法，此时才开始真正的处理数据，开发者需要从“session”中通过“loadObjectsOfClass”方法解析出需要的数据，再进行展示。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction concludeDrop:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这个方法会在Drop执行完成（包括Drop的动画）之后触发，代表Drop操作已经完成。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction sessionDidExit:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当用户手指移出Drop的响应区域时会触发此方法。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction sessionDidEnd:(<span class="keyword">id</span>&lt;<span class="built_in">UIDropSession</span>&gt;)session;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当Drop操作彻底结束时会触发此方法，无论是成功还是失败。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">nullable</span> <span class="built_in">UITargetedDragPreview</span> *)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction previewForDroppingItem:(<span class="built_in">UIDragItem</span> *)item withDefault:(<span class="built_in">UITargetedDragPreview</span> *)defaultPreview;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当用户松开手指时，并且Drop已经被成功响应，此时会执行一段Drop的动画，这个动画的View是可以通过这个方法替换的。 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)dropInteraction:(<span class="built_in">UIDropInteraction</span> *)interaction item:(<span class="built_in">UIDragItem</span> *)item willAnimateDropWithAnimator:(<span class="keyword">id</span>&lt;<span class="built_in">UIDragAnimating</span>&gt;)animator;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当用户松开手指时，并且Drop已经被成功响应，此时会执行一段Drop的动画，在这个动画将要执行的时候会触发此方法。  </p>
+<h2 id="三-Drag-and-Drop-in-TableView-amp-CollectionView"><a href="#三-Drag-and-Drop-in-TableView-amp-CollectionView" class="headerlink" title="三. Drag and Drop in TableView &amp; CollectionView"></a>三. Drag and Drop in TableView &amp; CollectionView</h2><p>&emsp;&emsp;在TableView和CollectionView中，Drag and Drop的使用跟刚才介绍的大致相同，但是多了一些特有的功能，那么接下来就介绍下TableView和CollectionView独有的一些功能。<br><strong>1.DropIntent</strong><br>&emsp;&emsp;DropIntent是Drop过程中在“sessionDidUpdate”方法里跟随“Operation”属性一起返回的一个属性。这个命名很不苹果，看名字根本不知道这个是用来做什么的。其实这个属性是用来确定在用户Drag数据到TableView或者CollectionView中时，cell需要做出什么动作来提示用户。<br>&emsp;&emsp;在TableView中，DropIntent有四个值：<br><strong>· UITableViewDropIntentUnspecified</strong><br><strong>· UITableViewDropIntentInsertAtDestinationIndexPath</strong><br><strong>· UITableViewDropIntentInsertIntoDestinationIndexPath</strong><br><strong>· UITableViewDropIntentAutomatic</strong><br>&emsp;&emsp;“Unspecified”表示当前手指所在的位置是不明确的，系统稍后会决定这个数据该放在哪里。<br>&emsp;&emsp;“InsertAtDestinationIndexPath”在手指移动过程中会在两个cell之间打开一个空隙，提示用户数据将要插入的位置。效果见下图：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2008.gif" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;“InsertIntoDestinationIndexPath”不会在cell间打开间隙，但是会高亮显示当前手指所在的cell，提示用户当前数据会插入到哪个cell里。效果见下图：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2009.gif" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;“Automatic”会在“InsertAtDestinationIndexPath”和“InsertIntoDestinationIndexPath” 间自己进行选择，当手指在两个cell之间时会打开一个空隙，当手指在cell里时会高亮当前cell。效果见下图：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2010.gif" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;在CollectionView中，DropIntent有三个值：<br><strong>· UICollectionViewDropIntentUnspecified</strong><br><strong>· UICollectionViewDropIntentInsertAtDestinationIndexPath</strong><br><strong>· UICollectionViewDropIntentInsertIntoDestinationIndexPath</strong><br>&emsp;&emsp;CollectionView和TableView的唯一区别就在于CollectionView没有“Automatic”这个效果，其余效果参考TableView。</p>
+<p><strong>2.DropPlaceholder</strong><br>&emsp;&emsp;TableView和CollectionView另外一个特有的功能是Placeholder。当数据过大时，数据的传输需要一定的时间，当这个时间过长时我们需要给用户一个提示，系统默认会给我们展示一个提示，如下图：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2007.png" alt="Drag and Drop">  </p>
+<p>&emsp;&emsp;我们可以看出这个提示是以对话框形式展示的，虽然会给出进度但是这个提示太强了，用户此时只能等待，不能操作界面。所以系统给我们提供了其它方法可以替代这个弹框，这个就是Placeholder。在“performDrop”方法里，系统为我们提供了一个参数：DropCoordinator，它就是实现placeHolder的关键，在”loadObjectOfClass”前，我们先调用“DropCoordinator”下面的方法为collectionView插入一个临时的cell： </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>&lt;<span class="built_in">UICollectionViewDropPlaceholderContext</span>&gt;)dropItem:(<span class="built_in">UIDragItem</span> *)dragItem toPlaceholderInsertedAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath withReuseIdentifier:(<span class="built_in">NSString</span> *)reuseIdentifier cellUpdateHandler:(<span class="keyword">void</span> (^)(__kindof <span class="built_in">UICollectionViewCell</span> *))cellUpdateHandler;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在这个cell上我们可以展示进度条或者一个loadingView。当数据加载完毕后，我们再调用“commitInsertionWithDataSourceUpdates:”方法将数据插入到数据源中，替换临时的cell。效果如下图：  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2006.png" alt="Drag and Drop"></p>
+<p>&emsp;&emsp;最后附上Demo：<a href="https://github.com/ChiRenhua/Drag-and-drop" target="_blank" rel="external">Drag and Drop</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/WeChat.jpg" alt="Renhua Chi WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/AliPay.jpg" alt="Renhua Chi Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/15/Xcode-真机编译iOS7方法/" rel="next" title="Xcode-真机编译iOS7方法">
+                <i class="fa fa-chevron-left"></i> Xcode-真机编译iOS7方法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/19/WWDC 2017笔记—Drag and Drop/"
+           data-title="" data-url="https://chirenhua.github.io/2017/07/19/WWDC 2017笔记—Drag and Drop/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg"
+               alt="Renhua Chi" />
+          <p class="site-author-name" itemprop="name">Renhua Chi</p>
+          <p class="site-description motion-element" itemprop="description">求知若渴，虚心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ChiRenhua" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2779978175?refer_flag=1001030101_&is_all=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friends
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://komey.utdme.com/" title="Komey" target="_blank">Komey</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://zhilong.me" title="Alex" target="_blank">Alex</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.i3geek.com" title="i3geek" target="_blank">i3geek</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Drag-and-Drop"><span class="nav-number">1.</span> <span class="nav-text">Drag and Drop</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-Drag"><span class="nav-number">1.1.</span> <span class="nav-text">一. Drag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-Drop"><span class="nav-number">1.2.</span> <span class="nav-text">二. Drop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-Drag-and-Drop-in-TableView-amp-CollectionView"><span class="nav-number">1.3.</span> <span class="nav-text">三. Drag and Drop in TableView & CollectionView</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Renhua Chi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chirenhua"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
