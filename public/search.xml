@@ -4,6 +4,20 @@
   
     
     <entry>
+      <title><![CDATA[WWDC-2017笔记—Vision]]></title>
+      <url>https://chirenhua.github.io/2017/09/07/WWDC-2017%E7%AC%94%E8%AE%B0%E2%80%94Vision/</url>
+      <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Vision/Vision.jpg" alt="Vision Logo">  </p>
+<h1 id="Vision"><a href="#Vision" class="headerlink" title="Vision"></a>Vision</h1><p>Vision是iOS11发布的一个新的框架，可以用来对图片信息进行处理。其内部集成了Core ML，可以高效的返回图片中的信息。同时开发者也可以在Vision中集成自己的Core ML Model，所以其灵活性非常高。 </p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>目前Vision可以支持的场景有：<br><strong>1. 人脸识别（给出人脸所在的矩形区域信息）</strong><br><strong>2. 人脸面部特征识别（给出眼睛、鼻子、嘴以及人脸中轴线的位置信息）</strong><br><strong>3. 文字识别（给出文字所在的矩形区域信息）</strong><br><strong>4. 二维码识别（识别二维码并返回二维码的信息）</strong><br><strong>5. 目标追踪（对于运动的目标，实时返回其位置信息）</strong>  </p>
+<h2 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h2><p>Vision使用起来非常简单，只需三步就可将Vision集成到项目中：  </p>
+<h3 id="1-初始化VNDetctRequest"><a href="#1-初始化VNDetctRequest" class="headerlink" title="1. 初始化VNDetctRequest"></a>1. 初始化VNDetctRequest</h3><p>根据使用场景的不同，可以选择初始化不同的Request，以人脸识别为例：<br><code>VNDetectFaceRectanglesRequest * faceRequest = [[VNDetectFaceRectanglesRequest alloc] init];</code><br>这里初始化了“VNDetectFaceRectanglesRequest”，表示希望返回人脸所在区域的信息。  </p>
+<h3 id="2-初始化VNImageRequestHandler"><a href="#2-初始化VNImageRequestHandler" class="headerlink" title="2. 初始化VNImageRequestHandler"></a>2. 初始化VNImageRequestHandler</h3><p>用于承接数据源，目前支持的数据源类型有：Data、URL、CGImage、CIImage、CVPixelBuffer。以CGImage为例：<br><code>VNImageRequestHandler *requestHandler = [[VNImageRequestHandler alloc] initWithCGImage:imageRef options:@{}];</code>  </p>
+<h3 id="3-发起请求"><a href="#3-发起请求" class="headerlink" title="3. 发起请求"></a>3. 发起请求</h3><p>调用“handler”下的“performRequests”方法开始进行识别，“performRequests”的参数是数组类型，可以同时传递多个“request“给“handler”一起处理。<br><code>[requestHandler performRequests:@[faceRequest] error:&amp;error];</code><br>识别完成后通过“request.results”来拿到识别结果，”results”是数组类型，如果为空则表示当前图片中没有人脸的信息。  </p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>利用Vision，我们可以做一些有趣的事情，比如为视频添加挂件，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC学习笔记—Vision/Visionvideo.gif" alt="Vision video"><br>具体代码已经上传git：<a href="https://github.com/ChiRenhua/VisionDemo" target="_blank" rel="external">视频挂件</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[WWDC 2017笔记—Drag and Drop]]></title>
       <url>https://chirenhua.github.io/2017/07/19/WWDC-2017%E7%AC%94%E8%AE%B0%E2%80%94Drag-and-Drop/</url>
       <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%20Logo.png" alt="Drag and Drop Logo">  </p>
