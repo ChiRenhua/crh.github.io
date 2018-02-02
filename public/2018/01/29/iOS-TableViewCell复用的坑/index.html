@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -90,15 +90,28 @@
 
 
 
-<meta name="description" content="求知若渴，虚心若愚">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Renhua's Blog">
-<meta property="og:url" content="https://chirenhua.github.io/archives/2017/05/index.html">
+<meta name="description" content="最近在解决Bug时，偶然间发现了一个TableViewCell复用的坑，在这里总结下。
+起因在项目中，有些Cell会监听一些通知来执行特定的操作，举个简单的例子：在CellA和CellB中监听一个通知，当收到通知时会分别将Label的文案设置为“A”和“B”。这时数据发生改变，CellA被CellB取代。此时看起来CellA已经被干掉，但是当发起通知的时候，CellA竟然仍能够响应，这就导致Lab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS-TableViewCell复用的坑">
+<meta property="og:url" content="https://chirenhua.github.io/2018/01/29/iOS-TableViewCell复用的坑/index.html">
 <meta property="og:site_name" content="Renhua's Blog">
-<meta property="og:description" content="求知若渴，虚心若愚">
+<meta property="og:description" content="最近在解决Bug时，偶然间发现了一个TableViewCell复用的坑，在这里总结下。
+起因在项目中，有些Cell会监听一些通知来执行特定的操作，举个简单的例子：在CellA和CellB中监听一个通知，当收到通知时会分别将Label的文案设置为“A”和“B”。这时数据发生改变，CellA被CellB取代。此时看起来CellA已经被干掉，但是当发起通知的时候，CellA竟然仍能够响应，这就导致Lab">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/002.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/001.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/003.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/004.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/005.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/006.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/007.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/008.png">
+<meta property="og:updated_time" content="2018-01-31T11:20:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Renhua's Blog">
-<meta name="twitter:description" content="求知若渴，虚心若愚">
+<meta name="twitter:title" content="iOS-TableViewCell复用的坑">
+<meta name="twitter:description" content="最近在解决Bug时，偶然间发现了一个TableViewCell复用的坑，在这里总结下。
+起因在项目中，有些Cell会监听一些通知来执行特定的操作，举个简单的例子：在CellA和CellB中监听一个通知，当收到通知时会分别将Label的文案设置为“A”和“B”。这时数据发生改变，CellA被CellB取代。此时看起来CellA已经被干掉，但是当发起通知的时候，CellA竟然仍能够响应，这就导致Lab">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/002.png">
 
 
 
@@ -119,9 +132,9 @@
 
 
 
-  <link rel="canonical" href="https://chirenhua.github.io/archives/2017/05/"/>
+  <link rel="canonical" href="https://chirenhua.github.io/2018/01/29/iOS-TableViewCell复用的坑/"/>
 
-  <title> 归档 | Renhua's Blog </title>
+  <title> iOS-TableViewCell复用的坑 | Renhua's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -142,7 +155,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -263,66 +276,189 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 12 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
 
-      
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS-TableViewCell复用的坑
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-01-29T17:21:40+08:00" content="2018-01-29">
+              2018-01-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发总结</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/01/29/iOS-TableViewCell复用的坑/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/29/iOS-TableViewCell复用的坑/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
+        <p>最近在解决Bug时，偶然间发现了一个TableViewCell复用的坑，在这里总结下。</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在项目中，有些Cell会监听一些通知来执行特定的操作，举个简单的例子：<br>在CellA和CellB中监听一个通知，当收到通知时会分别将Label的文案设置为“A”和“B”。这时数据发生改变，CellA被CellB取代。此时看起来CellA已经被干掉，但是当发起通知的时候，CellA竟然仍能够响应，这就导致Label的文案有时是“A”，有时是“B”。查看视图层级，并没有看到CellA的存在，一时有点懵逼，因为至少从视觉上看，CellA已经消失了。</p>
+<h2 id="排查"><a href="#排查" class="headerlink" title="排查"></a>排查</h2><p>在CellA的“dealloc”方法里打断点，数据刷新后，CellA消失，但是并没有走到对应“dealloc”方法里，可见CellA并没有被真正的干掉，它应该还存在于内存中。初步推断是TableViewCell的复用机制导致的。一般出于性能考虑，在创建TableViewCell的时候，都会使用“reuse”的方式创建，避免重复创建的开销。但是究竟是不是这个原因导致的，还要深入排查下。</p>
+<h2 id="深究"><a href="#深究" class="headerlink" title="深究"></a>深究</h2><p>先用一个简单Demo来验证下上面的推断:<br>创建三个不同的Cell均继承自“UITableViewCell”。</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/002.png" alt="DemoPicture001"></p>
+<p>点击Demo中的按钮会将TableView中第一行Cell刷新为对应的“CellA / CellB / CellC”。</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/001.png" alt="DemoPicture002"></p>
+<p>依次点击三个按钮，观察下内存的变化。<br>点击“Button A”时，可以看到内存里创建了一个“A Test TableViewCell”。</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/003.png" alt="DemoPicture003"></p>
+<p>再点击“Button B”，内存里新创建了一个“B Test TableViewCell”，但是可以发现，“A Test TableViewCell”并没有被销毁，虽然此时在View上已经看不到了。</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/004.png" alt="DemoPicture004"></p>
+<p>同理，点击“Button C”，内存里新创建了一个“C Test TableViewCell”，“A Test TableViewCell”和“B Test TableViewCell”依然没有被销毁。  </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/005.png" alt="DemoPicture005"></p>
+<p>可见确实是因为Cell的复用导致旧的Cell一直存在于内存中，但是视图层级里却找不到它。那是否可以通过判断Cell的superView是否存在来确定当前Cell是否在复用池中呢？我们再做个实验，在点击Button的时候，发出通知，Cell在收到通知后，打印其SuperView。结果如下：</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/006.png" alt="DemoPicture006"></p>
+<p>很神奇，虽然Cell已经不见了，但是看起来它并没有从TableView中移除，也就是说复用池中的Cell仍在存在于TableView上。既然这样我们不妨把TableView的子View都打印出来，看下结果：</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/007.png" alt="DemoPicture007"></p>
+<p>果真3个Cell都在，但是其中AB两个在复用池中的Cell是被隐藏的！！！所以在视图层级里是看不到它。</p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91/008.png" alt="DemoPicture008"></p>
+<p>终于找到原因，我的问题也得以解决，在收到通知时判断下当前Cell的隐藏状态，如果隐藏就不响应通知即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看来苹果对Cell复用的处理也是简单粗暴，直接隐藏，这也是导致被替换掉的Cell仍然能够响应通知的原因。所以以后在处理Cell时，可以考虑下以下两点建议：<br>1.和Cell通信时，尽量避免使用通知，因为很难追踪到谁会响应通知去做些什么事情，很有可能触发一些奇怪的Bug。<br>2.如果Cell占用很多内存的话，Cell复用会导致内存不能及时释放，可以考虑在内存过高时，清理TableView中处于Hidden的Cell。</p>
+
+      
+    </div>
+
+    <div>
+      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/WeChat.jpg" alt="Renhua Chi WeChat Pay"/>
+          <p>微信打赏</p>
         </div>
       
       
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/AliPay.jpg" alt="Renhua Chi Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
 
       
+    </div>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
 
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/15/Xcode-真机编译iOS7方法/" itemprop="url">
-              
-                <span itemprop="name">Xcode-真机编译iOS7方法</span>
-              
-            </a>
-        
-      </h1>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/07/WWDC-2017笔记—Vision/" rel="next" title="WWDC-2017笔记—Vision">
+                <i class="fa fa-chevron-left"></i> WWDC-2017笔记—Vision
+              </a>
+            
+          </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-15T21:00:30+08:00"
-              content="2017-05-15" >
-          05-15
-        </time>
-      </div>
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
 
-    </header>
+      
+      
+    </footer>
   </article>
 
 
 
-    
-
-  </section>
-
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -330,6 +466,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/01/29/iOS-TableViewCell复用的坑/"
+           data-title="iOS-TableViewCell复用的坑" data-url="https://chirenhua.github.io/2018/01/29/iOS-TableViewCell复用的坑/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -349,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg"
@@ -446,6 +599,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排查"><span class="nav-number">2.</span> <span class="nav-text">排查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深究"><span class="nav-number">3.</span> <span class="nav-text">深究</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -549,11 +713,9 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
