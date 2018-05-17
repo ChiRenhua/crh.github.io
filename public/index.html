@@ -287,6 +287,154 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/17/CocoaPods-创建私有仓库/" itemprop="url">
+                  CocoaPods-创建私有仓库
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-17T17:00:09+08:00" content="2018-05-17">
+              2018-05-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CocoaPods/" itemprop="url" rel="index">
+                    <span itemprop="name">CocoaPods</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/17/CocoaPods-创建私有仓库/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/17/CocoaPods-创建私有仓库/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg" alt="cocoaPods logo">  </p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前有介绍过如何安装 CocoaPods（<a href="http://chirenhua.com/2016/08/27/%E5%AE%89%E8%A3%85CocoaPods%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/" target="_blank" rel="external">传送门</a>），对于CocoaPods的好处自然也不必多说。然而有些情况下，我们想要管理自己的库，但还不想把这些库开源，这时就需要构建一个私有的 CocoaPods 仓库。  </p>
+<p>在前面安装 CocoaPods 的教程中有提到：pod setup 的本质就是将 <a href="https://github.com/CocoaPods/Specs" target="_blank" rel="external">https://github.com/CocoaPods/Specs</a> 上的 Specs 项目 clone到 /Users/ 用户名 /.cocoapods/repos 目录下。同理，我们在 git 上创建一个私有的仓库，用于存储私有的库文件，然后将这个私有仓库添加到 CocoaPods 中即可。</p>
+<h2 id="1-在-Git-上创建私有仓库"><a href="#1-在-Git-上创建私有仓库" class="headerlink" title="1. 在 Git 上创建私有仓库"></a>1. 在 Git 上创建私有仓库</h2><p>个人开发者可以在 GitHub 上购买一个私有仓库，公司的话一般都会有自己内部的 Git 平台。这里用GitHub举例，创建一个私有仓库用于存放私有的库文件:   </p>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods01.png" alt="">  </p>
+<p>创建完成后，在终端执行以下命令，将新创建的 MartinSpecs 仓库添加到 CocoaPods 中。（ MartinSpecs 是仓库名称，后面的域名是仓库地址）  </p>
+<p><code>pod repo add MartinSpecs https://github.com/ChiRenhua/MartinSpecs</code>  </p>
+<p>至此我们第一步就完成了，来到 .cocoapods 目录下，我们可以看到刚刚创建的 MartinSpecs 仓库已经添加到了 CocoaPods 中了。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods02.png" alt=""></p>
+<h2 id="2-创建-CocoaPods-库文件"><a href="#2-创建-CocoaPods-库文件" class="headerlink" title="2. 创建 CocoaPods 库文件"></a>2. 创建 CocoaPods 库文件</h2><p>这一步需要按照 CocoaPods 的标准对库文件进行包装。  </p>
+<ol>
+<li>在 GitHub 上创建一个新的项目：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods03.png" alt=""><br>要注意 License 文件是一定要有的，因为CocoaPods要求 Pods 依赖库必须要有 License 文件，否则会导致验证失败。</li>
+<li>创建并配置 .podspec 文件：<br>将项目 clone 到本地，并在相应目录下通过以下命令创建 .podspec 文件<br><code>pod spec create MartinPodsTest</code><br>打开 MartinPodsTest.podspec 文件（这是个 ruby 类型的文件，“#” 代表被注释，所以这里大部分是没用的注释），删掉没用的注释，我们把重要的参数配置下即可。  </li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods08.png" alt=""></p>
+<ol>
+<li>发布 release 版本<br>至此库文件已经配置完毕，接下来要在 GitHub 上发布一个 release 版本即可。<br>在相应目录下执行以下命令：<br><code>git tag &#39;0.0.3&#39;</code><br><code>git push --tags</code><br><code>git push</code><br>在 GitHub 上已经可以看到刚刚发布的 realse 版本了！<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods09.png" alt=""></li>
+</ol>
+<h2 id="3-添加到-CocoaPods-私有仓库中"><a href="#3-添加到-CocoaPods-私有仓库中" class="headerlink" title="3. 添加到 CocoaPods 私有仓库中"></a>3. 添加到 CocoaPods 私有仓库中</h2><ol>
+<li><p>验证库<br>通过命令 <code>pod lib lint</code> 来验证依赖库是否合法，如果合法就可以添加到 CocoaPods 的仓库中了。<br>如果出现了无关紧要的警告⚠️，如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods04.png" alt=""><br>可以通过下面的命令规避这些警告。<br><code>pod lib lint --allow-warnings</code></p>
+</li>
+<li><p>添加到 CocoaPods 私有仓库<br>如果验证通过会提示：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods05.png" alt=""><br>验证通过后通过下面的命令将项目提交到私有仓库中<br><code>pod repo push MartinSpecs MartinPodsTest.podspec</code><br>如果因为警告原因 push 失败，可以在 push 后添加 <code>--allow-warnings</code><br><code>pod repo pus --allow-warnings MartinSpecs MartinPodsTest.podspec</code><br>添加成功后就可以看到库文件已经被添加到私有仓库中了。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods07.png" alt=""><br>尝试搜索下刚刚新加的库，已经可以看到了！<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods06.png" alt=""></p>
+</li>
+</ol>
+<h2 id="4-在项目中引用依赖库"><a href="#4-在项目中引用依赖库" class="headerlink" title="4. 在项目中引用依赖库"></a>4. 在项目中引用依赖库</h2><p>创建一个新的项目，在项目目录下执行<br><code>pod init</code><br>执行完毕后会在目录中添加 Podfile 文件，修改 Podfile 文件，如图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods10.png" alt="">  </p>
+<ol>
+<li>添加两个 source 目录，对应官方的仓库地址和私有的仓库地址，一定要两个都加上，这样在搜索库时，会在两个目录下同时搜索。<br><code>source &#39;https://github.com/CocoaPods/Specs.git&#39;           #官方仓库</code><br><code>source &#39;https://github.com/ChiRenhua/MartinSpecs.git&#39;     #私有仓库</code>  </li>
+<li>添加 MartinPodsTest 库（顺便再加个 AFNetworking 来验证下公有库是否正常运行）<br><code>pod &#39;MartinPodsTest&#39;</code>  </li>
+<li>最后执行 install 命令安装 MartinPodsTest 库<br><code>pod install</code><br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/cocoaPods11.png" alt=""><br>一切正常！完美。<h2 id="5-结语"><a href="#5-结语" class="headerlink" title="5. 结语"></a>5. 结语</h2>这样我们就拥有一个私有的 CocoaPods 仓库了，可以将项目组件化，然后通过 CocoaPods 来管理。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/04/13/Python-在-Mac-下安装-Python-和-pip/" itemprop="url">
                   Python-在 Mac 下安装 Python 和 pip
                 </a>
@@ -1695,210 +1843,6 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/29/iOS-使用UISearchController创建搜索框/" itemprop="url">
-                  iOS--使用UISearchController创建搜索框
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-29T16:40:27+08:00" content="2016-08-29">
-              2016-08-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS开发总结</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/29/iOS-使用UISearchController创建搜索框/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/iOS-使用UISearchController创建搜索框/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>&emsp;&emsp;在iOS8之前，我们一直利用UISearchBar和UISearchDisplayController来实现搜索框，但是在iOS8以后上述方法已经过时，改而实用UISearchController来替代，用起来比之前的方法要简单好多。  </p>
-<h2 id="添加UISearchController变量"><a href="#添加UISearchController变量" class="headerlink" title="添加UISearchController变量"></a>添加UISearchController变量</h2><p>&emsp;&emsp;在开始之前我们要添加UISearchController变量，并未搜索前的数据和搜索结果创建两个数组：  </p>
-<p><pre>@property(strong, nonatomic) UISearchController <em>searchController;<br>@property(strong, nonatomic) NSMutableArray </em>bookArray;<br>@property(strong, nonatomic) NSMutableArray *bookResult;</pre></p>
-<h2 id="初始化UISearchController"><a href="#初始化UISearchController" class="headerlink" title="初始化UISearchController"></a>初始化UISearchController</h2><p>&emsp;&emsp;初始化UISearchController并设置其属性和默认文字  </p>
-<pre>- (void)showSearchBar {
-    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    //搜索结果处理函数代理
-    _searchController.searchResultsUpdater = self;
-    //是否显示背景
-    _searchController.dimsBackgroundDuringPresentation = false;
-    [_searchController.searchBar sizeToFit];
-    //修改searchBar的默认文字
-    _searchController.searchBar.placeholder = @"搜索";
-    //修改“Cancle按钮的默认文字”
-    [_searchController.searchBar setValue:@"取消" forKey:@"_cancelButtonText"];
-    //将搜索框添加到tableHeaderView中
-    _CheckBookViewtableView.tableHeaderView = self.searchController.searchBar;
-}</pre>
-
-<h2 id="添加UISearchResultsUpdating协议"><a href="#添加UISearchResultsUpdating协议" class="headerlink" title="添加UISearchResultsUpdating协议"></a>添加UISearchResultsUpdating协议</h2><p>&emsp;&emsp;如果要对搜索结果进行处理，那我们要为UISearchController添加一个搜索结果处理的协议，并实现其下的方法：<br>&emsp;&emsp;添加协议：</p>
-<p><pre>@interface CheckBookViewController ()&lt; UITableViewDataSource,UITableViewDelegate,UISearchResultsUpdating &gt;</pre></p>
-<p>&emsp;&emsp;实现方法：</p>
-<pre>- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    [searchResult removeAllObjects];
-    NSString *keyWord = [searchController .searchBar text];
-    [bookArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        Book *book = obj;
-        if ([book.bookName.uppercaseString containsString:keyWord.uppercaseString]) {
-            [searchResult addObject:book];
-        }
-    }];
-    [_CheckBookViewtableView reloadData];
-}</pre>
-
-<h2 id="UITableView代理方法下对搜索结果的处理"><a href="#UITableView代理方法下对搜索结果的处理" class="headerlink" title="UITableView代理方法下对搜索结果的处理"></a>UITableView代理方法下对搜索结果的处理</h2><p>&emsp;&emsp;因为搜索结果要复用界面的TableView，所以在TableView的代理方法下要进行判断当前是搜索的界面还是主界面：</p>
-<pre>- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // 判断是否是搜索结果的tableView
-    if ([self.searchController isActive]) {
-        return searchResult.count;
-    }
-    return [bookArray count];
-}
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    Book *books;
-    CheckBookViewcell = [tableView dequeueReusableCellWithIdentifier:@"UIListTableViewCell"];                                                        // 从缓存池中取出cell
-    if (!CheckBookViewcell) {                                                                                                                        // 判断是否能取出cell
-        CheckBookViewcell = [[ListTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UIListTableViewCell"];            // 如果cell为空则创建一个新的cell并放入缓存池中
-    }else{                                                                                                                                           // 如果cell不为空（注意：以下操作很重要，不然会造成cell数据错乱）
-        [CheckBookViewcell removeCellView];                                                                                                          // 将之前cell界面上的view全部remove掉
-        [CheckBookViewcell initCellView];                                                                                                            // 重新初始化cell上的view
-    }
-    // 判断是否是搜索结果的tableView
-    if ([self.searchController isActive]) {
-        books = searchResult[indexPath.row];
-    }else {
-        if (viewcode) {
-            books = bookArray[indexPath.row];
-        }else {
-            books = bookArray[indexPath.row];
-        }
-    }
-
-    [CheckBookViewcell setBookInfo:books];
-    return CheckBookViewcell;
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Book *book;
-    if ([_searchController isActive]) {
-        book = searchResult[indexPath.row];
-    }else {
-        book = bookArray[indexPath.row];
-    }
-    BookDetialViewController *bookDetialVC = [[BookDetialViewController alloc]init:book];
-    [self.navigationController pushViewController:bookDetialVC animated:YES];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];                                                                                  // 取消选中的状态
-}</pre>
-
-<h2 id="最后注意"><a href="#最后注意" class="headerlink" title="最后注意!"></a>最后注意!</h2><p>&emsp;&emsp;在离开界面时要销毁掉UISearchController，不然它会在其它界面一直存在：</p>
-<pre>- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if (self.searchController.active) {
-        self.searchController.active = NO;
-        [self.searchController.searchBar removeFromSuperview];
-    }
-}</pre>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1944,7 +1888,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1952,7 +1896,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1961,7 +1905,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
