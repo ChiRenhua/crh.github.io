@@ -4,6 +4,32 @@
   
     
     <entry>
+      <title><![CDATA[iOS-安装包瘦身]]></title>
+      <url>https://chirenhua.github.io/2018/05/20/iOS-%E5%AE%89%E8%A3%85%E5%8C%85%E7%98%A6%E8%BA%AB/</url>
+      <content type="html"><![CDATA[<p>随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。</p>
+<h2 id="1-资源文件"><a href="#1-资源文件" class="headerlink" title="1. 资源文件"></a>1. 资源文件</h2><h3 id="1-删除无用图片"><a href="#1-删除无用图片" class="headerlink" title="1. 删除无用图片"></a>1. 删除无用图片</h3><p>使用开源工具 <a href="https://github.com/tinymind/LSUnusedResources" target="_blank" rel="external"><strong>LSUnusedResources</strong></a> 检查重复图片，但是可能会有误报，比如 <code>[@&quot;image%d&quot;, index]</code> 这种引用方式无法检查到，需要人工在核对一边。</p>
+<h3 id="2-图片文件压缩"><a href="#2-图片文件压缩" class="headerlink" title="2. 图片文件压缩"></a>2. 图片文件压缩</h3><p>使用开源工具 <a href="https://github.com/ImageOptim/ImageOptim" target="_blank" rel="external"><strong>imageOptim</strong></a> 对所有图片压缩一遍。此工具会使用 git 上主流的图片压缩方法尝试一遍，选择最优方案。</p>
+<h3 id="3-纯色图片使用代码生成"><a href="#3-纯色图片使用代码生成" class="headerlink" title="3. 纯色图片使用代码生成"></a>3. 纯色图片使用代码生成</h3><p>如果项目中纯色的图片比较多，可以考虑使用代码替代，生成后缓存到本地以供后期使用。</p>
+<h3 id="4-不常用图片后台下发"><a href="#4-不常用图片后台下发" class="headerlink" title="4. 不常用图片后台下发"></a>4. 不常用图片后台下发</h3><p>对于项目中不常用的图片可以考虑由后台下发，但是此项收益可能不高，而且会影响使用体验，酌情使用。</p>
+<h3 id="5-字体文件"><a href="#5-字体文件" class="headerlink" title="5. 字体文件"></a>5. 字体文件</h3><p>字体文件一般都很大，如果项目中使用了多种字体文件，可以删掉不常用的字体文件。</p>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><h3 id="1-删除不使用的类"><a href="#1-删除不使用的类" class="headerlink" title="1. 删除不使用的类"></a>1. 删除不使用的类</h3><p>项目迭代很久后，会有很多历史遗留的代码，已经不会再调用到，可以使用开源工具 <a href="https://github.com/netyouli/WHC_Scan" target="_blank" rel="external"><strong>WHC_Scan</strong></a> 检查没有使用的类，但是可能会有误报，而且 OC 语言的特性导致需要人工 check 一遍。</p>
+<h3 id="2-删除不使用的方法"><a href="#2-删除不使用的方法" class="headerlink" title="2. 删除不使用的方法"></a>2. 删除不使用的方法</h3><p>方法和类不在一个数量级，所以检查起来比较耗时，而且一样会有误报，如果人工核实一遍的话耗时不说收益也偏少。</p>
+<h3 id="3-精简库文件"><a href="#3-精简库文件" class="headerlink" title="3. 精简库文件"></a>3. 精简库文件</h3><p>在编译选项中选择生成 LinkMap 文件，编译完成后会在对应目录下生成 LinkMap 文件。分析 LinkMap 文件可以知道每个库文件的大小。</p>
+<p>分析工具可以使用 <a href="https://github.com/huanxsd/LinkMap" target="_blank" rel="external"><strong>LinkMap</strong></a> ，效果如下图：</p>
+<p><img src="https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png" alt="LinkMap"></p>
+<p><strong>1. 检查删除没有使用的库文件。</strong></p>
+<p><strong>2. 对于过于庞大的库，检查下是否使用到了库中的所有功能，避免为了使用一小部分功能而引用了整个库。</strong></p>
+<p><strong>3. 检查重复的库文件，删除多余的库。</strong></p>
+<h3 id="4-删除无用功能代码"><a href="#4-删除无用功能代码" class="headerlink" title="4. 删除无用功能代码"></a>4. 删除无用功能代码</h3><p><strong>1. 对于一次性 / 活动需求，确认不会再使用后及时清理掉。</strong></p>
+<p><strong>2. 过时的功能，旧的 UI 样式，确实不再使用及时清理。</strong></p>
+<h2 id="3-编译选项"><a href="#3-编译选项" class="headerlink" title="3. 编译选项"></a>3. 编译选项</h2><h3 id="1-去掉符号信息"><a href="#1-去掉符号信息" class="headerlink" title="1. 去掉符号信息"></a>1. 去掉符号信息</h3><p>在 Release 版本把 Strip Debug Symbols During Copy 和 Symbols Hidden by Default 设为 YES，可以去除不必要的调试符号。</p>
+<p>Symbols Hidden by Default 会把所有符号都定义成 ”private extern”。  </p>
+<p>去掉符号信息会让安装包大小减少很多，但是代价是在 APP 里打印堆栈信息无法还原出对应的类名和方法名。</p>
+<h3 id="2-编译选项优化"><a href="#2-编译选项优化" class="headerlink" title="2. 编译选项优化"></a>2. 编译选项优化</h3><p>Release 版本的 Optimization Level 应该设置为 Fastest, Smalllest。</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[CocoaPods-创建私有仓库]]></title>
       <url>https://chirenhua.github.io/2018/05/17/CocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</url>
       <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg" alt="cocoaPods logo">  </p>
@@ -583,7 +609,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>]]></content
     
     <entry>
       <title><![CDATA[Hello World]]></title>
-      <url>https://chirenhua.github.io/2016/08/24/hello-world/</url>
+      <url>https://chirenhua.github.io/2016/08/26/hello-world/</url>
       <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hello%20world/home-bg-o.jpg" alt="hello world"><br>&emsp;&emsp;作为一个程序员，“Hello World”可以说为我打开了新世界的大门。第一个程序，第一个网站，第一个脚本…都是从“Hello World”开始的。因为我已经决定要重新开启我的博客生涯，所以我的第一篇博文就叫“Hello World”！</p>
 <p>&emsp;&emsp;人这一辈子最开心的事莫过于做自己喜欢的事情，很幸运，我的工作也是我的爱好，这也是支撑着我在周末来公司加班写博客的动力哈哈哈。</p>
 <p>&emsp;&emsp;我觉得编程就像画画一样，键盘是画笔，代码是墨，编译器是画纸。我们在键盘上敲敲敲，就像拿着笔在纸上挥毫一样，最终我们都会创造出一个个无法复刻的作品。所以说编程是门艺术，一点都没错。</p>

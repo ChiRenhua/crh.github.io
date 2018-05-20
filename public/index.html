@@ -287,6 +287,145 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/20/iOS-安装包瘦身/" itemprop="url">
+                  iOS-安装包瘦身
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-20T20:34:41+08:00" content="2018-05-20">
+              2018-05-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发总结</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/20/iOS-安装包瘦身/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/20/iOS-安装包瘦身/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。</p>
+<h2 id="1-资源文件"><a href="#1-资源文件" class="headerlink" title="1. 资源文件"></a>1. 资源文件</h2><h3 id="1-删除无用图片"><a href="#1-删除无用图片" class="headerlink" title="1. 删除无用图片"></a>1. 删除无用图片</h3><p>使用开源工具 <a href="https://github.com/tinymind/LSUnusedResources" target="_blank" rel="external"><strong>LSUnusedResources</strong></a> 检查重复图片，但是可能会有误报，比如 <code>[@&quot;image%d&quot;, index]</code> 这种引用方式无法检查到，需要人工在核对一边。</p>
+<h3 id="2-图片文件压缩"><a href="#2-图片文件压缩" class="headerlink" title="2. 图片文件压缩"></a>2. 图片文件压缩</h3><p>使用开源工具 <a href="https://github.com/ImageOptim/ImageOptim" target="_blank" rel="external"><strong>imageOptim</strong></a> 对所有图片压缩一遍。此工具会使用 git 上主流的图片压缩方法尝试一遍，选择最优方案。</p>
+<h3 id="3-纯色图片使用代码生成"><a href="#3-纯色图片使用代码生成" class="headerlink" title="3. 纯色图片使用代码生成"></a>3. 纯色图片使用代码生成</h3><p>如果项目中纯色的图片比较多，可以考虑使用代码替代，生成后缓存到本地以供后期使用。</p>
+<h3 id="4-不常用图片后台下发"><a href="#4-不常用图片后台下发" class="headerlink" title="4. 不常用图片后台下发"></a>4. 不常用图片后台下发</h3><p>对于项目中不常用的图片可以考虑由后台下发，但是此项收益可能不高，而且会影响使用体验，酌情使用。</p>
+<h3 id="5-字体文件"><a href="#5-字体文件" class="headerlink" title="5. 字体文件"></a>5. 字体文件</h3><p>字体文件一般都很大，如果项目中使用了多种字体文件，可以删掉不常用的字体文件。</p>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><h3 id="1-删除不使用的类"><a href="#1-删除不使用的类" class="headerlink" title="1. 删除不使用的类"></a>1. 删除不使用的类</h3><p>项目迭代很久后，会有很多历史遗留的代码，已经不会再调用到，可以使用开源工具 <a href="https://github.com/netyouli/WHC_Scan" target="_blank" rel="external"><strong>WHC_Scan</strong></a> 检查没有使用的类，但是可能会有误报，而且 OC 语言的特性导致需要人工 check 一遍。</p>
+<h3 id="2-删除不使用的方法"><a href="#2-删除不使用的方法" class="headerlink" title="2. 删除不使用的方法"></a>2. 删除不使用的方法</h3><p>方法和类不在一个数量级，所以检查起来比较耗时，而且一样会有误报，如果人工核实一遍的话耗时不说收益也偏少。</p>
+<h3 id="3-精简库文件"><a href="#3-精简库文件" class="headerlink" title="3. 精简库文件"></a>3. 精简库文件</h3><p>在编译选项中选择生成 LinkMap 文件，编译完成后会在对应目录下生成 LinkMap 文件。分析 LinkMap 文件可以知道每个库文件的大小。</p>
+<p>分析工具可以使用 <a href="https://github.com/huanxsd/LinkMap" target="_blank" rel="external"><strong>LinkMap</strong></a> ，效果如下图：</p>
+<p><img src="https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png" alt="LinkMap"></p>
+<p><strong>1. 检查删除没有使用的库文件。</strong></p>
+<p><strong>2. 对于过于庞大的库，检查下是否使用到了库中的所有功能，避免为了使用一小部分功能而引用了整个库。</strong></p>
+<p><strong>3. 检查重复的库文件，删除多余的库。</strong></p>
+<h3 id="4-删除无用功能代码"><a href="#4-删除无用功能代码" class="headerlink" title="4. 删除无用功能代码"></a>4. 删除无用功能代码</h3><p><strong>1. 对于一次性 / 活动需求，确认不会再使用后及时清理掉。</strong></p>
+<p><strong>2. 过时的功能，旧的 UI 样式，确实不再使用及时清理。</strong></p>
+<h2 id="3-编译选项"><a href="#3-编译选项" class="headerlink" title="3. 编译选项"></a>3. 编译选项</h2><h3 id="1-去掉符号信息"><a href="#1-去掉符号信息" class="headerlink" title="1. 去掉符号信息"></a>1. 去掉符号信息</h3><p>在 Release 版本把 Strip Debug Symbols During Copy 和 Symbols Hidden by Default 设为 YES，可以去除不必要的调试符号。</p>
+<p>Symbols Hidden by Default 会把所有符号都定义成 ”private extern”。  </p>
+<p>去掉符号信息会让安装包大小减少很多，但是代价是在 APP 里打印堆栈信息无法还原出对应的类名和方法名。</p>
+<h3 id="2-编译选项优化"><a href="#2-编译选项优化" class="headerlink" title="2. 编译选项优化"></a>2. 编译选项优化</h3><p>Release 版本的 Optimization Level 应该设置为 Fastest, Smalllest。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/05/17/CocoaPods-创建私有仓库/" itemprop="url">
                   CocoaPods-创建私有仓库
                 </a>
@@ -1675,191 +1814,6 @@ SwipeInteractiveTransition *swipeInteractiveTransition = [SwipeInteractiveTransi
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/iOS-NSUserDefaults用法总结/" itemprop="url">
-                  iOS--NSUserDefaults用法总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T21:00:41+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS开发总结</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/16/iOS-NSUserDefaults用法总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/iOS-NSUserDefaults用法总结/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="NSUserDefaults原理"><a href="#NSUserDefaults原理" class="headerlink" title="NSUserDefaults原理"></a>NSUserDefaults原理</h2><p>&emsp;&emsp;NSUserDefaults是iOS为我们提供的一种轻量级的本地存储方式，其工作原理非常简单，就是将数据存储到本地的plist文件中。其实建立plist文件我们自己也可以完成，只不过自己去操作文件的创建、读取等会比较麻烦，使用“NSUserDefaults”则可以完全省略掉这些步骤，只需要进行简单的读写就可以了。</p>
-<h2 id="NSUserDefaults支持的数据类型"><a href="#NSUserDefaults支持的数据类型" class="headerlink" title="NSUserDefaults支持的数据类型"></a>NSUserDefaults支持的数据类型</h2><p>&emsp;&emsp;因为NSUserDefaults是创建的plist类型的文件，所以它支持的数据类型也必须是plist文件能够存储的数据类型，分别是：<strong>NSNumber（NSInteger、float、double），NSString，NSDate，NSArray，NSDictionary，BOOL</strong>。需要注意的是，就算是存储的对象是“NSArray”类型的，那也要保证“NSArray”中存储的数据必须是plist文件支持的类型。如果需要存储plist不支持的数据类型，比如说一张图片或者一个自定义对象（下文会提到），可以先将其归档为“NSDate”类型，在存储到plist文件中。</p>
-<h2 id="NSUserDefaults用法"><a href="#NSUserDefaults用法" class="headerlink" title="NSUserDefaults用法"></a>NSUserDefaults用法</h2><p>&emsp;&emsp;NSUserDefaults是一个单例，我们可以在程序的任何地方获取到它的唯一实例化对象：</p>
-<pre>NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];</pre>  
-&emsp;&emsp;存储一个数据：  
-<pre>[userDefault setObject:@"测试" forKey:@"test"];</pre>  
-&emsp;&emsp;由于NSUserDefaults是隔一段时间将数据写到本地，所以为了保险起见，建议加上下面的代码，确保数据及时的存储。  
-<pre>[userDefault synchronize];</pre>  
-&emsp;&emsp;取出一个数据也是非常的简单：  
-<pre>NSString *str = [userDefault objectForKey:@"test"];</pre>
-
-<h2 id="使用NSUserDefaults存储自定义对象"><a href="#使用NSUserDefaults存储自定义对象" class="headerlink" title="使用NSUserDefaults存储自定义对象"></a>使用NSUserDefaults存储自定义对象</h2><h3 id="1-将自定义类型转换为NSDate类型"><a href="#1-将自定义类型转换为NSDate类型" class="headerlink" title="1.将自定义类型转换为NSDate类型"></a>1.将自定义类型转换为NSDate类型</h3><p>&emsp;&emsp;其实不建议将数据这样存储，多数据复杂类型还是建议存到数据库中，如果非要这样存储的话，可以先将自定义类型归档为NSDate类型，因为plist文件是支持存储NSDate类型数据的，然后再通过NSUserDefaults进行存储。下面举个例子：<br>&emsp;&emsp;假如我们要把书籍的对象存储起来。首先要在“.h”文件中声明“NSCoding”协议，并在“.m”文件中实现“encodeWithCoder”和“initWithCoder”两个方法。<br>&emsp;&emsp;.h文件：</p>
-<pre>//
-//  Book.h
-//  Book
-//
-//  Created by Renhuachi on 16/3/22.
-//  Copyright © 2016年 software. All rights reserved.
-//
-
-＃import < Foundation/Foundation.h >
-
-@interface Book : NSObject <nscoding>
-＃pragma mark - 属性
-@property (nonatomic,copy) NSString *authorName;
-@property (nonatomic,copy) NSString *bookName;
-
-@end</nscoding></pre>  
-&emsp;&emsp;.m文件  
-<pre>//
-//  Book.m
-//  Book
-//
-//  Created by Renhuachi on 16/3/22.
-//  Copyright © 2016年 software. All rights reserved.
-//
-
-＃import "Book.h"
-
-@implementation Book
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super init]) {
-        _authorName = [aDecoder decodeObjectForKey:@"authorName"];
-        _bookName = [aDecoder decodeObjectForKey:@"bookName"];
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:_authorName forKey:@"authorName"];
-    [aCoder encodeObject:_bookName forKey:@"bookName"];
-}
-@end</pre>
-
-<h3 id="2-利用NSUserDefaults存储自定义类"><a href="#2-利用NSUserDefaults存储自定义类" class="headerlink" title="2.利用NSUserDefaults存储自定义类"></a>2.利用NSUserDefaults存储自定义类</h3><p>&emsp;&emsp;首先创建一个Book类型的对象，并将其归档为NSDate类型，然后存储到NSUserDefaults中。  </p>
-<pre>Book *book = [[Book alloc]init];
-book.authorName = @"书名";
-book.bookName = @"作者";
-
-NSData *data = [NSKeyedArchiver archivedDataWithRootObject:book];
-NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-[userDefaults setObject:data forKey:@"book"];</pre>  
-&emsp;&emsp;从NSUserDefaults中还原数据也很简单。  
-<pre>NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-NSdData *data = [user objectForKey:@"book"];  
-Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1905,7 +1859,7 @@ Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];</pre>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

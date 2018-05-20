@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="命令," />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -90,21 +90,21 @@
 
 
 
-<meta name="description" content="安装安装npm install hexo -g升级npm update hexo -g初始化hexo init
-发表文章新建文章hexo n &amp;quot;我的博客&amp;quot; == hexo new &amp;quot;我的博客&amp;quot;发表草稿hexo p == hexo publish生成静态文件hexo g == hexo generate启动服务预览hexo s == hexo serve">
+<meta name="description" content="随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。
+1. 资源文件1. 删除无用图片使用开源工具 LSUnusedResources 检查重复图片，但是可能会有误报，比如 [@&amp;quot;image%d&amp;quot;, index] 这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo常用命令整理">
-<meta property="og:url" content="https://chirenhua.github.io/2016/08/27/hexo常用命令整理/index.html">
+<meta property="og:title" content="iOS-安装包瘦身">
+<meta property="og:url" content="https://chirenhua.github.io/2018/05/20/iOS-安装包瘦身/index.html">
 <meta property="og:site_name" content="Renhua's Blog">
-<meta property="og:description" content="安装安装npm install hexo -g升级npm update hexo -g初始化hexo init
-发表文章新建文章hexo n &amp;quot;我的博客&amp;quot; == hexo new &amp;quot;我的博客&amp;quot;发表草稿hexo p == hexo publish生成静态文件hexo g == hexo generate启动服务预览hexo s == hexo serve">
-<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hexo常用命令整理/hexo.jpg">
-<meta property="og:updated_time" content="2018-01-24T16:48:36.171Z">
+<meta property="og:description" content="随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。
+1. 资源文件1. 删除无用图片使用开源工具 LSUnusedResources 检查重复图片，但是可能会有误报，比如 [@&amp;quot;image%d&amp;quot;, index] 这">
+<meta property="og:image" content="https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png">
+<meta property="og:updated_time" content="2018-05-20T15:13:43.278Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo常用命令整理">
-<meta name="twitter:description" content="安装安装npm install hexo -g升级npm update hexo -g初始化hexo init
-发表文章新建文章hexo n &amp;quot;我的博客&amp;quot; == hexo new &amp;quot;我的博客&amp;quot;发表草稿hexo p == hexo publish生成静态文件hexo g == hexo generate启动服务预览hexo s == hexo serve">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hexo常用命令整理/hexo.jpg">
+<meta name="twitter:title" content="iOS-安装包瘦身">
+<meta name="twitter:description" content="随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。
+1. 资源文件1. 删除无用图片使用开源工具 LSUnusedResources 检查重复图片，但是可能会有误报，比如 [@&amp;quot;image%d&amp;quot;, index] 这">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png">
 
 
 
@@ -125,9 +125,9 @@
 
 
 
-  <link rel="canonical" href="https://chirenhua.github.io/2016/08/27/hexo常用命令整理/"/>
+  <link rel="canonical" href="https://chirenhua.github.io/2018/05/20/iOS-安装包瘦身/"/>
 
-  <title> Hexo常用命令整理 | Renhua's Blog </title>
+  <title> iOS-安装包瘦身 | Renhua's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -290,7 +290,7 @@
             
             
               
-                Hexo常用命令整理
+                iOS-安装包瘦身
               
             
           </h1>
@@ -302,8 +302,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-27T19:11:39+08:00" content="2016-08-27">
-              2016-08-27
+            <time itemprop="dateCreated" datetime="2018-05-20T20:34:41+08:00" content="2018-05-20">
+              2018-05-20
             </time>
           </span>
 
@@ -316,8 +316,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/网站搭建/" itemprop="url" rel="index">
-                    <span itemprop="name">网站搭建</span>
+                  <a href="/categories/iOS开发总结/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发总结</span>
                   </a>
                 </span>
 
@@ -332,8 +332,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/27/hexo常用命令整理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/27/hexo常用命令整理/" itemprop="commentsCount"></span>
+                <a href="/2018/05/20/iOS-安装包瘦身/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/20/iOS-安装包瘦身/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -356,11 +356,26 @@
       
 
       
-        <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hexo常用命令整理/hexo.jpg" alt="Hexo logl">  </p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装<br><code>npm install hexo -g</code><br>升级<br><code>npm update hexo -g</code><br>初始化<br><code>hexo init</code></p>
-<h2 id="发表文章"><a href="#发表文章" class="headerlink" title="发表文章"></a>发表文章</h2><p>新建文章<br><code>hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;</code><br>发表草稿<br><code>hexo p == hexo publish</code><br>生成静态文件<br><code>hexo g == hexo generate</code><br>启动服务预览<br><code>hexo s == hexo server</code><br>部署到远程<br><code>hexo d == hexo deploy</code></p>
-<h2 id="清理缓存"><a href="#清理缓存" class="headerlink" title="清理缓存"></a>清理缓存</h2><p>清除缓存文件 (db.json) 和已生成的静态文件 (public)<br><code>hexo clean</code></p>
-<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><p>查看Hexo运行版本<br><code>hexo version</code></p>
+        <p>随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。</p>
+<h2 id="1-资源文件"><a href="#1-资源文件" class="headerlink" title="1. 资源文件"></a>1. 资源文件</h2><h3 id="1-删除无用图片"><a href="#1-删除无用图片" class="headerlink" title="1. 删除无用图片"></a>1. 删除无用图片</h3><p>使用开源工具 <a href="https://github.com/tinymind/LSUnusedResources" target="_blank" rel="external"><strong>LSUnusedResources</strong></a> 检查重复图片，但是可能会有误报，比如 <code>[@&quot;image%d&quot;, index]</code> 这种引用方式无法检查到，需要人工在核对一边。</p>
+<h3 id="2-图片文件压缩"><a href="#2-图片文件压缩" class="headerlink" title="2. 图片文件压缩"></a>2. 图片文件压缩</h3><p>使用开源工具 <a href="https://github.com/ImageOptim/ImageOptim" target="_blank" rel="external"><strong>imageOptim</strong></a> 对所有图片压缩一遍。此工具会使用 git 上主流的图片压缩方法尝试一遍，选择最优方案。</p>
+<h3 id="3-纯色图片使用代码生成"><a href="#3-纯色图片使用代码生成" class="headerlink" title="3. 纯色图片使用代码生成"></a>3. 纯色图片使用代码生成</h3><p>如果项目中纯色的图片比较多，可以考虑使用代码替代，生成后缓存到本地以供后期使用。</p>
+<h3 id="4-不常用图片后台下发"><a href="#4-不常用图片后台下发" class="headerlink" title="4. 不常用图片后台下发"></a>4. 不常用图片后台下发</h3><p>对于项目中不常用的图片可以考虑由后台下发，但是此项收益可能不高，而且会影响使用体验，酌情使用。</p>
+<h3 id="5-字体文件"><a href="#5-字体文件" class="headerlink" title="5. 字体文件"></a>5. 字体文件</h3><p>字体文件一般都很大，如果项目中使用了多种字体文件，可以删掉不常用的字体文件。</p>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><h3 id="1-删除不使用的类"><a href="#1-删除不使用的类" class="headerlink" title="1. 删除不使用的类"></a>1. 删除不使用的类</h3><p>项目迭代很久后，会有很多历史遗留的代码，已经不会再调用到，可以使用开源工具 <a href="https://github.com/netyouli/WHC_Scan" target="_blank" rel="external"><strong>WHC_Scan</strong></a> 检查没有使用的类，但是可能会有误报，而且 OC 语言的特性导致需要人工 check 一遍。</p>
+<h3 id="2-删除不使用的方法"><a href="#2-删除不使用的方法" class="headerlink" title="2. 删除不使用的方法"></a>2. 删除不使用的方法</h3><p>方法和类不在一个数量级，所以检查起来比较耗时，而且一样会有误报，如果人工核实一遍的话耗时不说收益也偏少。</p>
+<h3 id="3-精简库文件"><a href="#3-精简库文件" class="headerlink" title="3. 精简库文件"></a>3. 精简库文件</h3><p>在编译选项中选择生成 LinkMap 文件，编译完成后会在对应目录下生成 LinkMap 文件。分析 LinkMap 文件可以知道每个库文件的大小。</p>
+<p>分析工具可以使用 <a href="https://github.com/huanxsd/LinkMap" target="_blank" rel="external"><strong>LinkMap</strong></a> ，效果如下图：</p>
+<p><img src="https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png" alt="LinkMap"></p>
+<p><strong>1. 检查删除没有使用的库文件。</strong></p>
+<p><strong>2. 对于过于庞大的库，检查下是否使用到了库中的所有功能，避免为了使用一小部分功能而引用了整个库。</strong></p>
+<p><strong>3. 检查重复的库文件，删除多余的库。</strong></p>
+<h3 id="4-删除无用功能代码"><a href="#4-删除无用功能代码" class="headerlink" title="4. 删除无用功能代码"></a>4. 删除无用功能代码</h3><p><strong>1. 对于一次性 / 活动需求，确认不会再使用后及时清理掉。</strong></p>
+<p><strong>2. 过时的功能，旧的 UI 样式，确实不再使用及时清理。</strong></p>
+<h2 id="3-编译选项"><a href="#3-编译选项" class="headerlink" title="3. 编译选项"></a>3. 编译选项</h2><h3 id="1-去掉符号信息"><a href="#1-去掉符号信息" class="headerlink" title="1. 去掉符号信息"></a>1. 去掉符号信息</h3><p>在 Release 版本把 Strip Debug Symbols During Copy 和 Symbols Hidden by Default 设为 YES，可以去除不必要的调试符号。</p>
+<p>Symbols Hidden by Default 会把所有符号都定义成 ”private extern”。  </p>
+<p>去掉符号信息会让安装包大小减少很多，但是代价是在 APP 里打印堆栈信息无法还原出对应的类名和方法名。</p>
+<h3 id="2-编译选项优化"><a href="#2-编译选项优化" class="headerlink" title="2. 编译选项优化"></a>2. 编译选项优化</h3><p>Release 版本的 Optimization Level 应该设置为 Fastest, Smalllest。</p>
 
       
     </div>
@@ -404,7 +419,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/命令/" rel="tag">#命令</a>
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
           
         </div>
       
@@ -413,17 +428,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/26/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2018/05/17/CocoaPods-创建私有仓库/" rel="next" title="CocoaPods-创建私有仓库">
+                <i class="fa fa-chevron-left"></i> CocoaPods-创建私有仓库
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/27/安装CocoaPods过程以及踩过的坑/" rel="prev" title="安装CocoaPods过程以及踩过的坑">
-                安装CocoaPods过程以及踩过的坑 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -449,8 +460,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/27/hexo常用命令整理/"
-           data-title="Hexo常用命令整理" data-url="https://chirenhua.github.io/2016/08/27/hexo常用命令整理/">
+      <div class="ds-thread" data-thread-key="2018/05/20/iOS-安装包瘦身/"
+           data-title="iOS-安装包瘦身" data-url="https://chirenhua.github.io/2018/05/20/iOS-安装包瘦身/">
       </div>
     
   </div>
@@ -587,7 +598,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发表文章"><span class="nav-number">2.</span> <span class="nav-text">发表文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#清理缓存"><span class="nav-number">3.</span> <span class="nav-text">清理缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本"><span class="nav-number">4.</span> <span class="nav-text">版本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-资源文件"><span class="nav-number">1.</span> <span class="nav-text">1. 资源文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-删除无用图片"><span class="nav-number">1.1.</span> <span class="nav-text">1. 删除无用图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-图片文件压缩"><span class="nav-number">1.2.</span> <span class="nav-text">2. 图片文件压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-纯色图片使用代码生成"><span class="nav-number">1.3.</span> <span class="nav-text">3. 纯色图片使用代码生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-不常用图片后台下发"><span class="nav-number">1.4.</span> <span class="nav-text">4. 不常用图片后台下发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-字体文件"><span class="nav-number">1.5.</span> <span class="nav-text">5. 字体文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-代码"><span class="nav-number">2.</span> <span class="nav-text">2. 代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-删除不使用的类"><span class="nav-number">2.1.</span> <span class="nav-text">1. 删除不使用的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-删除不使用的方法"><span class="nav-number">2.2.</span> <span class="nav-text">2. 删除不使用的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-精简库文件"><span class="nav-number">2.3.</span> <span class="nav-text">3. 精简库文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-删除无用功能代码"><span class="nav-number">2.4.</span> <span class="nav-text">4. 删除无用功能代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-编译选项"><span class="nav-number">3.</span> <span class="nav-text">3. 编译选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-去掉符号信息"><span class="nav-number">3.1.</span> <span class="nav-text">1. 去掉符号信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-编译选项优化"><span class="nav-number">3.2.</span> <span class="nav-text">2. 编译选项优化</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
