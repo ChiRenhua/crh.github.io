@@ -1,0 +1,34 @@
+language: node_js
+sudo: required
+node_js: 
+  - 7.9.0
+
+cache:
+  directories:
+    - node_modules
+
+branches:
+  only:
+    - hexo 
+
+before_install:
+  - npm install -g hexo-cli
+
+# S: Build Lifecycle
+install:
+  - npm install
+  - npm install hexo-deployer-git --save
+
+before_script:
+ # - npm install -g gulp
+
+script:
+  - hexo clean
+  - hexo generate
+
+after_script:
+  - git config user.name "ChiRenhua"
+  - git config user.email "crh944015688@163.com"
+  - sed -i "s/repo_token/${REPO_TOKEN}/g" ./_config.yml
+  - cat ./_config.yml
+  - hexo deploy
