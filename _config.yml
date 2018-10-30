@@ -74,7 +74,7 @@ pagination_dir: page
 theme: next
 
 # Deployment
-## Docs: https://hexo.io/docs/deployment.htm
+## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
   repository: https://repo_token@github.com/ChiRenhua/chirenhua.github.io.git
