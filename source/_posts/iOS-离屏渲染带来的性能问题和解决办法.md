@@ -2,7 +2,7 @@
 title: iOS--离屏渲染带来的性能问题和解决办法
 date: 2016-10-22 12:53:12  
 categories:
-- iOS开发总结
+- iOS 开发总结
 tags:
 - iOS
 ---

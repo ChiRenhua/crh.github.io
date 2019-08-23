@@ -2,7 +2,7 @@
 title: Python-在 Mac 下安装 Python 和 pip
 date: 2018-04-13 10:55:26  
 categories:
-- Python开发
+- Python 开发
 tags:
 - Python
 ---

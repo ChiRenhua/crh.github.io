@@ -2,7 +2,7 @@
 title: Git-安装
 date: 2019-08-23 15:34:40
 
-categroies:
+categories:
 - Git
 tags:
 - Git

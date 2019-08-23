@@ -2,7 +2,7 @@
 title: Git-简介
 date: 2019-08-23 10:48:13
 
-categroies:
+categories:
 - Git
 tags:
 - Git

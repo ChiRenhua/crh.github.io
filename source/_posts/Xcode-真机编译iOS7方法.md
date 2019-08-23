@@ -3,10 +3,10 @@ title: Xcode-真机编译iOS7方法
 date: 2017-05-15 21:00:30  
 
 categories:
-- Xcode工具
+- XCode 工具
 tags:
 - 工具
-- Xcode
+- XCode
 - iOS7
 ---
 ![iOS7_Logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Xcode-%E7%9C%9F%E6%9C%BA%E7%BC%96%E8%AF%91iOS7%E6%96%B9%E6%B3%95/ios-7-logo.png)  

@@ -3,10 +3,10 @@ title: Instruments--Core Animation下Debug Options的介绍和优化方法
 date: 2017-02-12 23:16:52  
 
 categories:
-- Xcode工具
+- XCode 工具
 tags:
 - 工具
-- Xcode
+- XCode
 - Instruments
 ---
 ![Instruments_Logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_Logo.png)  

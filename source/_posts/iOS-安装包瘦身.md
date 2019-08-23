@@ -2,7 +2,7 @@
 title: iOS-安装包瘦身
 date: 2018-05-20 20:34:41  
 categories:
-- iOS开发总结
+- iOS 开发总结
 tags:
 - iOS
 ---
