@@ -3,7 +3,7 @@ title: 安装CocoaPods过程以及踩过的坑
 date: 2016-08-27 20:18:29
 
 categories:
-- Xcode工具
+- CocoaPods
 tags:
 - 类库管理
 - 工具
