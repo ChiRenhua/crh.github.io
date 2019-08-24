@@ -1,24 +1,35 @@
-.site-meta {
-  padding: 20px 0;
-  color: white;
-  background: $black-deep;
+.site-brand-wrapper {
+  position: relative;
+}
 
-  +tablet() {
-    box-shadow: 0 0 16px rgba(0,0,0,0.5);
-  }
-  +mobile() {
-    box-shadow: 0 0 16px rgba(0,0,0,0.5);
+.site-meta {
+  background: $black-deep;
+  color: white;
+  padding: 20px 0;
+
+  +tablet-mobile() {
+    box-shadow: 0 0 16px rgba(0, 0, 0, .5);
   }
 }
 
 .brand {
-  display: block;
-  padding: 0;
   background: none;
+  padding: 0;
 
-  &:hover { color: white; }
+  &:hover {
+    color: white;
+  }
 }
 
-.site-subtitle { margin: 0; }
+.site-subtitle {
+  font-weight: initial;
+  margin: 10px 10px 0;
+}
 
-.site-search form { display: none; }
+.custom-logo-image {
+  margin-top: 20px;
+
+  +tablet-mobile() {
+    display: none;
+  }
+}
