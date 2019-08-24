@@ -177,8 +177,8 @@ menu_settings:
 
 # Schemes
 # scheme: Muse
-scheme: Mist
-#scheme: Pisces
+# scheme: Mist
+scheme: Pisces
 #scheme: Gemini
 
 
@@ -197,7 +197,7 @@ site_state: true
 # Value after `||` delimiter is the name of Font Awesome icon. If icon (with or without delimiter) is not specified, globe icon will be loaded.
 social:
   GitHub: https://github.com/ChiRenhua || github
-  #E-Mail: mailto:yourname@gmail.com || envelope
+  E-Mail: crh944015688@163.com || envelope
   #Weibo: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
   #Twitter: https://twitter.com/yourname || twitter
