@@ -16,11 +16,11 @@ Git 的本地仓库主要由三部分构成：
 2. 暂存区，类似于缓存区域，存放临时修改。
 3. HEAD 指针，一般指向最后一次提交。
 
+<!-- more -->
+
 ![git_workflow](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_workflow.png)
 
 整体流程就是：在工作目录对文件进行修改，修改后的文件通过 `git add` 命令添加到暂存区。所有修改完毕后，通过`git commit` 命令将暂存区内的所有文件生成一个新的版本记录，同时 HEAD 指针移动到最新的版本。
-
-<!-- more -->
 
 ## Git 文件生命周期
 Git 管理下的文件共有四种状态：
