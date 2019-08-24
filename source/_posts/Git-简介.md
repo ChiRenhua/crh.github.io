@@ -15,6 +15,8 @@ Git 作为分布式版本管理系统的鼻祖，是目前主流的版本管理�
 ## 什么是版本管理？
 类似于毕业论文，为了避免删除的部分后面还会再用到，每次修改前，都会先另存为一份论文，再进行修改。经过 n 次修改后，就会变成下面这样。
 
+<!-- more -->
+
 ![git_versionControl](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_versionControl.jpeg)
 
 这就是最简单的版本管理，缺点也显而易见：

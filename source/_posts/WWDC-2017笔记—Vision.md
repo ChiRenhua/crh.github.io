@@ -10,13 +10,18 @@ tags:
 ![Vision Logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Vision/Vision.jpg)  
 # Vision
 Vision是iOS11发布的一个新的框架，可以用来对图片信息进行处理。其内部集成了Core ML，可以高效的返回图片中的信息。同时开发者也可以在Vision中集成自己的Core ML Model，所以其灵活性非常高。 
+
+<!-- more -->
+
 ## 应用场景 
 目前Vision可以支持的场景有：  
+
 **1. 人脸识别（给出人脸所在的矩形区域信息）**  
 **2. 人脸面部特征识别（给出眼睛、鼻子、嘴以及人脸中轴线的位置信息）**  
 **3. 文字识别（给出文字所在的矩形区域信息）**  
 **4. 二维码识别（识别二维码并返回二维码的信息）**  
 **5. 目标追踪（对于运动的目标，实时返回其位置信息）**  
+
 ## 集成
 Vision使用起来非常简单，只需三步就可将Vision集成到项目中：  
 ### 1. 初始化VNDetctRequest

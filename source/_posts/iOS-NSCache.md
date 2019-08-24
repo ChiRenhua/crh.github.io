@@ -8,6 +8,9 @@ tags:
 ---
 ## NSCache 是什么
 简单的理解，NSCache 就是一个可变的键值对集合，类似于 NSMutableDictionary，用于存储一些临时数据。在内存吃紧时 NSCache 会自动释放存储的临时数据。
+
+<!-- more -->
+
 ## NSCache 特点
 * 在内存吃紧的时候，NSCache 会删除部分缓存的临时数据，最大限度的减少内存的占用。
 * NSCache 是线程安全的，增删改查操作无需加锁。

@@ -15,6 +15,7 @@ tags:
 之前有介绍过如何安装 CocoaPods（[**传送门**](http://chirenhua.com/2016/08/27/%E5%AE%89%E8%A3%85CocoaPods%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/)），对于CocoaPods的好处自然也不必多说。然而有些情况下，我们想要管理自己的库，但还不想把这些库开源，这时就需要构建一个私有的 CocoaPods 仓库。  
 
 在前面安装 CocoaPods 的教程中有提到：pod setup 的本质就是将 https://github.com/CocoaPods/Specs 上的 Specs 项目 clone到 /Users/ 用户名 /.cocoapods/repos 目录下。同理，我们在 git 上创建一个私有的仓库，用于存储私有的库文件，然后将这个私有仓库添加到 CocoaPods 中即可。
+<!-- more -->
 
 ## 1. 在 Git 上创建私有仓库
 个人开发者可以在 GitHub 上购买一个私有仓库，公司的话一般都会有自己内部的 Git 平台。这里用GitHub举例，创建一个私有仓库用于存放私有的库文件:   

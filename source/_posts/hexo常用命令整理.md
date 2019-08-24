@@ -16,6 +16,9 @@ tags:
 ``npm update hexo -g``  
 初始化  
 ``hexo init``
+
+<!-- more -->
+
 ## 发表文章
 新建文章  
 ``hexo n "我的博客" == hexo new "我的博客"``  

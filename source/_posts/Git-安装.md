@@ -14,6 +14,8 @@ tags:
 1. 直接官网下载安装包安装（[传送门](https://git-scm.com/downloads)），一路点下一步就行。
 2. 喜欢图形化界面的朋友，可以下载安装 SourceTree（[传送门](https://www.sourcetreeapp.com/)），同时也会安装好 Git，一路点下一步即可。
 
+<!-- more -->
+
 ## Mac
 Mac 上可以通过 [homebrew](https://brew.sh/) 安装 git，一行命令搞定：
 

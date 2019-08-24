@@ -14,6 +14,8 @@ Travis CI是一个托管的，分布式的持续集成服务，用于构建和�
 
 利用 Travis CI ，可以实现每次 push 新文章到 git 后，Travis CI 会自动检测到提交，然后根据配置文件 “.travis.yml”，按照设定好的步骤帮我们自动部署网页。
 
+<!-- more -->
+
 ## 实现
 ### 1.Travis CI 关联 GitHub
 下面的步骤都是在已经成功搭建好了 GitPages 网站的基础上进行的。
