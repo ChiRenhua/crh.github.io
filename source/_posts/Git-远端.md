@@ -15,6 +15,8 @@ tags:
 
 远端指的就是这台中央服务器上的版本库。
 
+<!-- more -->
+
 ## 添加远端
 本地已经创建好的仓库可以通过 `git remote add origin serverPath` 命令添加远端。
 
