@@ -9,7 +9,7 @@ tags:
 - XCode
 - Instruments
 ---
-![Instruments_Logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_Logo.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_Logo.png)  
 ## 关于视图的优化
 在开发一个产品的过程中，我们不仅仅要实现功能，其实使用的体验也是很重要的一部分，那么使用过程中非常影响用户体验的就是流畅度，所以如何提高流畅度，避免卡顿是一个必须要重视的问题。好在强大的苹果为开发者提供了一个工具--Instruments，通过它我们可以轻松的找出拖慢我们产品的元凶。
 
@@ -17,7 +17,7 @@ tags:
 
 首先打开Instruments，选择Core Animation，然后打开一个目标程序，点击Record，此时Instruments就开始监控你的程序，并且实时展示帧数。在屏幕右下侧部分点击设置按钮，会展开一个页面，上面有Debug Options各个选项，下面介绍各个选项所展示的性能问题和优化方法。 
  
-![Instruments_01](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_DebugOptions.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_DebugOptions.png)  
 
 ## Color Blended Layers（混合图层）
 混合图层的概念其实就是多个图层盖在了一起，我们知道屏幕是一个一个像素点组合在一起的，而像素点展示什么颜色是由R、G、B、alpha四个部分组成，所以如果多个图层盖在一起，那么其最终的颜色，会受到每个图层的影响。而在计算最终颜色的过程中，会消耗GPU的资源，所以如果你只想显示最上层图层的颜色，那么可以将它设置为不透明，这样的话GPU会自动忽略下面的所有View，从而减少GPU的压力。 
@@ -28,7 +28,7 @@ tags:
 如果UILable展示的是中文，设置  ``layer.masksToBounds = YES;``  
 不要慌，这里不会触发离屏渲染，在iOS8以后，展示中文时，UILable外围会有一圈透明的边，所以才要加这个，看下图）  
 
-![Instruments_03](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_03.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Instruments--Core%20Animation下Debug%20Options的介绍和优化方法/Instruments_03.png)
 
 ### UIImageVIew避免混合图层的办法：
 很简单，只要图片本身没有透明的地方就可以啦，然后代码保证没有设置alpha值一类的属性就没问题。  

@@ -7,7 +7,7 @@ tags:
 - iOS
 - AFNetworking
 ---
-![AFNetworkingLogo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-AFNetworking%20%E4%BD%BF%E7%94%A8%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/3509814878-58e86f67a028b.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-AFNetworking%20%E4%BD%BF%E7%94%A8%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/3509814878-58e86f67a028b.png)
 ## 1. unacceptable content-type 错误
 这个错误表示回包类型无法解析，一般这种情况请求回包的状态码是：200，表示错误并不在后台。详细错误描述为：
 

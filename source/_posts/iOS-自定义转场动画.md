@@ -6,7 +6,7 @@ categories:
 tags:
 - iOS
 ---
-![TranslateAnimateLogo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/iOS_TranslationAnimate.jpg)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/iOS_TranslationAnimate.jpg)  
 ## 概述  
 在iOS7中，苹果爸爸为开发者提供了一套全新的API去实现转场动画，开发者可以通过更灵活的方式去设计动画效果。同时，iOS7还支持用手势切换VC，比如你在某个应用中push了一个新的页面，那么你可以通过在屏幕左侧向右滑动来执行返回操作。
 
@@ -41,7 +41,7 @@ tags:
 ## Demo  
 ### 第一部分  
 我们先来尝试着实现如下图效果的页面切换。  
-![translateAnimate](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled.gif)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled.gif)  
 首先我们新建一个处理动画效果的类，这个类要实现“UIViewControllerAnimatedTransitioning”接口。  
 TranslationAnimateManager.h    
 
@@ -377,7 +377,7 @@ SwipeInteractiveTransition *swipeInteractiveTransition = [SwipeInteractiveTransi
 ```  
 如果没有手势触发或者手势触发失败，这个方法会返回空，此时系统会自动调用``- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source``这个方法去执行跳转动画。  
 我们看下完成后的效果。  
-![translateAnimate2](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled2.gif)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%20/Untitled2.gif)  
 看着还是很nice的。其实苹果为我们提供的动画接口还是很强大的，如果利用好了可以做出很多酷炫的效果和新颖的交互。
 
 

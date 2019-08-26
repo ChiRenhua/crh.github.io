@@ -7,7 +7,7 @@ categories:
 tags:
 - Git
 ---
-![git_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
 
 ## 工作流程
 Git 的本地仓库主要由三部分构成：
@@ -18,7 +18,7 @@ Git 的本地仓库主要由三部分构成：
 
 <!-- more -->
 
-![git_workflow](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_workflow.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_workflow.png)
 
 整体流程就是：在工作目录对文件进行修改，修改后的文件通过 `git add` 命令添加到暂存区。所有修改完毕后，通过`git commit` 命令将暂存区内的所有文件生成一个新的版本记录，同时 HEAD 指针移动到最新的版本。
 
@@ -32,7 +32,7 @@ Git 管理下的文件共有四种状态：
 
 在平时的开发过程中，文件会在这四种状态中来回扭转。
 
-![git_fileLife](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_fileLife.jpg)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_fileLife.jpg)
 
 新创建的文件是 untracked（未跟踪） 的状态，此时 Git 还没有开始追踪这个新文件，通过 `git add fileName` 命令告诉 Git 开始追踪这个文件，并将文件加入到暂存区，此时文件状态扭转为 staged（暂存）。
 

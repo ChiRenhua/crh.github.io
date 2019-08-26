@@ -10,7 +10,7 @@ tags:
 - Xcode
 - CocoaPods  
 ---
-![cocoaPods logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg)  
 ## 前言
 之前有介绍过如何安装 CocoaPods（[**传送门**](http://chirenhua.com/2016/08/27/%E5%AE%89%E8%A3%85CocoaPods%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/)），对于CocoaPods的好处自然也不必多说。然而有些情况下，我们想要管理自己的库，但还不想把这些库开源，这时就需要构建一个私有的 CocoaPods 仓库。  
 

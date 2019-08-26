@@ -7,7 +7,7 @@ categories:
 tags:
 - 命令
 ---
-![Hexo logl](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hexo常用命令整理/hexo.jpg)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Hexo常用命令整理/hexo.jpg)  
 
 ## 安装
 安装  

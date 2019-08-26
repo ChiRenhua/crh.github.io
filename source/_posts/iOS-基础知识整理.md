@@ -6,7 +6,7 @@ categories:
 tags:
 - iOS
 ---
-![ios_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS-%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9%E5%90%88%E9%9B%86/iOS-7-10-Emblem.jpg)
+
 # iOS 基础知识整理
 ## 1. Tagged Pointer
 概括：将本来用于存储对象指针的空间存储数据，以节省空间、提高效率。

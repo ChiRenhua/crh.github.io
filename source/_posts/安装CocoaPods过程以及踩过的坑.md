@@ -9,7 +9,7 @@ tags:
 - 工具
 - Xcode
 ---
-![cocoaPods logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg)  
 ## 为什么要用到CocoaPods
 &emsp;&emsp;以往在写iOS程序的时候，遇到好的第三方开源库都是将开源库下载下来，拷贝到项目中，然后再去使用，而且遇到开源库更新，我们还要重新执行一边操作。如果开源库数量很多，这个操作就显得非常麻烦了。  
 &emsp;&emsp;现在有了CocoaPods，这些问题就都迎刃而解了，CocoaPods可以帮助我们下载，管理第三方的开源库，包括更新、系统依赖和编译参数等都能帮助我们处理。简直不能再方便，设置完CocoaPods后，以后我们只需要专心的敲代码就好了。  
@@ -34,7 +34,7 @@ tags:
 &emsp;&emsp;如果出现错误：“[!] Unable to find a pod with name, author, summary, or description matching AFNetworking”，可以通过执行下面的命令来解决：  
 &emsp;&emsp;``rm ~/Library/Caches/CocoaPods/search_index.json``  
 &emsp;&emsp;如果执行成功，会出现“AFNetworking”的相关信息，如下图。  
-![searchResult](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/searchResult.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/searchResult.png)
 &emsp;&emsp;这说明“AFNetworking”是支持CocoaPods的。接下来我们就可以将“AFNetworking”导入到我们的项目中去。  
 &emsp;&emsp;首先，我们通过Terminal终端进入到们已经创建好的项目目录下，执行下面的命令：  
 &emsp;&emsp;``$ vim Podfile``  
@@ -46,6 +46,6 @@ tags:
 &emsp;&emsp;然后保存退出，这时候在项目的目录里就会出现一个名为Podfile的文件，然后我们执行以下命令来将“AFNetworking”下载到项目中。（注意：下面的命令需要在项目目录中执行。）  
 &emsp;&emsp;``$ pod install``  
 &emsp;&emsp;执行成功后，项目中会多出来一个.xcworkspace类型的文件，如下图：  
-![project](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/project.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/project.png)  
 &emsp;&emsp;以后需要用它来打开工程才会配置类库的相关文件。  
 &emsp;&emsp;以上就是CocoaPods的安装和使用方法介绍，如果想要了解更多的使用方法，可以参考[官方文档](https://github.com/CocoaPods/CocoaPods/wiki)。

@@ -7,7 +7,7 @@ categories:
 tags:
 - Git
 ---
-![git_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
 
 ## 版本库
 在前面的文章 [《Git-创建新仓库》](http://chirenhua.com/2019/08/24/Git-%E5%88%9B%E5%BB%BA%E6%96%B0%E4%BB%93%E5%BA%93/)中我们了解到，每个仓库下面都有一个名为 .git 的隐藏文件夹，这个文件夹其实就是版本库，这里面就藏了 Git 版本管理的秘密。
@@ -17,7 +17,7 @@ tags:
 ## .git 目录结构
 .git 的目录结构如下图：
 
-![gitExample](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/gitExample.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/gitExample.png)
 
 ### config
 当前仓库的配置文件
@@ -40,7 +40,7 @@ hooks 文件夹用来存放 Git 脚本，这些脚本一般用于规范 Git 操�
 
 在生成 Git 对象时，会同时生成一个 40 位的哈希值，哈希值的前 2 位用作文件夹名，后 38 位用作 Git 文件名。
 
-![git_objects](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_objects.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_objects.png)
 
 Git 对象共有三种类型：
 
@@ -50,14 +50,14 @@ Git 对象共有三种类型：
 
 这三个文件之间的关系如下：
 
-![git_commit](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_commit.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_commit.png)
 
 ### refs
 存放远端以及各个分支的信息、版本信息、本地所有分支的 HEAD 指针。
 
 refs 文件夹下有三个子文件夹：
 
-![git_refs](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_refs.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_refs.png)
 
 heads 文件夹存放的是所有本地分支的 HEAD 指针，指针中存放的是对应分支最新的 commit ID。
 

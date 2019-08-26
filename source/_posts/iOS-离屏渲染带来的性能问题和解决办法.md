@@ -27,18 +27,18 @@ view.layer.cornerRadius = 5;
 
 
 只需要一行代码就可以轻松的设置圆角，效果如下图：  
-![image01](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png)
 但是如果我们在当前view上又覆盖多个view，那么如果覆盖的view超出了圆角的范围，那么圆角的设置就失效了，为了避免这种情况的发生，我们可以为其加上一个属性：
 ```
 view.layer.masksToBounds = YES;
 ```
 
 执行代码，发现所有的子view都已经被设置了圆角，效果如下图：  
-![image02](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png)
 
 
 图片层次图：
-![image03](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png)
 看起来很完美，但是这个时候已经出发了离屏渲染，如果这个view足够多的话，就会造成非常明显的卡顿现象。  
 ## 如何避免触发离屏渲染  
 还是以设置圆角为例，目前来看优化的方式有两种：
@@ -46,7 +46,7 @@ view.layer.masksToBounds = YES;
 对于静态的视图，由于其内部结构和内容不会发生改变，所以可以通过设置“Rasterization”属性的方式来优化性能。
 ### 2.动态内容视图  
 对于动态的视图，现在主流的解决方案是在view的最外层盖上一个圆角的遮罩，来达到设置圆角的目的，如下图：
-![image04](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png)  
 这种方法简单粗暴，而且效果非常好，但是缺点就是对背景颜色有要求，因为是在view的最外层覆盖了一个圆角view，所以就要求圆角view的颜色必须和当前视图所在view的背景颜色一致，如果背景颜色是动态改变或者不是纯色背景，那就不适合这种方法。  
 下面给出一个生成圆角遮罩图的方法：  
 <pre>- (UIImage * ) drawRoundedCornerImageWithRadius:(CGFloat)radius Rectsize:(CGSize)rectSize BackgroundColor:(UIColor* ) backgroundColor {

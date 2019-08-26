@@ -6,7 +6,7 @@ categories:
 tags:
 - Python
 ---
-![Python_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Python-%E5%9C%A8%20Mac%20%E4%B8%8B%E5%AE%89%E8%A3%85%20Python%20%E5%92%8C%20pip/Python_Logo.jpg)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Python-%E5%9C%A8%20Mac%20%E4%B8%8B%E5%AE%89%E8%A3%85%20Python%20%E5%92%8C%20pip/Python_Logo.jpg)  
 
 Mac 系统默认有安装 Python2.7 ，但是这个版本已经过时了，Python3 作为一次革命性的更新，取代 Python2.x 版本只是时间问题。作为一个开发人员，我们一定要跟上时代的潮流！
 

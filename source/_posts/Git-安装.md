@@ -7,7 +7,7 @@ categories:
 tags:
 - Git
 ---
-![git_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
 
 ## 安装
 
@@ -26,7 +26,7 @@ brew install git
 ## 安装成功
 安装完毕后，在终端上输入命令 git ，如果出现下面的提示就表明安装成功。
 
-![git_load_success](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_load_success.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_load_success.png)
 
 ## 配置 Git
 安装完毕后，需要简单配置下 git 才能使用，在终端输入下面两个命令：

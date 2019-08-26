@@ -7,7 +7,7 @@ tags:
 - iOS
 - WWDC
 ---
-![Vision Logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Vision/Vision.jpg)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Vision/Vision.jpg)  
 # Vision
 Vision是iOS11发布的一个新的框架，可以用来对图片信息进行处理。其内部集成了Core ML，可以高效的返回图片中的信息。同时开发者也可以在Vision中集成自己的Core ML Model，所以其灵活性非常高。 
 
@@ -43,5 +43,5 @@ VNImageRequestHandler *requestHandler = [[VNImageRequestHandler alloc] initWithC
 识别完成后通过“request.results”来拿到识别结果，"results"是数组类型，如果为空则表示当前图片中没有人脸的信息。  
 ## Demo  
 利用Vision，我们可以做一些有趣的事情，比如为视频添加挂件，效果如下图：  
-![Vision video](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC学习笔记—Vision/Visionvideo.gif)   
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC学习笔记—Vision/Visionvideo.gif)   
 具体代码已经上传git：[视频挂件](https://github.com/ChiRenhua/VisionDemo)

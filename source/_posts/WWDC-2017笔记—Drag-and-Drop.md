@@ -7,7 +7,7 @@ tags:
 - iOS
 - WWDC
 ---
-![Drag and Drop Logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%20Logo.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%20Logo.png)  
 # Drag and Drop
 今年的WWDC，苹果推出了一个新的功能—Drag and Drop，通过这个功能，用户可以将数据（一张图片或者一段文字）从一个地方拖拽到另一个地方，这个操作可以在同一个APP里，也可以跨APP，非常方便。但是目前只有iPad能够完美支持，iPhone上暂时还不支持跨应用的拖拽，所有操作都被限制在同一个APP内。  
 
@@ -17,13 +17,13 @@ tags:
 ## 一. Drag
 Drag and Drop的整个流程是基于用户与View之间的交互。我们知道，如果想要为一个View添加点击事件，需要为View添加一个UITapGestureRecognizer。与之类似，如果想要让View支持Drag，需要为View添加UIDragInteraction。那么这个UIDragInteraction是什么？  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2001.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2001.png)  
 
 通过上面这张图我们可以看出，UIDragInteraction其实就是用户和Drag操作之间的中介，我们可以通过实现其代理方法，为Drag提供数据，或者接收整个Drag流程中各种状态的信息。因为UIDragInteraction中集成了手势，所以在实现Drag的过程中需要打开View的userInteractionEnabled属性。  
 
 下面这段代码展示了如何为一个imageView添加UIDragInteraction：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2002.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2002.png)  
 
 现在这个imageView已经可以支持Drag了，但是这并不表明它可以相应Drag，因为还没有实现相应的代理方法。下面我会列出所有的代理方法，分别说明都是做什么的。  
 
@@ -126,11 +126,11 @@ Drop端如果以copy或者move来响应当前Drag时，会对数据进行转移�
 ## 二. Drop
 Drop是在手指松开后执行的操作，通过下面的图我们可以发现它的结构跟Drag如出一辙。同样都是为View添加Interaction，然后通过Delegate来管理整个流程。  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2003.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2003.png)  
 
 先看下Drop的生命周期：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2004.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2004.png)  
 
 首先当数据被拖动到Drop的区域时，会通过“canHandleSession”方法询问Drop是否想响应这次Drag，如果Drop对数据不感兴趣或者不打算响应，那么这次Drag会在手指松开的时候被取消掉。如果可以响应会触发“sessionDidEnter”方法通知用户的手指已经拖动到Drop的可响应区域内。  
 
@@ -158,7 +158,7 @@ Drop是在手指松开后执行的操作，通过下面的图我们可以发现�
 ```
 这个方法必须实现，它会在“sessionDidEnter”之后触发，我们需要指定其返回值“UIDropProposal”下的“operation”属性，operation有四个值，分别是：“UIDropOperationCancel”、 “UIDropOperationForbidden”、 “UIDropOperationCopy”、 “UIDropOperationMove”我们可以通过下面的图看到其对应的效果。 
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2005.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2005.png)  
     
 **· UIDropOperationCancel：**Drag会被取消掉，不会触发后续的“performDrop”方法。  
 **· UIDropOperationCopy：**数据会进行拷贝操作，但是一般用于不同APP之间的Drag and Drop，如果用户在当前位置松开手指，会触发“performDrop”方法。  
@@ -218,15 +218,15 @@ DropIntent是Drop过程中在“sessionDidUpdate”方法里跟随“Operation�
 
 “InsertAtDestinationIndexPath”在手指移动过程中会在两个cell之间打开一个空隙，提示用户数据将要插入的位置。效果见下图：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2008.gif)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2008.gif)  
 
 “InsertIntoDestinationIndexPath”不会在cell间打开间隙，但是会高亮显示当前手指所在的cell，提示用户当前数据会插入到哪个cell里。效果见下图：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2009.gif)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2009.gif)  
 
 “Automatic”会在“InsertAtDestinationIndexPath”和“InsertIntoDestinationIndexPath” 间自己进行选择，当手指在两个cell之间时会打开一个空隙，当手指在cell里时会高亮当前cell。效果见下图：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2010.gif)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2010.gif)  
 
 在CollectionView中，DropIntent有三个值：  
 
@@ -239,7 +239,7 @@ CollectionView和TableView的唯一区别就在于CollectionView没有“Automat
 **2.DropPlaceholder**  
 TableView和CollectionView另外一个特有的功能是Placeholder。当数据过大时，数据的传输需要一定的时间，当这个时间过长时我们需要给用户一个提示，系统默认会给我们展示一个提示，如下图：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2007.png)  
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2007.png)  
 
 我们可以看出这个提示是以对话框形式展示的，虽然会给出进度但是这个提示太强了，用户此时只能等待，不能操作界面。所以系统给我们提供了其它方法可以替代这个弹框，这个就是Placeholder。在“performDrop”方法里，系统为我们提供了一个参数：DropCoordinator，它就是实现placeHolder的关键，在”loadObjectOfClass”前，我们先调用“DropCoordinator”下面的方法为collectionView插入一个临时的cell： 
 
@@ -251,6 +251,6 @@ TableView和CollectionView另外一个特有的功能是Placeholder。当数据�
  
 在这个cell上我们可以展示进度条或者一个loadingView。当数据加载完毕后，我们再调用“commitInsertionWithDataSourceUpdates:”方法将数据插入到数据源中，替换临时的cell。效果如下图：  
 
-![Drag and Drop](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2006.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/2017%20WWDC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94Drag%20and%20Drop/Drag%20and%20Drop%2006.png)
 
 最后附上Demo：[Drag and Drop](https://github.com/ChiRenhua/Drag-and-drop)

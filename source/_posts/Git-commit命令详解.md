@@ -7,7 +7,7 @@ categories:
 tags:
 - Git
 ---
-![git_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
 
 `git commit` 会将暂存区的所有文件拿出来，生成一个新的版本。那么在背后 `git commit` 都做了哪些操作呢，下面详细介绍下。
 
@@ -18,7 +18,7 @@ tags:
 
 这个 Git 对象存储了当前的目录结构以及对应目录结构下的 blob 文件，而 blob 文件就是暂存区中的文件。
 
-![git_treeObject](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_treeObject.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_treeObject.png)
 
 ## 生成新的版本
 一个新的版本，就是保存当前的目录结构，以及目录结构下的文件对应的二进制对象，上一步操作已经将目录结构保存下来，下面就要将保存好的目录结构生成一个新的版本。
@@ -27,7 +27,7 @@ Git 执行 `git commit-tree` 命令，将 tree 对象生成新的版本。这个
 
 这个 Git 对象存储了 tree 文件和作者信息。
 
-![git_commitObject](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_commitObject.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_commitObject.png)
 
 ## 其它命令
 

@@ -8,7 +8,7 @@ tags:
 - Travis-CI
 ---
 ## Travis-CI简介
-![Travis-CI](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI.png)
 
 Travis CI是一个托管的，分布式的持续集成服务，用于构建和测试在GitHub上托管的软件项目。
 
@@ -21,22 +21,22 @@ Travis CI是一个托管的，分布式的持续集成服务，用于构建和�
 下面的步骤都是在已经成功搭建好了 GitPages 网站的基础上进行的。
 使用 GitHub 账户登录 [Travis CI](https://travis-ci.org) ，Travis CI 会自动加载 GitHub 账户下的所有仓库，选择 ``yourname/yourname.github.io`` 项目进行关联。
 
-![Travis-CI01](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI01.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI01.png)
 
 点击 “setting” 进入设置页面，在 General 下打开 “Build pushed branches” 选项。
 
-![Travis-CI02](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI02.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI02.png)
 
 ### 2.配置 Travis CI
 Travis CI 在部署网页时，需要于之关联的 GitHub 上仓库的读写权限。GitHub 提供了 Token 方式供外部访问对应的仓库。
 
 进入到 GitHub 的[设置](https://github.com/settings/tokens)页面，创建一个新的 Token 。注意要勾选对应的权限。创建完毕后，务必要记下 Token 的值，下个步骤要用到，这个值只会在创建完展示一次，所以一定要记好。
 
-![Travis-CI03](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI03.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI03.png)
 
 回到 Travis CI 的设置页面，在 Environment Variables 选项下，添加我们刚刚在 GitHub 中生成的 Token 。
 
-![Travis-CI04](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI04.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI04.png)
 
 ### 3.创建  .travis.yml 文件
  .travis.yml 文件作用是告诉 Travis CI 在监听到 Push 操作后都需要做什么。在博客的根目录下创建 .travis.yml 文件，文件示例如下：
@@ -94,7 +94,7 @@ deploy:
  
  最后将 yml 文件 push 到 GitGub 上就可以在 Travis CI 上看到构建了。
  
- ![Travis-CI05](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI05.png)
+ ![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Travis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99/Travis-CI05.png)
  
 ## 最后
 以后在发布新博客，只需要将写好的博客放到 hexo/source/_post/ 文件夹下，Push 到 GitHub 上即可，后续的的构建操作 hexo clean、hexo g、hexo d 都会由 Travis-CI 自动完成。

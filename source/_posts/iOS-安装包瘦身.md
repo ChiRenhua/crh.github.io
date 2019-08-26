@@ -38,7 +38,7 @@ tags:
 
 分析工具可以使用 [**LinkMap**](https://github.com/huanxsd/LinkMap) ，效果如下图：
 
-![LinkMap](https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png)
+![](https://raw.githubusercontent.com/huanxsd/LinkMap/master/ScreenShot2.png)
 
 **1. 检查删除没有使用的库文件。**
 

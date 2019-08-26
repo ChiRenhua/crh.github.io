@@ -7,7 +7,7 @@ categories:
 tags:
 - Git
 ---
-![git_logo](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_logo.png)
 
 ## 简介
 Git 作为分布式版本管理系统的鼻祖，是目前主流的版本管理方案。
@@ -17,7 +17,7 @@ Git 作为分布式版本管理系统的鼻祖，是目前主流的版本管理�
 
 <!-- more -->
 
-![git_versionControl](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_versionControl.jpeg)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_versionControl.jpeg)
 
 这就是最简单的版本管理，缺点也显而易见：
 
@@ -35,7 +35,7 @@ Git 作为后起之秀，从理念和设计上都完胜 SVN。
 ## Git vs SVN
 对比 Git 和 SVN 就是对比 “分布式版本管理系统” 和 “集中式版本管理系统”。从图中可以清晰看出两个系统的特点。
 
-![git_vs_svn](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_vs_svn.png)
+![](https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Git/git_vs_svn.png)
 
 分布式版本管理系统特点：
 
