@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="什么是离屏渲染离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS--离屏渲染带来的性能问题和解决办法">
+<meta property="og:url" content="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/index.html">
+<meta property="og:site_name" content="Renhua&#39;s Blog">
+<meta property="og:description" content="什么是离屏渲染离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png">
+<meta property="og:updated_time" content="2019-09-27T12:42:12.647Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS--离屏渲染带来的性能问题和解决办法">
+<meta name="twitter:description" content="什么是离屏渲染离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png">
+  <link rel="canonical" href="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>iOS--离屏渲染带来的性能问题和解决办法 | Renhua's Blog</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Renhua's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay Hungry. Stay Foolish</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-wrapper">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://chirenhua.github.io/2016/10/22/iOS-离屏渲染带来的性能问题和解决办法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Renhua Chi">
+      <meta itemprop="description" content="求知若渴，虚心若愚">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Renhua's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">iOS--离屏渲染带来的性能问题和解决办法
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2016-10-22 12:53:12" itemprop="dateCreated datePublished" datetime="2016-10-22T12:53:12+00:00">2016-10-22</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-27 12:42:12" itemprop="dateModified" datetime="2019-09-27T12:42:12+00:00">2019-09-27</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发总结/" itemprop="url" rel="index"><span itemprop="name">iOS 开发总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="什么是离屏渲染"><a href="#什么是离屏渲染" class="headerlink" title="什么是离屏渲染"></a>什么是离屏渲染</h2><p>离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离屏渲染是为了优化而生，只不过错误的使用才会导致卡顿的产生。  </p>
+<a id="more"></a>
+<h2 id="什么操作会产生离屏渲染"><a href="#什么操作会产生离屏渲染" class="headerlink" title="什么操作会产生离屏渲染"></a>什么操作会产生离屏渲染</h2><p>以下操在使用不当时可能会触发离屏渲染：  </p>
+<ol>
+<li>shouldRasterize（光栅化）  </li>
+<li>masks（遮罩）  </li>
+<li>shadows（阴影）  </li>
+<li>edge antialiasing（抗锯齿）    </li>
+<li>group opacity（不透明）  </li>
+</ol>
+<p>以设置圆角为例，通常我们设置圆角的方法很简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view.layer.cornerRadius = 5;</span><br></pre></td></tr></table></figure></p>
+<p>只需要一行代码就可以轻松的设置圆角，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9501.png" alt><br>但是如果我们在当前view上又覆盖多个view，那么如果覆盖的view超出了圆角的范围，那么圆角的设置就失效了，为了避免这种情况的发生，我们可以为其加上一个属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view.layer.masksToBounds = YES;</span><br></pre></td></tr></table></figure></p>
+<p>执行代码，发现所有的子view都已经被设置了圆角，效果如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9502.png" alt></p>
+<p>图片层次图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9503.png" alt><br>看起来很完美，但是这个时候已经出发了离屏渲染，如果这个view足够多的话，就会造成非常明显的卡顿现象。  </p>
+<h2 id="如何避免触发离屏渲染"><a href="#如何避免触发离屏渲染" class="headerlink" title="如何避免触发离屏渲染"></a>如何避免触发离屏渲染</h2><p>还是以设置圆角为例，目前来看优化的方式有两种：</p>
+<h3 id="1-静态内容视图"><a href="#1-静态内容视图" class="headerlink" title="1.静态内容视图"></a>1.静态内容视图</h3><p>对于静态的视图，由于其内部结构和内容不会发生改变，所以可以通过设置“Rasterization”属性的方式来优化性能。</p>
+<h3 id="2-动态内容视图"><a href="#2-动态内容视图" class="headerlink" title="2.动态内容视图"></a>2.动态内容视图</h3><p>对于动态的视图，现在主流的解决方案是在view的最外层盖上一个圆角的遮罩，来达到设置圆角的目的，如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/iOS--%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%9504.png" alt><br>这种方法简单粗暴，而且效果非常好，但是缺点就是对背景颜色有要求，因为是在view的最外层覆盖了一个圆角view，所以就要求圆角view的颜色必须和当前视图所在view的背景颜色一致，如果背景颜色是动态改变或者不是纯色背景，那就不适合这种方法。<br>下面给出一个生成圆角遮罩图的方法：  </p>
+<p><pre>- (UIImage <em> ) drawRoundedCornerImageWithRadius:(CGFloat)radius Rectsize:(CGSize)rectSize BackgroundColor:(UIColor</em> ) backgroundColor {<br>    UIGraphicsBeginImageContextWithOptions(rectSize, NO, [UIScreen mainScreen].scale);<br>    CGContextRef currentContext = UIGraphicsGetCurrentContext();<br>    UIBezierPath <em>bezierPath = [[UIBezierPath alloc]init];<br>    CGPoint hLeftUpPoint = CGPointMake(radius, 0);<br>    CGPoint hRightUpPoint = CGPointMake(rectSize.width - radius, 0);<br>    CGPoint hLeftDownPoint = CGPointMake(radius, rectSize.height);<br>    CGPoint vLeftUpPoint = CGPointMake(0, radius);<br>    CGPoint vRightDownPoint = CGPointMake(rectSize.width, rectSize.height - radius);<br>    CGPoint centerLeftUp = CGPointMake(radius, radius);<br>    CGPoint centerRightUp = CGPointMake(rectSize.width - radius, radius);<br>    CGPoint centerLeftDown = CGPointMake(radius, rectSize.height - radius);<br>    CGPoint centerRightDown = CGPointMake(rectSize.width - radius, rectSize.height - radius);<br>    [bezierPath moveToPoint:hLeftUpPoint];<br>    [bezierPath addLineToPoint:hRightUpPoint];<br>    [bezierPath addArcWithCenter:centerRightUp radius:radius startAngle:M_PI </em> 3 / 2 endAngle:M_PI <em> 2 clockwise:true];<br>    [bezierPath addLineToPoint:vRightDownPoint];<br>    [bezierPath addArcWithCenter:centerRightDown radius:radius startAngle:0 endAngle:M_PI / 2 clockwise:true];<br>    [bezierPath addLineToPoint:hLeftDownPoint];<br>    [bezierPath addArcWithCenter:centerLeftDown radius:radius startAngle:M_PI / 2 endAngle:M_PI clockwise:true];<br>    [bezierPath addLineToPoint:vLeftUpPoint];<br>    [bezierPath addArcWithCenter:centerLeftUp radius:radius startAngle:M_PI endAngle:M_PI </em> 3 / 2 clockwise:true];<br>    [bezierPath addLineToPoint:hLeftUpPoint];<br>    [bezierPath closePath];<br>    [bezierPath moveToPoint:CGPointZero];<br>    [bezierPath addLineToPoint:CGPointMake(0, rectSize.height)];<br>    [bezierPath addLineToPoint:CGPointMake(rectSize.width, rectSize.height)];<br>    [bezierPath addLineToPoint:CGPointMake(rectSize.width, 0)];<br>    [bezierPath moveToPoint:CGPointZero];<br>    [bezierPath closePath];<br>    [backgroundColor setFill];<br>    [bezierPath fill];<br>    CGContextDrawPath(currentContext, kCGPathFillStroke);<br>    UIImage * antiRoundedCornerImage = UIGraphicsGetImageFromCurrentImageContext();<br>    UIGraphicsEndImageContext();<br>    return antiRoundedCornerImage;<br>}</pre>  </p>
+<h2 id="再优化"><a href="#再优化" class="headerlink" title="再优化"></a>再优化</h2><p>覆盖一个圆角view已经可以非常完美的应付绝大多数情况的离屏渲染，但是每个view在生成的时候都要去调用一遍生成圆角的方法去重新绘制一个圆角view，也是一种性能的浪费，所以可以在这个基础上对画好的圆角view做一个缓存，如果后续的view需要一样的圆角view那就不需要重新绘制，只需要去内存中取已经画好的圆角view就可以了。  </p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.jianshu.com/p/ca51c9d3575b" target="_blank" rel="noopener">离屏渲染优化详解：实例示范+性能测试</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/WeChat.jpg" alt="Renhua Chi 微信支付">
+        <p>微信支付</p>
+      </div>
+        
+      
+      <div style="display: inline-block">
+        <img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/AliPay.jpg" alt="Renhua Chi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2016/09/16/iOS-NSUserDefaults用法总结/" rel="next" title="iOS--NSUserDefaults用法总结">
+                  <i class="fa fa-chevron-left"></i> iOS--NSUserDefaults用法总结
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2017/02/12/Instruments-Core-Animation下Debug-Options的介绍和优化方法/" rel="prev" title="Instruments--Core Animation下Debug Options的介绍和优化方法">
+                  Instruments--Core Animation下Debug Options的介绍和优化方法 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是离屏渲染"><span class="nav-number">1.</span> <span class="nav-text">什么是离屏渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么操作会产生离屏渲染"><span class="nav-number">2.</span> <span class="nav-text">什么操作会产生离屏渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免触发离屏渲染"><span class="nav-number">3.</span> <span class="nav-text">如何避免触发离屏渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-静态内容视图"><span class="nav-number">3.1.</span> <span class="nav-text">1.静态内容视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-动态内容视图"><span class="nav-number">3.2.</span> <span class="nav-text">2.动态内容视图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再优化"><span class="nav-number">4.</span> <span class="nav-text">再优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg"
+      alt="Renhua Chi">
+  <p class="site-author-name" itemprop="name">Renhua Chi</p>
+  <div class="site-description" itemprop="description">求知若渴，虚心若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/ChiRenhua" title="GitHub &rarr; https://github.com/ChiRenhua" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/crh944015688@163.com" title="E-Mail &rarr; crh944015688@163.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Renhua Chi</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '17815167175c0f1b9432',
+      clientSecret: '0631cc8f27051d93cd0dde7da18062d403e0a689',
+      repo: 'chirenhua.github.io',
+      owner: 'ChiRenhua',
+      admin: ['ChiRenhua'],
+      id: 'c15314da9cfe25f6517a86763bf338ad',
+        language: window.navigator.language || window.navigator.userLanguage,
+      
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Git-LFS]]></title>
+    <url>%2F2019%2F09%2F27%2FGit-LFS%2F</url>
+    <content type="text"><![CDATA[简介LFS 全称 Large File Storage，顾名思义是用来存储大文件的。在 Git 中，每次提交都会将改动转为二进制文件保存起来，但是对于图片、视频、音频等本来就是二进制的文件，Git 无法识别出差异，所以每次提交都会生成一个新的拷贝。也就是说，一个 100M 的图片，哪怕只改了一点点，提交新版本后它都会在仓库里占用 200M 的空间。 为了解决这个问题，GitHub 提出了 LFS，将图片、视频、音频等大文件存储到主仓库外的一个仓库里。 原理LFS 的原理是将大型二进制文件存储到主仓库外的另外一个仓库里，本地仓库并不会存储这些大文件，仅仅是保留一个指向大文件的指针，当用户切换到某一分支时，LFS 会根据当前分支的情况下载对应的大文件。 使用下载 LFS可以官网下载安装。 Mac 用户可以通过 homebrew 安装 install git-lfs```。12345678### 安装 LFS进入目标仓库目录，然后运行 ```git lfs install``` 安装 LFS。### 使用 LFS通过下面命令选择你希望 LFS 管理的文件类型或者目录。```git lfs track &quot;*.psd&quot; 选择好后别忘了添加 .gitattributes。 add .gitattributes```12一切就绪，后面当我们提交的文件中包含 .psd 类型的文件时，Git 会自动使用 LFS 对其进行管理。 git add file.psdgit commit -m “Add design file”git push origin master``` 结论建议二进制文件都使用 LFS 进行管理，避免频繁的改动使仓库越来越大，如果当前 Git 仓库已经提交了很多大文件变得很大，还有个后悔药可以吃。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-变基]]></title>
+    <url>%2F2019%2F09%2F26%2FGit-%E5%8F%98%E5%9F%BA%2F</url>
+    <content type="text"><![CDATA[变基本名 rebase ，也不知道是谁给它起了这么拗口的名字。 上一篇文章我们学习了 merge 操作，知道了两个分支之间同步代码可以使用git merge命令，但是 merge 命令有一个小缺点让一部分完美主义者无法接受，那就是每次 merge 完成之后，都会生成一个新的 commit。 假如频繁的从 master 分支同步代码到 develop 分支，那 develop 分支上会多出来很多 merge 节点，这些节点有些人觉得很多余，污染了提交历史，让它阅读起来很困难。也有一部分人觉得应该保留开发过程中的每一个操作，方便追踪问题，所以不应该去掉这些节点。两种想法没有对错，仅看个人习惯，如果想同步代码后不产生新的节点，那可以使用一个新的命令git rebase。 流程base 基本点，在 Git 中指分支开始分叉的那个节点。 re 重新设置。 rebase 可以理解为重新设置基本点，也就是修改分支分叉的位置。 1. 切换到目标分支使用git checkout develop命令，切换到 develop 分支，develop 可以替换为任何目标分支。 2. 变基使用git rebase master命令，将 master 代码 rebase 到 master，如果没有冲突则 rebase 完成。 3. 解决冲突如果产生了冲突，则需要先解决冲突，冲突解决完毕后，使用git rebase --continue命令继续执行 rebase 操作。如果想终止此次 rebase 可以使用git rebase --abort命令。 原理下图展示的是将 master 分支代码 rebase 到 develop 分支的过程： 从图中我们可以发现，在执行 rebase 之前，develop 分支是基于 C2 节点的，执行 rebase 操作后，develop 分支的基点移动到了 C4，而 develop 分支的 C5 和 C6 节点会重新在 C4 之后再重放一遍。 C5 和 C6 节点看起来是从 C2 节点后移动到了 C4 节点后，但实际上 Git 并没有移动 C5 和 C6 节点，而是在 C4 节点后，又提交了两个跟 C5 和 C6 相同的节点 C5’ 和 C6’，C5 和 C5’ 除了 commit id 不同，其余完全一样。 rebase 黄金法则永远不要对一个公共分支执行 rebase 操作。 在执行 rebase 操作前，请默念此法则三遍。一旦对公共分支执行了 rebase 操作，那整个分支将会变得不可维护。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-合并分支]]></title>
+    <url>%2F2019%2F09%2F26%2FGit-%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF%2F</url>
+    <content type="text"><![CDATA[在 develop 分支开发完成后，需要将 develop 分支的代码同步到 master，这时 merge（合并）就派上了用场。 merge 是 Git 中非常常用的一个命令，并行开发中各个分支代码的同步基本都要使用 merge。 流程1. 切换到目标分支使用git checkout master命令，切换到 master 分支，master 可以替换为任何目标分支。 2. 合并使用git merge develop命令，将 develop 代码合并到 master，如果没有冲突则合并完成，同时会生成一个新的 commit 提交，commit 的内容就是 merge 的内容。 3. 解决冲突如果产生了冲突，则需要先解决冲突，冲突解决完毕后，使用git add命令跟踪解决完的改动，同时也会去掉该文件的冲突标记，最后使用git commit命令提交这次 merge。 结语合并完成后，临时分支就可以删除了。 比如，开发者在 develop 分支完成开发，并将 develop 分支的代码合并回 master 分支，合并完成后，develop 分支就完成了它的使命，可以删除。 还有一种情况是开发过程中同步主线代码到开发分支，也是使用 merge 命令进行操作，不同的是这次可不要把 master 分支删掉哦。 下图展示的是将 master 分支代码同步到 develop 分支的过程：]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-分支]]></title>
+    <url>%2F2019%2F09%2F02%2FGit-%E5%88%86%E6%94%AF%2F</url>
+    <content type="text"><![CDATA[简介每次提交新版本，Git 都会把新版本连接到上一个版本的后面，串成一条时间线，这个时间线就是分支。 分支管理是 Git 的强项，有别于 SVN 的分支是整个项目的一个拷贝，Git 的分支仅仅是一个指向某次提交的指针。所以 Git 创建、删除分支有天然的优势，仅仅创建、删除一个指针即可，成本极低。 分支操作创建分支git branch develop 创建一个名为 develop 的分支。 创建一个名为 develop 的指针指向当前最新的提交。 git checkout -b develop 创建并切换到 develop 分支。 创建一个名为 develop 的指针指向当前最新的提交，同时 HEAD 指针也会移动到 develop 分支。 HEAD 指针永远都指向当前分支最新的节点。 切换分支git checkout develop 命令用于切换到已有分支 develop。 Git 将 HEAD 指针指向 develop 分支最新的提交，切换分支仅仅是移动一个指针即可。 删除分支git branch -D develop 命令用于删除 develop 分支。 Git 只要删除 develop 指针，就完成了分支的删除。 其它常用命令git branch -a 查看所有分支。 git branch -a -v 查看所有分支详细信息。 小结分支的存在让并行开发成为了可能，而 Git 强大的分支管理，极大的提升了开发效率和版本迭代效率。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-仓库瘦身]]></title>
+    <url>%2F2019%2F08%2F29%2FGit-%E4%BB%93%E5%BA%93%E7%98%A6%E8%BA%AB%2F</url>
+    <content type="text"><![CDATA[背景随着项目的不断开发，仓库自然而然会变得越来越大，如果项目中只是纯文本文件，那仓库的大小增加的会非常缓慢。但是如果仓库中存放了视频、图片、音频等比较大的二进制文件，那这个仓库估计经历几次提交就爆炸了。尤其 clone 仓库时，如果你面对几十个 G 的仓库，估计还没开发心态就崩了。 分析前文我们有了解过，Git 提交版本时，是将改动的文件压缩成二进制文件存储的，但是对于已经是二进制文件的视频、图片等文件，Git 无法对其进行压缩，也没有办法对比出差异，所以每次改动这些文件时，Git 都会完整的拷贝一份。也就是说一个 100M 的图片，哪怕只改了一点点，提交新版本后他都会在仓库里占用 200M 的空间。 既然视频、图片等类型的二进制文件会造成仓库膨胀，有人会认为那把这些文件从项目中删掉不就可以了。too young！从项目中删除这些文件只是让项目工程变小了，实际上 Git 仓库里还保留着这些文件的提交历史，所以仓库本质上并没有变小。 方案方案一为了解决这个问题，Git 提供了一个底层命令 git verify-pack，可以先找出占用空间比较大的文件。 1234$ git verify-pack -v .git/objects/pack/pack-3f8c0...bb.idx | sort -k 3 -n | tail -3e3f094f522629ae358806b17daf78246c27c007b blob 1486 734 466705408d195263d853f09dca71d55116663690c27c blob 12908 3478 11897a9eb2fba2b1811321254ac360970fc169ba2330 blob 2056716 2056872 5401 然后通过 filter-branch 命令从提交历史中彻底删除这个文件。 1234$ git filter-branch --index-filter \ &apos;git rm --cached --ignore-unmatch git.tbz2&apos; -- 6df7640^..Rewrite 6df764092f3e7c8f5f94cbe08ee5cf42e92a0289 (1/2)rm &apos;git.tbz2&apos;Rewrite da3f30d019005479c99eb4c3406225613985a1db (2/2)Ref &apos;refs/heads/master&apos; was rewritten 现在历史记录中已经不包含对那个文件的引用了。不过 reflog 以及运行 filter-branch 时 Git 往 .git/refs/original 添加的一些 refs 中仍有对它的引用，因此需要将这些引用删除并对仓库进行 repack 操作。在进行 repack 前需要将所有对这些 commits 的引用去除： 12345678$ rm -Rf .git/refs/original$ rm -Rf .git/logs/$ git gcCounting objects: 19, done.Delta compression using 2 threads.Compressing objects: 100% (14/14), done.Writing objects: 100% (19/19), done.Total 19 (delta 3), reused 16 (delta 1) 方案二使用 BFG Repo-Cleaner，这是 git-filter-branch 的替代方案，优点是快，超级的快，使用起来也很简单，推荐使用此方案。 具体使用方法可以参考官方文档。 注意事项： 在优化完仓库准备 push 到远端时，记得先删除远端的 tag。因为 BFG Repo-Cleaner 会对 tag 进行清洗，而远端的 tag 不支持写入，所以需要先删除远端的 tag，push 时会将清洗后的 tag 提交上去。 清洗完的仓库提交到远端后，要通知其他合作的同事废弃掉本地的旧仓库，重新 clone 一份新的。避免其他人的提交将已经删除的数据又提交回来。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-远端]]></title>
+    <url>%2F2019%2F08%2F26%2FGit-%E8%BF%9C%E7%AB%AF%2F</url>
+    <content type="text"><![CDATA[远端根据 Git 的特点，每个人本地都是一个完整的版本库，没有服务器其实也是可以工作，只要两台电脑能够互相连接上，就可以进行数据的交换。但是在实际使用时，没人会通过这种方式互相推送修改，因为两台电脑很有可能不在一个局域网下。所以 Git 一般也会有一个中央服务器，他的存在就是为了方便大家进行数据的交换。 远端指的就是这台中央服务器上的版本库。 添加远端本地已经创建好的仓库可以通过 git remote add origin serverPath 命令添加远端。 origin 是远端在本地的名称，可以修改为其它名称。 serverPath 对应远端的地址。 如果是从远端 clone 仓库，那在 clone 下来时，远端就已经添加好了，默认名称是 origin。 查看远端远端添加完后，可以通过 git remote show 命令查看远端。 git remote -v 用于查看远端的详细信息。 删除远端git remote remove origin 用于删除远端，origin 是要删除远端的名字。 重命名远端git remote rename origin origin_new 如果添加远端时起了一个不合适的名字，可以通过这个命令修改远端的名字。origin 是当前远端的名字，origin_new 是远端的新名字。 与远端交互远端关联完成后，就可以与远端进行数据交互了。假设本地我们已经提交了一个新的版本，如果想把本地的提交同步到远端，需要进行两步操作： 先执行 git pull 命令，将远端数据同步到本地，如果此时有冲突，则需要解决冲突。 执行 git push 命令，将本地的修改同步到远端仓库。 git pullgit pull 命令会将远端的数据同步到本地，git pull 命令实际上是执行了两步操作： 执行 git fetch 命令，将远端仓库的数据同步到本地的远端仓库副本里。 执行 git merge 命令，将远端仓库副本里的数据和当前分支的数据进行合并，如果没有冲突，合并完成。如果有冲突则需要先解决冲突。 完成后，远端的数据就已经同步到本地了。 git push上一步我们已经将远端的数据同步到了本地，但是我们本地提交的版本还没有同步到远端。 git push 命令会将本地提交的所有版本同步到远端以及远端的本地副本。 Git 提交流程到这里，一个完整的 Git 流程就浮出水面了，通过下面的图可以回顾下整个 Git 的提交流程： git add 将修改的文件添加到暂存区。 git commit 将暂存区中的所有文件提交成一个新的版本。 git pull 从远端同步数据到本地。 git push 将本地新的版本同步到远端。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-commit命令详解]]></title>
+    <url>%2F2019%2F08%2F24%2FGit-commit%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[git commit 会将暂存区的所有文件拿出来，生成一个新的版本。那么在背后 git commit 都做了哪些操作呢，下面详细介绍下。 保存当前目录结构首先 Git 会执行 git write-tree 命令保存当前的目录结构，这个操作会生成一个 Git 对象，同时也会将当前的目录结构生成一个哈希值，哈希值的前 2 位作为文件夹名，后 38 位作为 Git 对象名，存入 .git/objects 目录下。这个新生成的 Git 对象就是前文 《Git-版本库目录结构解析》 提到过的 tree 类型的文件。 这个 Git 对象存储了当前的目录结构以及对应目录结构下的 blob 文件，而 blob 文件就是暂存区中的文件。 生成新的版本一个新的版本，就是保存当前的目录结构，以及目录结构下的文件对应的二进制对象，上一步操作已经将目录结构保存下来，下面就要将保存好的目录结构生成一个新的版本。 Git 执行 git commit-tree 命令，将 tree 对象生成新的版本。这个操作同样会生成一个 Git 对象，并存在 .git/objects 目录下。这个新生成的 Git 对象就是前文 《Git-版本库目录结构解析》 提到过的 commit 类型的文件。 这个 Git 对象存储了 tree 文件和作者信息。 其它命令git logcommit 信息中不仅存储了改动的文件和目录，还存储了作者信息以及提交的时间，查询一个项目的提交历史时，其实就是查询这些数据，可以通过 git log 命令来查看项目的提交历史。 git checkout 2a18f9bd7f2caa…每个 commit 都有一个唯一的哈希 id ，通过这个哈希 id 可以迅速找到某一次提交，基于这个特性，Git 可以方便的切换到某一次提交。 git show 2a18f9bd7f2caa…用于展示 2a18f9bd7f2caa… 这次提交的所有改动。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-add命令解析]]></title>
+    <url>%2F2019%2F08%2F24%2FGit-add%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[前文有了解到，git add fileName 命令会将指定文件加入到暂存区，那么 git add 背后都做了哪些操作，下面详细介绍下。 1. 保存已修改的对象在执行 git add 操作后，Git 首先会执行 git hash-object 命令把当前修改的文件压缩成二进制文件，我们称为一个 Git 对象。同时还会计算当前文件内容的哈希值，哈希值一共 40 位，前两位作为文件夹的名字，后两位作为这个 Git 对象的名字，存入 .git/objects 目录下。这个新生成的 Git 对象就是前文 《Git-版本库目录结构解析》 提到过的 blob 类型的文件。 2. 将修改的信息添加到暂存区文件保存完后，还需要告诉 Git 哪些文件发生了改动，这些变动的文件会统一存放在暂存区中。 Git 通过执行 git update-index 命令，将修改的文件名，对应 Git 对象名，以及文件权限等信息写入到暂存区。 文件加入到暂存区后，就可以通过 git status 命令查看到当前修改的文件了。 其它命令git add . ：对所有已修改的文件都执行一遍 git add 操作。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-版本库目录结构解析]]></title>
+    <url>%2F2019%2F08%2F24%2FGit-%E7%89%88%E6%9C%AC%E5%BA%93%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%A7%A3%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[版本库在前面的文章 《Git-创建新仓库》中我们了解到，每个仓库下面都有一个名为 .git 的隐藏文件夹，这个文件夹其实就是版本库，这里面就藏了 Git 版本管理的秘密。 .git 目录结构.git 的目录结构如下图： config当前仓库的配置文件 description仓库的描述信息，一般 GitHub、GitLab 等托管平台会用到。 HEAD前文有提到，是 Git 本地仓库的三大组成部分之一。HEAD 文件存储了当前分支的关联。 hookshooks 文件夹用来存放 Git 脚本，这些脚本一般用于规范 Git 操作。可以设定在执行某些 Git 操作时，触发相应的脚本。比如提交前检查提交信息等。 info存放 Git 仓库的一些信息。 objects存放所有的 Git 对象。 在生成 Git 对象时，会同时生成一个 40 位的哈希值，哈希值的前 2 位用作文件夹名，后 38 位用作 Git 文件名。 Git 对象共有三种类型： blob 实际修改文件的二进制文件。 tree 当前的目录结构，以及对应目录结构下的 blob 文件。 commit 版本信息，包含 tree 文件、作者信息、上一个 commit ID 等信息。（注：commit ID 就是 commit 文件的哈希值） 这三个文件之间的关系如下： refs存放远端以及各个分支的信息、版本信息、本地所有分支的 HEAD 指针。 refs 文件夹下有三个子文件夹： heads 文件夹存放的是所有本地分支的 HEAD 指针，指针中存放的是对应分支最新的 commit ID。 remotes 文件夹存放了所有远端的信息，包括每个远端下分支的信息。 tags 文件夹存放了所有版本的信息。 logs存放了所有的提交历史和操作历史。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-工作流程]]></title>
+    <url>%2F2019%2F08%2F24%2FGit-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[工作流程Git 的本地仓库主要由三部分构成： 工作目录，持有实际文件。 暂存区，类似于缓存区域，存放临时修改。 HEAD 指针，一般指向最后一次提交。 整体流程就是：在工作目录对文件进行修改，修改后的文件通过 git add 命令添加到暂存区。所有修改完毕后，通过git commit 命令将暂存区内的所有文件生成一个新的版本记录，同时 HEAD 指针移动到最新的版本。 Git 文件生命周期Git 管理下的文件共有四种状态： untracked（未跟踪） unmodified（未修改） modified（已修改） staged（暂存） 在平时的开发过程中，文件会在这四种状态中来回扭转。 新创建的文件是 untracked（未跟踪） 的状态，此时 Git 还没有开始追踪这个新文件，通过 git add fileName 命令告诉 Git 开始追踪这个文件，并将文件加入到暂存区，此时文件状态扭转为 staged（暂存）。 对于 Git 已经开始跟踪的文件，如果没有改动，文件状态就是 unmodified（未修改）。 当对已经跟踪的文件进行修改时，文件的状态就会扭转到 modified（已修改）的状态，此时通过 git add fileName 可以将文件当前的改动存到暂存区，同时文件状态扭转为 staged（暂存）。 已经暂存的文件通过 git commit 命令生成一个新的版本。生成新版本后，所有文件都恢复到 unmodified（未修改）的状态。 小结从上面的流程中可以发现两个经常出现的命令： git add // 将文件加入到暂存区 git commit // 将暂存区中的文件提交成一个新的版本 这是版本管理中最常用到的两个命令，后面会详细介绍。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-创建新仓库]]></title>
+    <url>%2F2019%2F08%2F24%2FGit-%E5%88%9B%E5%BB%BA%E6%96%B0%E4%BB%93%E5%BA%93%2F</url>
+    <content type="text"><![CDATA[简介仓库是 Git 中的一个概念，实际上就是一个被 Git 标记的本地文件目录，目录中文件的增、删、改都能被 Git 捕捉到。 Git 创建新仓库有两种方式，一种是本地初始化一个新仓库，另外一种是从服务器上 clone 一个仓库到本地。 本地初始化仓库类似于把大象放冰箱分为三步，本地创建一个 Git 仓库只需要两步： 创建一个本地文件夹。 在当前文件夹目录下执行 git init。 以下图 GitExample 文件夹为例，执行完 git init 后，会在 GitExample 文件夹下生成一个 .git 的隐藏文件夹，这就表明 git 仓库初始化成功。 .git 文件夹中的文件就是 git 平时运作所需的必要文件，后面会详细介绍这些文件的作用。 从服务器 clone 仓库这种方式可以简单的理解为，把服务器上的仓库拷贝一份到本地。 以 git 上比较出名的 AFNetworking 举例，如果你想把这个仓库拷贝到本地，总共也分两步： 在 GitHub 上找到 AFNetworking 这个项目，并复制仓库地址。 选好本地目录，并执行 git clone 仓库地址 GitHub 上的仓库地址： 执行完 git clone 仓库地址 命令后，本地目录就会多出来一个文件夹，这个就是拷贝下来的 git 仓库，在仓库中同样可以看到 .git 隐藏文件夹。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-安装]]></title>
+    <url>%2F2019%2F08%2F23%2FGit-%E5%AE%89%E8%A3%85%2F</url>
+    <content type="text"><![CDATA[安装 直接官网下载安装包安装（传送门），一路点下一步就行。 喜欢图形化界面的朋友，可以下载安装 SourceTree（传送门），同时也会安装好 Git，一路点下一步即可。 MacMac 上可以通过 homebrew 安装 git，一行命令搞定： brew install git 安装成功安装完毕后，在终端上输入命令 git ，如果出现下面的提示就表明安装成功。 配置 Git安装完毕后，需要简单配置下 git 才能使用，在终端输入下面两个命令： 12git config --global user.name &quot;your name&quot;git config --global user.email &quot;email@example.com&quot; 在使用 git 时，git 需要知道是谁做出了修改，这两个命令就是告诉 git 这台机器的作者和 email。这两个信息会体现在提交的 commit 中。 --global 这个参数表示在全局生效，也就是这台机器所有的 git 仓库都会使用这个用户名和 email。如果只想在当前仓库生效，则去掉 --global即可。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git-简介]]></title>
+    <url>%2F2019%2F08%2F23%2FGit-%E7%AE%80%E4%BB%8B%2F</url>
+    <content type="text"><![CDATA[简介Git 作为分布式版本管理系统的鼻祖，是目前主流的版本管理方案。 什么是版本管理？类似于毕业论文，为了避免删除的部分后面还会再用到，每次修改前，都会先另存为一份论文，再进行修改。经过 n 次修改后，就会变成下面这样。 这就是最简单的版本管理，缺点也显而易见： 版本间具体修改了啥不清楚。 基本无法支持多人合作。 n 多个文件占用空间还不敢删除。 版本管理从如此简陋的状态发展到现在已经非常成熟，目前有两大主流的方案： 分布式版本管理系统：Git 集中式版本管理系统：SVN Git 作为后起之秀，从理念和设计上都完胜 SVN。 Git vs SVN对比 Git 和 SVN 就是对比 “分布式版本管理系统” 和 “集中式版本管理系统”。从图中可以清晰看出两个系统的特点。 分布式版本管理系统特点： 每台设备都有完整的版本库。 支持离线操作，没有网时依然可以提交版本、查看日志等操作。 安全！如果作为服务器的设备版本库损坏或丢失，从任何一台设备拷贝一份版本库到服务器就可以继续工作。 集中式版本管理系统特点： 中央服务器存有完整的版本库，开发者只有版本库的最新版本。 所有操作都依赖中央服务器，无论是提交版本，还是查看日志，没有网络就无法办公。 不安全，一旦中央服务器挂掉，所有人都无法办公，数据也无法恢复。 集中式版本管理系统就像中央集权，所有权利都集中在中央手中，地方无论要做什么事情都要先跟中央申请。 分布式版本管理系统就像现在的各地政府，地方的事情由地方政府负责处理，每个地方政府定时跟中央汇报下就行了。 由此可见，分布式版本管理系统在设计上就优于集中式版本管理系统，除此之外，Git 在分支管理和并行开发上也是完胜 SVN ，这部分后面会讲到。]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-变量修饰符]]></title>
+    <url>%2F2019%2F05%2F26%2FiOS-%E5%8F%98%E9%87%8F%E4%BF%AE%E9%A5%B0%E7%AC%A6%2F</url>
+    <content type="text"><![CDATA[atomic默认属性，系统在生成 get / set 方法时通过自旋锁保证 get / set 操作的完整性，当多个线程同时访问属性时，能够保证操作按顺序执行。 如果重写了 get / set 方法，那 atomic、nonatomic、copy 等修饰符都将毫无卵用。 锁会产生额外开销，所以使用 atomic 修饰的变量读写速度不快。 atomic 只能保证多线程下的读写安全，当其它线程释放了这个对象时，就可能会造成 crash，所以 atomic 并不是线程安全的。 nonatomic非读写安全，好处是没有锁，速度快。 assignassign 一般用来修饰基础数据类型，尽量不用它修饰对象，因为 assign 修改对象并不会使引用计数 +1，会被 ARC 及时清除，但此时 assign 的指针地址依然存在，就会造成野指针。 weak一般用来修改对象，使用它修饰时，引用计数不会 +1，是当它被 ARC 自动释放时，其对应的指针也会置为 nil，避免了野指针的问题。 weak 指针在引用的对象被回收的时候会自动置为 nil，原理是 RunTime 维护了一个 weak 表，用来存储 weak 指针。weak 表是一个 hash 表，key 是对象地址，value 是 weak 指针地址数组。当对象被置为 nil 时，会通过对象地址找到 weak 指针地址数组，然后将数组中每个地址的数组置为 nil。然后将其从 weak 表中删除。由此可见，weak 指针涉及 hash 表的增删改查，所以也有一定的性能开销。 strong用来修饰对象，引用计数 +1，只有当引用计数为 0 时才会被回收，也可以将对象设置为 nil 来销毁它。 copycopy 和 strong 都是强引用，不同的是，strong 的复制是多个指针指向同一个地址，而 copy 是复制对象本身，指针会指向不同的地址。 copy 使用时要注意不能修饰可变对象，例如：NSMutableArray、NSMutableDictionary 等，因为使用 copy 修饰后，此对象会变为不可变的，如果此时使用可变对象的方法，会导致 crash。 readonly只读，只有 get 方法，没有 set 方法。 readwrite可读可写，有 get 方法，也有 set 方法。 __block用在 block 中，block 可以访问局部变量，但是不能修改，如果要修改就要用 __block 修饰。 __weak用在 block 中，用来修饰变量，weak 用来修饰属性。 __strong用在 block 中，防止对象被提前释放。举例： 12345__weak typeof(self) weakSelf = self;[self setBlock:^&#123; __strong typeof(weakSelf) self = weakSelf; self.string = @&quot;hello world&quot;;&#125;];]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-基础知识整理]]></title>
+    <url>%2F2019%2F03%2F14%2FiOS-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86%2F</url>
+    <content type="text"><![CDATA[iOS 基础知识整理1. Tagged Pointer概括：将本来用于存储对象指针的空间存储数据，以节省空间、提高效率。 在 32 位设备中，NSNumber、NSDate 这类对象占用的空间是 8 字节（对象指针 4 字节 + 对象值 4 字节），而到 64 位设备中，占用的空间则是 16 字节（对象指针 8 字节 + 对象值 8 字节），空间上翻了一倍。效率上，NSNumber、NSDate 会在堆上分配空间存储对象的值，同时还要维护对象的引用计数进行销毁释放，效率不高。 为了解决上述问题，苹果提出 Tagged Pointer 对象。原理就是将对象指针分为两部分，一部分用于存储对象的值，一部分存储特殊标记（标记是 Tagged Pointer 对象）。在 64 位设备中，占用的空间变为 8 字节 （对象值 &amp; 特殊标记 8 字节），这样在内存中就省掉了在堆中存储对象值的空间，同时也省掉了维护对象所需要的开销。 但是 8 字节存储的数据也是有限的，所以如果数据超过了 8 字节，Tagged Pointer 对象还是会按照 “对象指针 8 字节 + 对象值 8 字节” 方式存储。 2. Assign 修饰符导致的野指针assign 一般用来修饰基础数据类型，尽量不用它修饰对象，因为 assign 修改对象并不会使引用计数 +1，会被 ARC 及时清除，但此时 assign 的指针地址依然存在，就会造成野指针。]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-小知识点合集]]></title>
+    <url>%2F2019%2F03%2F11%2FiOS-%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9%E5%90%88%E9%9B%86%2F</url>
+    <content type="text"><![CDATA[Crash 相关 针对 iOS 8.4 及以下系统，在 layoutSubViews 方法中，不要删除一个 View（view = nil）。]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Travis-CI 自动化部署网站]]></title>
+    <url>%2F2018%2F10%2F30%2FTravis-CI%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99%2F</url>
+    <content type="text"><![CDATA[Travis-CI简介 Travis CI是一个托管的，分布式的持续集成服务，用于构建和测试在GitHub上托管的软件项目。 利用 Travis CI ，可以实现每次 push 新文章到 git 后，Travis CI 会自动检测到提交，然后根据配置文件 “.travis.yml”，按照设定好的步骤帮我们自动部署网页。 实现1.Travis CI 关联 GitHub下面的步骤都是在已经成功搭建好了 GitPages 网站的基础上进行的。使用 GitHub 账户登录 Travis CI ，Travis CI 会自动加载 GitHub 账户下的所有仓库，选择 yourname/yourname.github.io 项目进行关联。 点击 “setting” 进入设置页面，在 General 下打开 “Build pushed branches” 选项。 2.配置 Travis CITravis CI 在部署网页时，需要于之关联的 GitHub 上仓库的读写权限。GitHub 提供了 Token 方式供外部访问对应的仓库。 进入到 GitHub 的设置页面，创建一个新的 Token 。注意要勾选对应的权限。创建完毕后，务必要记下 Token 的值，下个步骤要用到，这个值只会在创建完展示一次，所以一定要记好。 回到 Travis CI 的设置页面，在 Environment Variables 选项下，添加我们刚刚在 GitHub 中生成的 Token 。 3.创建 .travis.yml 文件 .travis.yml 文件作用是告诉 Travis CI 在监听到 Push 操作后都需要做什么。在博客的根目录下创建 .travis.yml 文件，文件示例如下： 1234567891011121314151617181920212223242526272829303132333435363738# 指定语言环境language: node_js# 指定需要sudo权限sudo: required# 指定node_js版本node_js: - 7.9.0# 指定缓存模块，可选。缓存可加快编译速度。cache: directories: - node_modules# 指定博客源码分支，因人而异。hexo博客源码托管在独立repo则不用设置此项branches: only: - hexo before_install: - npm install -g hexo-cli# Start: Build Lifecycleinstall: - npm install - npm install hexo-deployer-git --save# 执行清缓存，生成网页操作script: - hexo clean - hexo generate# 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署after_script: - git config user.name &quot;yourName&quot; - git config user.email &quot;yourEmail&quot; # 替换同目录下的_config.yml文件中gh_token字符串为travis后台刚才配置的变量，注意此处sed命令用了双引号。单引号无效！ - sed -i &quot;s/gh_token/$&#123;GH_TOKEN&#125;/g&quot; ./_config.yml - hexo deploy# End: Build LifeCycle 同时，还要修改 _config.yml 文件的 deploy 节点： 12345deploy:- type: git # 下方的gh_token会被.travis.yml中sed命令替换 repo: https://gh_token@github.com/xiong-it/xiong-it.github.io.git branch: master 最后将 yml 文件 push 到 GitGub 上就可以在 Travis CI 上看到构建了。 最后以后在发布新博客，只需要将写好的博客放到 hexo/source/_post/ 文件夹下，Push 到 GitHub 上即可，后续的的构建操作 hexo clean、hexo g、hexo d 都会由 Travis-CI 自动完成。]]></content>
+      <categories>
+        <category>网站搭建</category>
+      </categories>
+      <tags>
+        <tag>Travis-CI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-AFNetworking 使用遇到的问题汇总]]></title>
+    <url>%2F2018%2F10%2F17%2FiOS-AFNetworking-%E4%BD%BF%E7%94%A8%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB%2F</url>
+    <content type="text"><![CDATA[1. unacceptable content-type 错误这个错误表示回包类型无法解析，一般这种情况请求回包的状态码是：200，表示错误并不在后台。详细错误描述为： Request failed: unacceptable content-type: text/plain（或者 text/html） 可以看出错误的原因是 AFNetworking 框架并不支持解析 plain 和 html 类型的数据。 解决办法：在 AFURLResponseSerialization.h 类里面找到 self.acceptableContentTypes = [NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;, nil];然后在后面追加 @&quot;text/html&quot;, @&quot;text/plain&quot;两个参数即可。self.acceptableContentTypes = [NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;, @&quot;text/html&quot;, @&quot;text/plain&quot;, nil];]]></content>
+      <categories>
+        <category>踩过的坑</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>AFNetworking</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-NSCache]]></title>
+    <url>%2F2018%2F09%2F17%2FiOS-NSCache%2F</url>
+    <content type="text"><![CDATA[NSCache 是什么简单的理解，NSCache 就是一个可变的键值对集合，类似于 NSMutableDictionary，用于存储一些临时数据。在内存吃紧时 NSCache 会自动释放存储的临时数据。 NSCache 特点 在内存吃紧的时候，NSCache 会删除部分缓存的临时数据，最大限度的减少内存的占用。 NSCache 是线程安全的，增删改查操作无需加锁。 与 NSMutableDictionary 不同，NScache 的键（key）不会被复制。键（key）不需要实现 NSCopying 协议。 一般对于初始化开销比较大或者重复占用内存的对象，可以考虑用 NSCache 存储。但是这些对象不应该影响程序的运行，因为系统可能会在内存不足的时候清理掉这些对象，此时就需要在必要时重新创建这些对象。 NSCache 中的对象是被缓存强引用的，如果创建的对象希望在不需要它时能够被缓存及时释放掉，可以实现 NSDiscardableContent 协议。这样当此对象已经不被需要时，缓存也会丢弃这个对象以节省内存。 NSCache 介绍变量@property(copy) NSString *name; 缓存名称（默认值为空 “”） @property NSUInteger countLimit; 最多支持缓存对象的数量（0 代表无限制，默认是 0），如果缓存中的对象数量超过了这个限制，会清除部分对象直至缓存数量低于 countLimit。 @property NSUInteger totalCostLimit; 缓存对象占用的内存上限。（0 代表无限制，默认是 0）。 在将对象添加到缓存时，如果此对象的添加会导致缓存占用的内存大小超过 totalCostLimit 限制，缓存可能会直接抛弃此对象。 协议1. NSDiscardableContent 如果对象希望在不被使用时，缓存能够及时释放掉自己，可以实现此协议以节省更多内存。实现此协议的对象会有一个 counter 值来管理其生命周期，当此对象正在使用时，counter 值大于等于 1 。当此对象已经不被使用时，counter 值为 0 ，此时缓存策略会将此对象移除缓存。 @property BOOL evictsObjectsWithDiscardedContent; 缓存是否会自动删除已经被废弃的对象。默认是 YES。 - (BOOL)beginContentAccess; 返回一个 BOOL 值用来表示当前对象是否正在使用。此方法会使 counter 值 +1。 - (void)endContentAccess; 此方法会使 counter 值 -1，当 counter 值减少到 0 时，缓存策略会及时清除此对象。 - (void)discardContentIfPossible; 当对象的 counter 值为 0 ，缓存策略开始清除此对象时会调用此方法。 - (BOOL)isContentDiscarded; 此对象是否被清除。 2. NSCacheDelegate - (void)cache:(NSCache *)cache willEvictObject:(id)obj; 当此对象（obj）准备从缓存（cache）中移除时，会调用此方法。 方法- (ObjectType)objectForKey:(KeyType)key; 通过 key 取缓存的对象。 - (void)setObject:(ObjectType)obj forKey:(KeyType)key; 通过 key 将对象（obj）存到缓存中。 - (void)setObject:(ObjectType)obj forKey:(KeyType)key cost:(NSUInteger)g; 这个方法跟 “setObject:forKey:” 类似，但是多了一个 cost 值，这个值代表此对象占用空间的成本，但是这个值具体会有什么作用，苹果官方文档并没有说明。文档中有提到，当内存不足时，会移除部分对象释放内存，但是释放对象的过程并不会按照某种特定顺序来，所以如果想通过 cost 值来影响释放行为是没用的。如果计算这个 cost 值需要额外开销，cost 值可以直接传 0，或者简单点，使用 “setObject:forKey:” 方法。 - (void)removeObjectForKey:(KeyType)key; 删除缓存中 key 对应的对象。 - (void)removeAllObjects; 删除缓存中所有的数据。 总结NSCache 用法比想象中简单的多，因为缓存清理的策略已经由系统帮我们处理。]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-安装包瘦身]]></title>
+    <url>%2F2018%2F05%2F20%2FiOS-%E5%AE%89%E8%A3%85%E5%8C%85%E7%98%A6%E8%BA%AB%2F</url>
+    <content type="text"><![CDATA[随着 APP 版本的迭代，安装包无法避免的会变的越来越大。分析安装包的构成可以发现，安装包主要是由资源文件和代码构成的，所以从这两个点出手优化可以达到一个很明显的效果。同时编译选项的配置也会对安装包的大小有一定影响。 1. 资源文件1. 删除无用图片使用开源工具 LSUnusedResources 检查重复图片，但是可能会有误报，比如 [@&quot;image%d&quot;, index] 这种引用方式无法检查到，需要人工在核对一边。 2. 图片文件压缩使用开源工具 imageOptim 对所有图片压缩一遍。此工具会使用 git 上主流的图片压缩方法尝试一遍，选择最优方案。 3. 纯色图片使用代码生成如果项目中纯色的图片比较多，可以考虑使用代码替代，生成后缓存到本地以供后期使用。 4. 不常用图片后台下发对于项目中不常用的图片可以考虑由后台下发，但是此项收益可能不高，而且会影响使用体验，酌情使用。 5. 字体文件字体文件一般都很大，如果项目中使用了多种字体文件，可以删掉不常用的字体文件。 2. 代码1. 删除不使用的类项目迭代很久后，会有很多历史遗留的代码，已经不会再调用到，可以使用开源工具 WHC_Scan 检查没有使用的类，但是可能会有误报，而且 OC 语言的特性导致需要人工 check 一遍。 2. 删除不使用的方法方法和类不在一个数量级，所以检查起来比较耗时，而且一样会有误报，如果人工核实一遍的话耗时不说收益也偏少。 3. 精简库文件在编译选项中选择生成 LinkMap 文件，编译完成后会在对应目录下生成 LinkMap 文件。分析 LinkMap 文件可以知道每个库文件的大小。 分析工具可以使用 LinkMap ，效果如下图： 1. 检查删除没有使用的库文件。 2. 对于过于庞大的库，检查下是否使用到了库中的所有功能，避免为了使用一小部分功能而引用了整个库。 3. 检查重复的库文件，删除多余的库。 4. 删除无用功能代码1. 对于一次性 / 活动需求，确认不会再使用后及时清理掉。 2. 过时的功能，旧的 UI 样式，确实不再使用及时清理。 3. 编译选项1. 去掉符号信息在 Release 版本把 Strip Debug Symbols During Copy 和 Symbols Hidden by Default 设为 YES，可以去除不必要的调试符号。 Symbols Hidden by Default 会把所有符号都定义成 ”private extern”。 去掉符号信息会让安装包大小减少很多，但是代价是在 APP 里打印堆栈信息无法还原出对应的类名和方法名。 2. 编译选项优化Release 版本的 Optimization Level 应该设置为 Fastest, Smalllest。]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CocoaPods-创建私有仓库]]></title>
+    <url>%2F2018%2F05%2F17%2FCocoaPods-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%2F</url>
+    <content type="text"><![CDATA[前言之前有介绍过如何安装 CocoaPods（传送门），对于CocoaPods的好处自然也不必多说。然而有些情况下，我们想要管理自己的库，但还不想把这些库开源，这时就需要构建一个私有的 CocoaPods 仓库。 在前面安装 CocoaPods 的教程中有提到：pod setup 的本质就是将 https://github.com/CocoaPods/Specs 上的 Specs 项目 clone到 /Users/ 用户名 /.cocoapods/repos 目录下。同理，我们在 git 上创建一个私有的仓库，用于存储私有的库文件，然后将这个私有仓库添加到 CocoaPods 中即可。 1. 在 Git 上创建私有仓库个人开发者可以在 GitHub 上购买一个私有仓库，公司的话一般都会有自己内部的 Git 平台。这里用GitHub举例，创建一个私有仓库用于存放私有的库文件: 创建完成后，在终端执行以下命令，将新创建的 MartinSpecs 仓库添加到 CocoaPods 中。（ MartinSpecs 是仓库名称，后面的域名是仓库地址） pod repo add MartinSpecs https://github.com/ChiRenhua/MartinSpecs 至此我们第一步就完成了，来到 .cocoapods 目录下，我们可以看到刚刚创建的 MartinSpecs 仓库已经添加到了 CocoaPods 中了。 2. 创建 CocoaPods 库文件这一步需要按照 CocoaPods 的标准对库文件进行包装。 1. 在 GitHub 上创建一个新的项目 要注意 License 文件是一定要有的，因为CocoaPods要求 Pods 依赖库必须要有 License 文件，否则会导致验证失败。 2. 创建并配置 .podspec 文件：将项目 clone 到本地，并在相应目录下通过以下命令创建 .podspec 文件 pod spec create MartinPodsTest 打开 MartinPodsTest.podspec 文件（这是个 ruby 类型的文件，“#” 代表被注释，所以这里大部分是没用的注释），删掉没用的注释，我们把重要的参数配置下即可。 3. 发布 release 版本至此库文件已经配置完毕，接下来要在 GitHub 上发布一个 release 版本即可。在相应目录下执行以下命令： git tag &#39;0.0.3&#39;git push --tagsgit push 在 GitHub 上已经可以看到刚刚发布的 realse 版本了！ 3. 添加到 CocoaPods 私有仓库中1. 验证库通过命令 pod lib lint 来验证依赖库是否合法，如果合法就可以添加到 CocoaPods 的仓库中了。如果出现了无关紧要的警告⚠️，如下图： 可以通过下面的命令规避这些警告。 pod lib lint --allow-warnings 2. 添加到 CocoaPods 私有仓库如果验证通过会提示： 验证通过后通过下面的命令将项目提交到私有仓库中 pod repo push MartinSpecs MartinPodsTest.podspec 如果因为警告原因 push 失败，可以在 push 后添加 --allow-warnings pod repo pus --allow-warnings MartinSpecs MartinPodsTest.podspec 添加成功后就可以看到库文件已经被添加到私有仓库中了。 尝试搜索下刚刚新加的库，已经可以看到了！ 4. 在项目中引用依赖库创建一个新的项目，在项目目录下执行 pod init 执行完毕后会在目录中添加 Podfile 文件，修改 Podfile 文件，如图： 1. 添加两个 source 目录，对应官方的仓库地址和私有的仓库地址，一定要两个都加上，这样在搜索库时，会在两个目录下同时搜索。 source &#39;https://github.com/CocoaPods/Specs.git&#39; #官方仓库source &#39;https://github.com/ChiRenhua/MartinSpecs.git&#39; #私有仓库 2. 添加 MartinPodsTest 库（顺便再加个 AFNetworking 来验证下公有库是否正常运行） pod &#39;MartinPodsTest&#39; 3. 最后执行 install 命令安装 MartinPodsTest 库 pod install 一切正常！完美。 5. 结语这样我们就拥有一个私有的 CocoaPods 仓库了，可以将项目组件化，然后通过 CocoaPods 来管理。]]></content>
+      <categories>
+        <category>CocoaPods</category>
+      </categories>
+      <tags>
+        <tag>类库管理</tag>
+        <tag>工具</tag>
+        <tag>Xcode</tag>
+        <tag>CocoaPods</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Python-在 Mac 下安装 Python 和 pip]]></title>
+    <url>%2F2018%2F04%2F13%2FPython-%E5%9C%A8-Mac-%E4%B8%8B%E5%AE%89%E8%A3%85-Python-%E5%92%8C-pip%2F</url>
+    <content type="text"><![CDATA[Mac 系统默认有安装 Python2.7 ，但是这个版本已经过时了，Python3 作为一次革命性的更新，取代 Python2.x 版本只是时间问题。作为一个开发人员，我们一定要跟上时代的潮流！ 注意⚠️：网上有很多方法可以将系统的 Python2.7 升级为 Python3，但是这样可能会引发奇怪的错误，因为你不知道系统的哪些功能或者 App 是依赖 Python2.7 的。所以建议 Python2.7 和 Python3 共存。开发时只需要用 Python3 命令去打开 .py 即可。 1. 安装 Python31. 先安装 C 编译器，打开终端运行：xcode-select --install 来安装 Xcode 命令行工具（前提是有安装 Xcode ） 2. 安装 Homebrew，打开终端运行：/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot; 3.安装 Python3，打开终端运行：brew install python 等一会儿就安完了～此时在终端输入 Python 会展示系统默认的 Python 2.7 信息输入 Python 3 会展示刚刚安装的 Python 3 信息。 2. 安装 pippip 是啥： pip 是一个以 Python 计算机程序语言写成的软件包管理系统，他可以安装和管理软件包，另外不少的软件包也可以在“ Python 软件包索引” 网站：www.pip-installer.org 源代码库：github.com/pypa/pip维基百科 通俗地说就是用来管理 Python 包和第三方库的工具，很方便。 如果是使用 Python.org 或 Homebrew 的安装程序来安装 Python，此时应该已经有 pip 了在终端输入 pip 应该就会展示 pip 的信息了，如果没有，说明没有安装，可以通过下面的方法安装。 Python 有自带 “ easy_install “直接在在 Terminal 里面输入 sudo easy_install pip 进行安装即可。等几秒就OK了。]]></content>
+      <categories>
+        <category>Python 开发</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS-TableViewCell复用的坑]]></title>
+    <url>%2F2018%2F01%2F29%2FiOS-TableViewCell%E5%A4%8D%E7%94%A8%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[最近在解决Bug时，偶然间发现了一个TableViewCell复用的坑，在这里总结下。 起因在项目中，有些Cell会监听一些通知来执行特定的操作，举个简单的例子：在CellA和CellB中监听一个通知，当收到通知时会分别将Label的文案设置为“A”和“B”。这时数据发生改变，CellA被CellB取代。此时看起来CellA已经被干掉，但是当发起通知的时候，CellA竟然仍能够响应，这就导致Label的文案有时是“A”，有时是“B”。查看视图层级，并没有看到CellA的存在，一时有点懵逼，因为至少从视觉上看，CellA已经消失了。 排查在CellA的“dealloc”方法里打断点，数据刷新后，CellA消失，但是并没有走到对应“dealloc”方法里，可见CellA并没有被真正的干掉，它应该还存在于内存中。初步推断是TableViewCell的复用机制导致的。一般出于性能考虑，在创建TableViewCell的时候，都会使用“reuse”的方式创建，避免重复创建的开销。但是究竟是不是这个原因导致的，还要深入排查下。 深究先用一个简单Demo来验证下上面的推断:创建三个不同的Cell均继承自“UITableViewCell”。 点击Demo中的按钮会将TableView中第一行Cell刷新为对应的“CellA / CellB / CellC”。 依次点击三个按钮，观察下内存的变化。点击“Button A”时，可以看到内存里创建了一个“A Test TableViewCell”。 再点击“Button B”，内存里新创建了一个“B Test TableViewCell”，但是可以发现，“A Test TableViewCell”并没有被销毁，虽然此时在View上已经看不到了。 同理，点击“Button C”，内存里新创建了一个“C Test TableViewCell”，“A Test TableViewCell”和“B Test TableViewCell”依然没有被销毁。 可见确实是因为Cell的复用导致旧的Cell一直存在于内存中，但是视图层级里却找不到它。那是否可以通过判断Cell的superView是否存在来确定当前Cell是否在复用池中呢？我们再做个实验，在点击Button的时候，发出通知，Cell在收到通知后，打印其SuperView。结果如下： 很神奇，虽然Cell已经不见了，但是看起来它并没有从TableView中移除，也就是说复用池中的Cell仍在存在于TableView上。既然这样我们不妨把TableView的子View都打印出来，看下结果： 果真3个Cell都在，但是其中AB两个在复用池中的Cell是被隐藏的！！！所以在视图层级里是看不到它。 终于找到原因，我的问题也得以解决，在收到通知时判断下当前Cell的隐藏状态，如果隐藏就不响应通知即可。 总结看来苹果对Cell复用的处理也是简单粗暴，直接隐藏，这也是导致被替换掉的Cell仍然能够响应通知的原因。所以以后在处理Cell时，可以考虑下以下两点建议：1.和Cell通信时，尽量避免使用通知，因为很难追踪到谁会响应通知去做些什么事情，很有可能触发一些奇怪的Bug。2.如果Cell占用很多内存的话，Cell复用会导致内存不能及时释放，可以考虑在内存过高时，清理TableView中处于Hidden的Cell。]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[WWDC-2017笔记—Vision]]></title>
+    <url>%2F2017%2F09%2F07%2FWWDC-2017%E7%AC%94%E8%AE%B0%E2%80%94Vision%2F</url>
+    <content type="text"><![CDATA[VisionVision是iOS11发布的一个新的框架，可以用来对图片信息进行处理。其内部集成了Core ML，可以高效的返回图片中的信息。同时开发者也可以在Vision中集成自己的Core ML Model，所以其灵活性非常高。 应用场景目前Vision可以支持的场景有： 1. 人脸识别（给出人脸所在的矩形区域信息）2. 人脸面部特征识别（给出眼睛、鼻子、嘴以及人脸中轴线的位置信息）3. 文字识别（给出文字所在的矩形区域信息）4. 二维码识别（识别二维码并返回二维码的信息）5. 目标追踪（对于运动的目标，实时返回其位置信息） 集成Vision使用起来非常简单，只需三步就可将Vision集成到项目中： 1. 初始化VNDetctRequest根据使用场景的不同，可以选择初始化不同的Request，以人脸识别为例：VNDetectFaceRectanglesRequest * faceRequest = [[VNDetectFaceRectanglesRequest alloc] init];这里初始化了“VNDetectFaceRectanglesRequest”，表示希望返回人脸所在区域的信息。 2. 初始化VNImageRequestHandler用于承接数据源，目前支持的数据源类型有：Data、URL、CGImage、CIImage、CVPixelBuffer。以CGImage为例：VNImageRequestHandler *requestHandler = [[VNImageRequestHandler alloc] initWithCGImage:imageRef options:@{}]; 3. 发起请求调用“handler”下的“performRequests”方法开始进行识别，“performRequests”的参数是数组类型，可以同时传递多个“request“给“handler”一起处理。[requestHandler performRequests:@[faceRequest] error:&amp;error];识别完成后通过“request.results”来拿到识别结果，”results”是数组类型，如果为空则表示当前图片中没有人脸的信息。 Demo利用Vision，我们可以做一些有趣的事情，比如为视频添加挂件，效果如下图：具体代码已经上传git：视频挂件]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>WWDC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[WWDC 2017笔记—Drag and Drop]]></title>
+    <url>%2F2017%2F07%2F19%2FWWDC-2017%E7%AC%94%E8%AE%B0%E2%80%94Drag-and-Drop%2F</url>
+    <content type="text"><![CDATA[Drag and Drop今年的WWDC，苹果推出了一个新的功能—Drag and Drop，通过这个功能，用户可以将数据（一张图片或者一段文字）从一个地方拖拽到另一个地方，这个操作可以在同一个APP里，也可以跨APP，非常方便。但是目前只有iPad能够完美支持，iPhone上暂时还不支持跨应用的拖拽，所有操作都被限制在同一个APP内。 看名字可以知道，Drag and Drop主要分为两部分，这两部分是相对独立的，APP可以只实现Drag或者只实现Drop，可以了两者都实现。那么接下我会分别介绍Drag、Drop以及在TableView和CollectionView下Drag and Drop实现上的差异。 一. DragDrag and Drop的整个流程是基于用户与View之间的交互。我们知道，如果想要为一个View添加点击事件，需要为View添加一个UITapGestureRecognizer。与之类似，如果想要让View支持Drag，需要为View添加UIDragInteraction。那么这个UIDragInteraction是什么？ 通过上面这张图我们可以看出，UIDragInteraction其实就是用户和Drag操作之间的中介，我们可以通过实现其代理方法，为Drag提供数据，或者接收整个Drag流程中各种状态的信息。因为UIDragInteraction中集成了手势，所以在实现Drag的过程中需要打开View的userInteractionEnabled属性。 下面这段代码展示了如何为一个imageView添加UIDragInteraction： 现在这个imageView已经可以支持Drag了，但是这并不表明它可以相应Drag，因为还没有实现相应的代理方法。下面我会列出所有的代理方法，分别说明都是做什么的。 1- (NSArray&lt;UIDragItem *&gt; *)dragInteraction:(UIDragInteraction *)interaction itemsForBeginningSession:(id&lt;UIDragSession&gt;)session; 这个是Drag里最重要的一个方法，这个方法会为Drag提供数据，如果返回nil，那么Drag会被终止掉。 1- (nullable UITargetedDragPreview *)dragInteraction:(UIDragInteraction *)interaction previewForLiftingItem:(UIDragItem *)item session:(id&lt;UIDragSession&gt;)session; 在Drag执行过程中，我们会看到一个View被我们拖着走，这个View是可以通过此方法进行替换的。 1- (void)dragInteraction:(UIDragInteraction *)interaction willAnimateLiftWithAnimator:(id&lt;UIDragAnimating&gt;)animator session:(id&lt;UIDragSession&gt;)session; 在触发Drag时，我们需要长按View，此时我们会看到View有一个抬起的状态，在这个抬起的动画将要执行时，会触发此方法。 1- (void)dragInteraction:(UIDragInteraction *)interaction sessionWillBegin:(id&lt;UIDragSession&gt;)session; Drag已经被触发，准备开始拖动View的时候会触发此方法。 1- (BOOL)dragInteraction:(UIDragInteraction *)interaction sessionAllowsMoveOperation:(id&lt;UIDragSession&gt;)session; 是否允许Drop以Move的方式响应次方法，这个方法只有在同一个APP里进行操作才会生效，因为在不同的APP里Drop只能以copy的方式来响应。这个方法默认返回YES。 1- (BOOL)dragInteraction:(UIDragInteraction *)interaction sessionIsRestrictedToDraggingApplication:(id&lt;UIDragSession&gt;)session; 决定当前的Drag是否受限于只能被当前APP响应，默认返回NO。 1- (BOOL)dragInteraction:(UIDragInteraction *)interaction prefersFullSizePreviewsForSession:(id&lt;UIDragSession&gt;)session; 这个方法用来告诉Drag是否需要展示全尺寸的预览图，默认返回NO，如果预览图如果太大系统会替我们进行缩放。 1- (void)dragInteraction:(UIDragInteraction *)interaction sessionDidMove:(id&lt;UIDragSession&gt;)session; 用户的手指开始移动时会触发此方法，此时可以通过[UIDragSession locationInView:]来获取当前手指的位置。 1- (void)dragInteraction:(UIDragInteraction *)interaction session:(id&lt;UIDragSession&gt;)session willEndWithOperation:(UIDropOperation)operation; Drag将要执行完毕时会触发此方法。 1- (void)dragInteraction:(UIDragInteraction *)interaction session:(id&lt;UIDragSession&gt;)session didEndWithOperation:(UIDropOperation)operation; Drag已经执行完毕，并且结束动画已经展示完后会触发此方法。 1- (void)dragInteraction:(UIDragInteraction *)interaction sessionDidTransferItems:(id&lt;UIDragSession&gt;)session; Drop端如果以copy或者move来响应当前Drag时，会对数据进行转移，当转移操作完成时会触发此方法。 1- (NSArray&lt;UIDragItem *&gt; *)dragInteraction:(UIDragInteraction *)interaction itemsForAddingToSession:(id&lt;UIDragSession&gt;)session withTouchAtPoint:(CGPoint)point; 这个方法允许用户继续点击View，为现有的Drag添加新的数据。 1- (nullable id&lt;UIDragSession&gt;)dragInteraction:(UIDragInteraction *)interaction sessionForAddingItems:(NSArray&lt;id&lt;UIDragSession&gt;&gt; *)sessions withTouchAtPoint:(CGPoint)point; 因为我们可以一次拖动多个Drag出来，所以这个方法可以决定你选中的数据需要添加到哪个Drag 上。 1- (void)dragInteraction:(UIDragInteraction *)interaction session:(id&lt;UIDragSession&gt;)session willAddItems:(NSArray&lt;UIDragItem *&gt; *)items forInteraction:(UIDragInteraction *)addingInteraction; 这个方法会在你点击View添加新的数据之前触发。 1- (nullable UITargetedDragPreview *)dragInteraction:(UIDragInteraction *)interaction previewForCancellingItem:(UIDragItem *)item withDefault:(UITargetedDragPreview *)defaultPreview; 当一个Drag操作被取消时，我们可以通过这个方法来更改取消时的View。 1- (void)dragInteraction:(UIDragInteraction *)interaction item:(UIDragItem *)item willAnimateCancelWithAnimator:(id&lt;UIDragAnimating&gt;)animator; 当一个Drag操作被取消时，会在执行取消动画前触发此方法。 二. DropDrop是在手指松开后执行的操作，通过下面的图我们可以发现它的结构跟Drag如出一辙。同样都是为View添加Interaction，然后通过Delegate来管理整个流程。 先看下Drop的生命周期： 首先当数据被拖动到Drop的区域时，会通过“canHandleSession”方法询问Drop是否想响应这次Drag，如果Drop对数据不感兴趣或者不打算响应，那么这次Drag会在手指松开的时候被取消掉。如果可以响应会触发“sessionDidEnter”方法通知用户的手指已经拖动到Drop的可响应区域内。 当用户手指在Drop区域移动时会不停的触发“sessionDidUpdate”方法来询问打算通过何种方法响应Drag，如果“sessionDidUpdate”返回的是cancel，那么在松开手指时，此次Drag会被取消掉，如果返回copy或者move，那么在手指松开时会触发“performDrop”方法，这时才开始真正的对数据进行处理。 当用户手指移动到Drop区域外时会触发“sessionDidExit”方法，此时松开手指Drop是无法被响应的，当手指重新移动回Drop区域时会重新触发“sessionDidEnter”方法，继续后面的流程。 接下来我们看下UIDropInteractionDelegate下的所有方法： 1- (BOOL)dropInteraction:(UIDropInteraction *)interaction canHandleSession:(id&lt;UIDropSession&gt;)session; 这个方法就是Drop生命周期中的第一步，返回一个BOOL值来说明对传递过来的数据是否感兴趣，如果这个方法没有被实现，那么这个方法默认返回YES。但是返回YES并不代表Drop一定会接受这个数据。 1- (void)dropInteraction:(UIDropInteraction *)interaction sessionDidEnter:(id&lt;UIDropSession&gt;)session; 手指移动到Drop的响应区域时会触发此方法。 1- (UIDropProposal *)dropInteraction:(UIDropInteraction *)interaction sessionDidUpdate:(id&lt;UIDropSession&gt;)session; 这个方法必须实现，它会在“sessionDidEnter”之后触发，我们需要指定其返回值“UIDropProposal”下的“operation”属性，operation有四个值，分别是：“UIDropOperationCancel”、 “UIDropOperationForbidden”、 “UIDropOperationCopy”、 “UIDropOperationMove”我们可以通过下面的图看到其对应的效果。 · UIDropOperationCancel：Drag会被取消掉，不会触发后续的“performDrop”方法。· UIDropOperationCopy：数据会进行拷贝操作，但是一般用于不同APP之间的Drag and Drop，如果用户在当前位置松开手指，会触发“performDrop”方法。· UIDropOperationMove：只有当“allowsMoveOperation”方法返回YES时，此Operation才会生效，并且按照苹果在注释中的说法，系统并没有对这个Operation赋予特殊的含义，开发者需要自己对数据源进行删除操作，同时在新的位置添加数据，好让数据看起来是移动（Move）了。- -！· UIDropOperationForbidden：Drag会被取消掉，同时在Drop Session的右上角会有一个禁止的提示，来提醒用户当前Drop在这个位置是被禁止的。具体什么时候返回“Forbidden”由开发者自行判断，比如当一个“String”类型的数据被拖拽到一个“ImageView”里时，就可以返回“Forbidden”。 1- (void)dropInteraction:(UIDropInteraction *)interaction performDrop:(id&lt;UIDropSession&gt;)session; 当用户在Drop的响应区域松开手指时会触发此方法，此时才开始真正的处理数据，开发者需要从“session”中通过“loadObjectsOfClass”方法解析出需要的数据，再进行展示。 1- (void)dropInteraction:(UIDropInteraction *)interaction concludeDrop:(id&lt;UIDropSession&gt;)session; 这个方法会在Drop执行完成（包括Drop的动画）之后触发，代表Drop操作已经完成。 1- (void)dropInteraction:(UIDropInteraction *)interaction sessionDidExit:(id&lt;UIDropSession&gt;)session; 当用户手指移出Drop的响应区域时会触发此方法。 1- (void)dropInteraction:(UIDropInteraction *)interaction sessionDidEnd:(id&lt;UIDropSession&gt;)session; 当Drop操作彻底结束时会触发此方法，无论是成功还是失败。 1- (nullable UITargetedDragPreview *)dropInteraction:(UIDropInteraction *)interaction previewForDroppingItem:(UIDragItem *)item withDefault:(UITargetedDragPreview *)defaultPreview; 当用户松开手指时，并且Drop已经被成功响应，此时会执行一段Drop的动画，这个动画的View是可以通过这个方法替换的。 1- (void)dropInteraction:(UIDropInteraction *)interaction item:(UIDragItem *)item willAnimateDropWithAnimator:(id&lt;UIDragAnimating&gt;)animator; 当用户松开手指时，并且Drop已经被成功响应，此时会执行一段Drop的动画，在这个动画将要执行的时候会触发此方法。 三. Drag and Drop in TableView &amp; CollectionView在TableView和CollectionView中，Drag and Drop的使用跟刚才介绍的大致相同，但是多了一些特有的功能，那么接下来就介绍下TableView和CollectionView独有的一些功能。 1.DropIntentDropIntent是Drop过程中在“sessionDidUpdate”方法里跟随“Operation”属性一起返回的一个属性。这个命名很不苹果，看名字根本不知道这个是用来做什么的。其实这个属性是用来确定在用户Drag数据到TableView或者CollectionView中时，cell需要做出什么动作来提示用户。 在TableView中，DropIntent有四个值： · UITableViewDropIntentUnspecified· UITableViewDropIntentInsertAtDestinationIndexPath· UITableViewDropIntentInsertIntoDestinationIndexPath· UITableViewDropIntentAutomatic “Unspecified”表示当前手指所在的位置是不明确的，系统稍后会决定这个数据该放在哪里。 “InsertAtDestinationIndexPath”在手指移动过程中会在两个cell之间打开一个空隙，提示用户数据将要插入的位置。效果见下图： “InsertIntoDestinationIndexPath”不会在cell间打开间隙，但是会高亮显示当前手指所在的cell，提示用户当前数据会插入到哪个cell里。效果见下图： “Automatic”会在“InsertAtDestinationIndexPath”和“InsertIntoDestinationIndexPath” 间自己进行选择，当手指在两个cell之间时会打开一个空隙，当手指在cell里时会高亮当前cell。效果见下图： 在CollectionView中，DropIntent有三个值： · UICollectionViewDropIntentUnspecified· UICollectionViewDropIntentInsertAtDestinationIndexPath· UICollectionViewDropIntentInsertIntoDestinationIndexPath CollectionView和TableView的唯一区别就在于CollectionView没有“Automatic”这个效果，其余效果参考TableView。 2.DropPlaceholderTableView和CollectionView另外一个特有的功能是Placeholder。当数据过大时，数据的传输需要一定的时间，当这个时间过长时我们需要给用户一个提示，系统默认会给我们展示一个提示，如下图： 我们可以看出这个提示是以对话框形式展示的，虽然会给出进度但是这个提示太强了，用户此时只能等待，不能操作界面。所以系统给我们提供了其它方法可以替代这个弹框，这个就是Placeholder。在“performDrop”方法里，系统为我们提供了一个参数：DropCoordinator，它就是实现placeHolder的关键，在”loadObjectOfClass”前，我们先调用“DropCoordinator”下面的方法为collectionView插入一个临时的cell： 1- (id&lt;UICollectionViewDropPlaceholderContext&gt;)dropItem:(UIDragItem *)dragItem toPlaceholderInsertedAtIndexPath:(NSIndexPath *)indexPath withReuseIdentifier:(NSString *)reuseIdentifier cellUpdateHandler:(void (^)(__kindof UICollectionViewCell *))cellUpdateHandler; 在这个cell上我们可以展示进度条或者一个loadingView。当数据加载完毕后，我们再调用“commitInsertionWithDataSourceUpdates:”方法将数据插入到数据源中，替换临时的cell。效果如下图： 最后附上Demo：Drag and Drop]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>WWDC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Xcode-真机编译iOS7方法]]></title>
+    <url>%2F2017%2F05%2F15%2FXcode-%E7%9C%9F%E6%9C%BA%E7%BC%96%E8%AF%91iOS7%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[真机编译iOS7的方法步骤炒鸡简单： 将iOS7.0/iOS7.1的SDK放到Xcode这个目录下(iOS7 SDK请百度自行下载)：/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport； 进入目录：/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk 打开“iPhoneOS.sdk”文件夹和“SDKSettings.plist”文件的读写权限； 打开“SDKSettings.plist”文件，按图添加7.0/7.1（⚠️一定要按照从小到大的顺序添加）然后重启Xcode就可以了。]]></content>
+      <categories>
+        <category>XCode 工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+        <tag>XCode</tag>
+        <tag>iOS7</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS--自定义转场动画]]></title>
+    <url>%2F2017%2F04%2F22%2FiOS-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%2F</url>
+    <content type="text"><![CDATA[概述在iOS7中，苹果爸爸为开发者提供了一套全新的API去实现转场动画，开发者可以通过更灵活的方式去设计动画效果。同时，iOS7还支持用手势切换VC，比如你在某个应用中push了一个新的页面，那么你可以通过在屏幕左侧向右滑动来执行返回操作。 API实现动画的主要API： @protocol UIViewControllerContextTransitioning @protocol UIViewControllerAnimatedTransitioning @protocol UIViewControllerTransitioningDelegate UIViewControllerContextTransitioning这个接口在切换VC过程中为我们提供了上下文，通过它我们可以获取到执行切换时，两个VC的详细信息。在实现跳转动画的方法中，系统会为我们提供这个上下文，所以开发者并不需要去实现这个接口。 UIViewControllerAnimatedTransitioning这个接口是在VC切换过程中起着非常重要的角色，因为它负责处理切换过程中的事件，也就是说我们要实现的动画效果等，都是在这里实现的。这里我们需要实现下面的两个方法。-(NSTimeInterval)transitionDuration:(id &lt; UIViewControllerContextTransitioning &gt;)transitionContext;返回切换过程所需要的时间。-(void)animateTransition:(id &lt; UIViewControllerContextTransitioning &gt;)transitionContext;切换时会调用此方法，动画效果都在这个方法里完成。 UIViewControllerTransitioningDelegate对于想要执行自定义动画的VC需要实现这个接口，共有四个方法。-(id&lt; UIViewControllerAnimatedTransitioning &gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source;跳转新页面的动画。-(id&lt; UIViewControllerAnimatedTransitioning &gt;)animationControllerForDismissedController:(UIViewController *)dismissed;当前页面消失的动画。-(id&lt; UIViewControllerInteractiveTransitioning &gt;)interactionControllerForPresentation:(id &lt; UIViewControllerAnimatedTransitioning &gt;)animator;手势控制页面跳转的动画。-(id&lt; UIViewControllerInteractiveTransitioning &gt;)interactionControllerForDismissal:(id &lt; UIViewControllerAnimatedTransitioning &gt;)animator;手势控制页面消失的动画。 Demo第一部分我们先来尝试着实现如下图效果的页面切换。首先我们新建一个处理动画效果的类，这个类要实现“UIViewControllerAnimatedTransitioning”接口。TranslationAnimateManager.h 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163typedef NS_ENUM(NSUInteger, TransitionType) &#123; TransitionTypePresent, TransitionTypeDismiss&#125;;@interface TranslationAnimateManager : NSObject &lt;UIViewControllerAnimatedTransitioning&gt;//根据定义的枚举初始化的两个方法+ (instancetype)transitionWithTransitionType:(TransitionType)type;- (instancetype)initWithTransitionType:(TransitionType)type;@end ``` TranslationAnimateManager.m ``` objc@interface TranslationAnimateManager ()@property (nonatomic, assign) TransitionType type;@end@implementation TranslationAnimateManager+ (instancetype)transitionWithTransitionType:(TransitionType)type &#123; static id sharedInstance = nil; static dispatch_once_t onceToken; dispatch_once(&amp;onceToken, ^&#123; sharedInstance = [[self alloc] initWithTransitionType:type]; &#125;); return sharedInstance;&#125;- (instancetype)initWithTransitionType:(TransitionType)type &#123; if (self = [super init]) &#123; self.type = type; &#125; return self;&#125;- (NSTimeInterval)transitionDuration:(id&lt;UIViewControllerContextTransitioning&gt;)transitionContext &#123; return 0.5;&#125;- (void)animateTransition:(id&lt;UIViewControllerContextTransitioning&gt;)transitionContext &#123; switch (self.type) &#123; case TransitionTypePresent: [self presentAnimation:transitionContext]; break; case TransitionTypeDismiss: [self dismissAnimation:transitionContext]; break; &#125;&#125;//实现present动画逻辑代码- (void)presentAnimation:(id&lt;UIViewControllerContextTransitioning&gt;)transitionContext&#123; UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey]; UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey]; UIView *toView = toVC.view; UIView *fromView = fromVC.view; UIView *containerView = [transitionContext containerView]; UIView *toViewSnapshot = [UIView new]; toViewSnapshot.contentImage = toView.snapshotImage; toViewSnapshot.frame = containerView.bounds; CATransform3D scale = CATransform3DIdentity; toViewSnapshot.layer.transform = CATransform3DScale(scale, 0.9, 0.9, 1);// [containerView addSubview:toViewSnapshot]; [containerView sendSubviewToBack:toViewSnapshot]; CGRect upSnapshotRegion = CGRectMake(0, 0, fromView.frame.size.width, fromView.frame.size.height * 0.5); UIView *upHandView = [UIView new]; upHandView.contentImage = fromView.snapshotImage; upHandView.layer.contentsRect = CGRectMake(0, 0, 1, 0.5); upHandView.frame = upSnapshotRegion; [containerView addSubview:upHandView]; CGRect downSnapshotRegion = CGRectMake(0, fromView.frame.size.height * 0.5, fromView.frame.size.width, fromView.frame.size.height * 0.5); UIView *downHandView = [UIView new]; downHandView.contentImage = upHandView.contentImage; downHandView.layer.contentsRect = CGRectMake(0, 0.5, 1, 0.5); downHandView.frame = downSnapshotRegion; [containerView addSubview:downHandView]; fromView.hidden = YES; [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^&#123; upHandView.frame = CGRectOffset(upHandView.frame, 0, - upHandView.frame.size.height); downHandView.frame = CGRectOffset(downHandView.frame, 0, downHandView.frame.size.height); toViewSnapshot.center = toView.center; toViewSnapshot.frame = toView.frame; &#125; completion:^(BOOL finished) &#123; fromView.hidden = NO; if ([transitionContext transitionWasCancelled]) &#123; [containerView addSubview:fromView]; [self removeOtherViews:fromView]; &#125; else &#123; [containerView addSubview:toView]; [self removeOtherViews:toView]; &#125; [transitionContext completeTransition:![transitionContext transitionWasCancelled]]; &#125;];&#125;//实现dismiss动画逻辑代码- (void)dismissAnimation:(id&lt;UIViewControllerContextTransitioning&gt;)transitionContext&#123; UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey]; UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey]; UIView *toView = toVC.view; UIView *fromView = fromVC.view; UIView *containerView = [transitionContext containerView]; [containerView addSubview:fromView]; toView.frame = [transitionContext finalFrameForViewController:toVC]; toView.frame = CGRectOffset(toView.frame, toView.frame.size.width, 0); [containerView addSubview:toView]; CGRect upSnapshotRegion = CGRectMake(0, 0, fromView.frame.size.width, fromView.frame.size.height * 0.5); UIView *upHandView = [UIView new]; upHandView.contentImage = toView.snapshotImage; upHandView.layer.contentsRect = CGRectMake(0, 0, 1, 0.5); upHandView.frame = upSnapshotRegion; upHandView.frame = CGRectOffset(upHandView.frame, 0, - upHandView.frame.size.height); [containerView addSubview:upHandView]; CGRect downSnapshotRegion = CGRectMake(0, fromView.frame.size.height * 0.5, fromView.frame.size.width, fromView.frame.size.height * 0.5); UIView *downHandView = [UIView new]; downHandView.contentImage = upHandView.contentImage; downHandView.layer.contentsRect = CGRectMake(0, 0.5, 1, 0.5); downHandView.frame = downSnapshotRegion; downHandView.frame = CGRectOffset(downHandView.frame, 0, downHandView.frame.size.height); [containerView addSubview:downHandView]; [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^&#123; upHandView.frame = CGRectOffset(upHandView.frame, 0, upHandView.frame.size.height); downHandView.frame = CGRectOffset(downHandView.frame, 0, - downHandView.frame.size.height); CATransform3D scale = CATransform3DIdentity; fromView.layer.transform = CATransform3DScale(scale, 0.9, 0.9, 1);// &#125; completion:^(BOOL finished) &#123; if ([transitionContext transitionWasCancelled]) &#123; [self removeOtherViews:fromView]; &#125; else &#123; [self removeOtherViews:toView]; toView.frame = containerView.bounds; &#125; [transitionContext completeTransition:![transitionContext transitionWasCancelled]]; &#125;];&#125;- (void)removeOtherViews:(UIView*)viewToKeep &#123; UIView *containerView = viewToKeep.superview; for (UIView *view in containerView.subviews) &#123; if (view != viewToKeep) &#123; [view removeFromSuperview]; &#125; &#125;&#125;@end 然后我们再新建一个初始VC，就叫“FromViewController”。这个页面只需要负责点击按钮跳转即可，省下什么都不用做。 123456789101112131415161718192021222324@interface FromViewController ()@property (nonatomic, strong) ToViewController *toVC;@end@implementation FromViewController- (void)viewDidLoad &#123; [super viewDidLoad]; self.view.backgroundColor = [UIColor brownColor]; UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width / 2 - 50, self.view.bounds.size.height / 2 - 15, 100, 30)]; [button setTitle:@"点我跳转" forState:UIControlStateNormal]; [button setBackgroundColor:[UIColor blackColor]]; [button addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside]; button.layer.cornerRadius = 15; [self.view addSubview:button];&#125;- (void)buttonClick &#123; self.toVC = [[ToViewController alloc] init]; [self presentViewController:self.toVC animated:YES completion:nil];&#125; 接下来我们再创建一个新的页面叫做“ToViewController”，是跳转后的界面，因为要实现自定的跳转动画，所以这个页面要实现“UIViewControllerTransitioningDelegate”接口。 @interface ToViewController ()&lt;UIViewControllerTransitioningDelegate&gt; @end @implementation ToViewController - (id)init { if (self = [super init]) { } return self; } - (void)viewDidLoad { [super viewDidLoad]; self.transitioningDelegate = self; self.modalPresentationStyle = UIModalPresentationCustom; self.view.backgroundColor = [UIColor grayColor]; UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width / 2 - 50, self.view.bounds.size.height / 2 - 15, 100, 30)]; [button setTitle:@"点我回退" forState:UIControlStateNormal]; [button setBackgroundColor:[UIColor blackColor]]; [button addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside]; button.layer.cornerRadius = 15; [self.view addSubview:button]; } - (void)buttonClick { [self dismissViewControllerAnimated:YES completion:nil]; } - (id &lt;UIViewControllerAnimatedTransitioning&gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source { return [TranslationAnimateManager transitionWithTransitionType:TransitionTypePresent]; } - (id&lt;UIViewControllerAnimatedTransitioning&gt;)animationControllerForDismissedController:(UIViewController *)dismissed{ //这里我们初始化dismissType return [[TranslationAnimateManager alloc ]initWithTransitionType:TransitionTypeDismiss]; } 至此，我们就完成了第一部分自定义跳转动画，赶快运行起来试试吧～ 第二部分现在我们点击按钮可以让页面按照我们写好的动画跳转到下一个页面，但是还有一个手势控制我们没有实现，利用手势控制我们可以实现更加友好的界面操作。我们再创建一个类，继承自“UIPercentDrivenInteractiveTransition”，用来监听我们的手势操作。 @interface SwipeInteractiveTransition () @property (nonatomic, assign) BOOL shouldComplete; @property (nonatomic, strong) UIViewController *presentingVC; @property (nonatomic, strong) UIViewController *targetVC; @end @implementation SwipeInteractiveTransition + (instancetype)sharedInstance { static id sharedInstance = nil; static dispatch_once_t onceToken; dispatch_once(&amp;onceToken, ^{ sharedInstance = [[self alloc] init]; }); return sharedInstance; } -(void)wireToViewController:(UIViewController *)viewController { self.presentingVC = viewController; [self prepareGestureRecognizerInView:viewController.view]; } - (void)writeTargetViewController:(UIViewController *)viewController { self.targetVC = viewController; } - (void)prepareGestureRecognizerInView:(UIView*)view { UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)]; [view addGestureRecognizer:gesture]; } -(CGFloat)completionSpeed { return 1 - self.percentComplete; } - (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer { CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view.superview]; switch (gestureRecognizer.state) { case UIGestureRecognizerStateBegan: { self.interacting = YES; self.targetVC = [[ToViewController alloc] init]; [self.presentingVC presentViewController:self.targetVC animated:YES completion:nil]; } break; case UIGestureRecognizerStateChanged: { NSInteger y = translation.y; CGFloat fraction = y / 200.0; fraction = fminf(fmaxf(fraction, 0.0), 1.0); self.shouldComplete = (fraction &gt; 0.1); [self updateInteractiveTransition:fraction]; break; } case UIGestureRecognizerStateEnded: case UIGestureRecognizerStateCancelled: { self.interacting = NO; if (!self.shouldComplete || gestureRecognizer.state == UIGestureRecognizerStateCancelled) { [self cancelInteractiveTransition]; } else { [self finishInteractiveTransition]; } break; } default: break; } } @end 然后在“FromViewController”中，我们添加如下代码注册手势监听： self.toVC = [[ToViewController alloc] init]; SwipeInteractiveTransition *swipeInteractiveTransition = [SwipeInteractiveTransition sharedInstance]; [swipeInteractiveTransition wireToViewController:self]; [swipeInteractiveTransition writeTargetViewController:self.toVC]; 在“ToViewController”中，我们要实现下面的方法： -(id&lt;UIViewControllerInteractiveTransitioning&gt;)interactionControllerForPresentation:(id&lt;UIViewControllerAnimatedTransitioning&gt;)animator { return [SwipeInteractiveTransition sharedInstance].interacting ? [SwipeInteractiveTransition sharedInstance] : nil; } 如果没有手势触发或者手势触发失败，这个方法会返回空，此时系统会自动调用- (id &lt;UIViewControllerAnimatedTransitioning&gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source这个方法去执行跳转动画。我们看下完成后的效果。看着还是很nice的。其实苹果为我们提供的动画接口还是很强大的，如果利用好了可以做出很多酷炫的效果和新颖的交互。]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Instruments--Core Animation下Debug Options的介绍和优化方法]]></title>
+    <url>%2F2017%2F02%2F12%2FInstruments-Core-Animation%E4%B8%8BDebug-Options%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[关于视图的优化在开发一个产品的过程中，我们不仅仅要实现功能，其实使用的体验也是很重要的一部分，那么使用过程中非常影响用户体验的就是流畅度，所以如何提高流畅度，避免卡顿是一个必须要重视的问题。好在强大的苹果为开发者提供了一个工具–Instruments，通过它我们可以轻松的找出拖慢我们产品的元凶。 首先打开Instruments，选择Core Animation，然后打开一个目标程序，点击Record，此时Instruments就开始监控你的程序，并且实时展示帧数。在屏幕右下侧部分点击设置按钮，会展开一个页面，上面有Debug Options各个选项，下面介绍各个选项所展示的性能问题和优化方法。 Color Blended Layers（混合图层）混合图层的概念其实就是多个图层盖在了一起，我们知道屏幕是一个一个像素点组合在一起的，而像素点展示什么颜色是由R、G、B、alpha四个部分组成，所以如果多个图层盖在一起，那么其最终的颜色，会受到每个图层的影响。而在计算最终颜色的过程中，会消耗GPU的资源，所以如果你只想显示最上层图层的颜色，那么可以将它设置为不透明，这样的话GPU会自动忽略下面的所有View，从而减少GPU的压力。 UILable避免混合图层的办法：为UILable设置非透明背景色：lable.backgroundColor = [UIColor whiteColor];如果UILable展示的是中文，设置 layer.masksToBounds = YES;不要慌，这里不会触发离屏渲染，在iOS8以后，展示中文时，UILable外围会有一圈透明的边，所以才要加这个，看下图） UIImageVIew避免混合图层的办法：很简单，只要图片本身没有透明的地方就可以啦，然后代码保证没有设置alpha值一类的属性就没问题。 Color Hits Green and Misses Red (光栅化)如果shouldRasterize被设置成YES，对应的渲染结果会被缓存，如果图层是绿色，就表示这些缓存被复用；如果是红色就表示缓存会被重复创建，这就表示该处存在性能问题了。 所以一般在图像内容不变的情况下才使用光栅化，例如设置阴影耗费资源比较多的静态内容，如果使用光栅化对性能的提升有一定帮助。反之如果图像内容总会变就不要设置这个属性。 如果你在一个界面中使用了光栅化，刚进去这个页面的所有使用了光栅化的控件layer都会是红色，因为还没有缓存成功，如果上下滑动你会发现，layer变成了绿色。但是如果你滑动幅度较大会发现，新出现的控件会是红色然后变成绿色，因为刚开始这些控件的layer还没有缓存。 注意点：（1）系统给光栅化缓存分配了一个固定的大小，因此不能过度使用，如果超出了缓存也会造成离屏渲染。（2）缓存的时间为100ms，因此如果在100ms内没有使用缓存的对象，则会从缓存中清除。 color copied images（图片颜色格式）苹果给出的官网解释：”If an image is in a color format that the GPU can not directly work with, it will be converted in the CPU.” 翻译过来就是：苹果的GPU只解析 32bit 的颜色格式。 如果你放一张图片，而它的颜色格式不是 32bit ，CPU会先进行颜色格式转换，再让GPU渲染。这样无形中就消耗了CPU部分性能。 解决办法： 让设计师给图的时候注意要是32bit的。 再开一个异步线程去处理颜色格式的转换。 （还是第一个办法好） Color Non-Standard Surface Formats（颜色非标准表面格式）没查到时嘎哈的，只知道大概跟文本的显示有关。 Color Immediately（立即执行颜色刷新）默认的颜色刷新有10ms延迟，这个选项可以去掉这个延迟，某些情况下调试可能会用到。 Color Misaligned Images(图片大小不符)当展示的图片和容器的大小不匹配时image会被标黄，尽量用大小符合的图片，不然会消耗资源对图片进行压缩或放大。 Color Offscreen-Rendered Yellow（离屏渲染）参考文章：iOS-离屏渲染带来的性能问题和解决办法 Color Compositing Fast-Path Blue (快速路径)标记由硬件绘制的路径为蓝色，蓝色越多越好. Flash Updated Regions (重绘区域)这个选项会对重绘的内容高亮成黄色,重绘就是指使用Core Graphics绘制，绘制会损耗一定的性能，因此重绘区域应该越小越好，对于未发生变化的内容则不应该重绘。]]></content>
+      <categories>
+        <category>XCode 工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+        <tag>XCode</tag>
+        <tag>Instruments</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS--离屏渲染带来的性能问题和解决办法]]></title>
+    <url>%2F2016%2F10%2F22%2FiOS-%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[什么是离屏渲染离屏渲染（Off-Screen Rendering）指的是在GPU在执行图层的合成时，会在当前屏幕的缓冲区外创建一个新的缓冲区去执行此操作，这样的话当GPU进行图层渲染时，都会先将图层移到屏幕外的缓冲区去执行合成操作，然后在移回当前屏幕的缓冲区进行渲染，由于这种转换会发生在渲染的每一帧，所以如果当前屏幕如果有大量的图层需要执行离屏渲染操作时，那就会造成严重的性能问题，产生卡顿。其实离屏渲染是为了优化而生，只不过错误的使用才会导致卡顿的产生。 什么操作会产生离屏渲染以下操在使用不当时可能会触发离屏渲染： shouldRasterize（光栅化） masks（遮罩） shadows（阴影） edge antialiasing（抗锯齿） group opacity（不透明） 以设置圆角为例，通常我们设置圆角的方法很简单：1view.layer.cornerRadius = 5; 只需要一行代码就可以轻松的设置圆角，效果如下图：但是如果我们在当前view上又覆盖多个view，那么如果覆盖的view超出了圆角的范围，那么圆角的设置就失效了，为了避免这种情况的发生，我们可以为其加上一个属性：1view.layer.masksToBounds = YES; 执行代码，发现所有的子view都已经被设置了圆角，效果如下图： 图片层次图：看起来很完美，但是这个时候已经出发了离屏渲染，如果这个view足够多的话，就会造成非常明显的卡顿现象。 如何避免触发离屏渲染还是以设置圆角为例，目前来看优化的方式有两种： 1.静态内容视图对于静态的视图，由于其内部结构和内容不会发生改变，所以可以通过设置“Rasterization”属性的方式来优化性能。 2.动态内容视图对于动态的视图，现在主流的解决方案是在view的最外层盖上一个圆角的遮罩，来达到设置圆角的目的，如下图：这种方法简单粗暴，而且效果非常好，但是缺点就是对背景颜色有要求，因为是在view的最外层覆盖了一个圆角view，所以就要求圆角view的颜色必须和当前视图所在view的背景颜色一致，如果背景颜色是动态改变或者不是纯色背景，那就不适合这种方法。下面给出一个生成圆角遮罩图的方法： - (UIImage ) drawRoundedCornerImageWithRadius:(CGFloat)radius Rectsize:(CGSize)rectSize BackgroundColor:(UIColor ) backgroundColor { UIGraphicsBeginImageContextWithOptions(rectSize, NO, [UIScreen mainScreen].scale); CGContextRef currentContext = UIGraphicsGetCurrentContext(); UIBezierPath bezierPath = [[UIBezierPath alloc]init]; CGPoint hLeftUpPoint = CGPointMake(radius, 0); CGPoint hRightUpPoint = CGPointMake(rectSize.width - radius, 0); CGPoint hLeftDownPoint = CGPointMake(radius, rectSize.height); CGPoint vLeftUpPoint = CGPointMake(0, radius); CGPoint vRightDownPoint = CGPointMake(rectSize.width, rectSize.height - radius); CGPoint centerLeftUp = CGPointMake(radius, radius); CGPoint centerRightUp = CGPointMake(rectSize.width - radius, radius); CGPoint centerLeftDown = CGPointMake(radius, rectSize.height - radius); CGPoint centerRightDown = CGPointMake(rectSize.width - radius, rectSize.height - radius); [bezierPath moveToPoint:hLeftUpPoint]; [bezierPath addLineToPoint:hRightUpPoint]; [bezierPath addArcWithCenter:centerRightUp radius:radius startAngle:M_PI 3 / 2 endAngle:M_PI 2 clockwise:true]; [bezierPath addLineToPoint:vRightDownPoint]; [bezierPath addArcWithCenter:centerRightDown radius:radius startAngle:0 endAngle:M_PI / 2 clockwise:true]; [bezierPath addLineToPoint:hLeftDownPoint]; [bezierPath addArcWithCenter:centerLeftDown radius:radius startAngle:M_PI / 2 endAngle:M_PI clockwise:true]; [bezierPath addLineToPoint:vLeftUpPoint]; [bezierPath addArcWithCenter:centerLeftUp radius:radius startAngle:M_PI endAngle:M_PI 3 / 2 clockwise:true]; [bezierPath addLineToPoint:hLeftUpPoint]; [bezierPath closePath]; [bezierPath moveToPoint:CGPointZero]; [bezierPath addLineToPoint:CGPointMake(0, rectSize.height)]; [bezierPath addLineToPoint:CGPointMake(rectSize.width, rectSize.height)]; [bezierPath addLineToPoint:CGPointMake(rectSize.width, 0)]; [bezierPath moveToPoint:CGPointZero]; [bezierPath closePath]; [backgroundColor setFill]; [bezierPath fill]; CGContextDrawPath(currentContext, kCGPathFillStroke); UIImage * antiRoundedCornerImage = UIGraphicsGetImageFromCurrentImageContext(); UIGraphicsEndImageContext(); return antiRoundedCornerImage;} 再优化覆盖一个圆角view已经可以非常完美的应付绝大多数情况的离屏渲染，但是每个view在生成的时候都要去调用一遍生成圆角的方法去重新绘制一个圆角view，也是一种性能的浪费，所以可以在这个基础上对画好的圆角view做一个缓存，如果后续的view需要一样的圆角view那就不需要重新绘制，只需要去内存中取已经画好的圆角view就可以了。 参考文章离屏渲染优化详解：实例示范+性能测试]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS--NSUserDefaults用法总结]]></title>
+    <url>%2F2016%2F09%2F16%2FiOS-NSUserDefaults%E7%94%A8%E6%B3%95%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[NSUserDefaults原理NSUserDefaults是iOS为我们提供的一种轻量级的本地存储方式，其工作原理非常简单，就是将数据存储到本地的plist文件中。其实建立plist文件我们自己也可以完成，只不过自己去操作文件的创建、读取等会比较麻烦，使用“NSUserDefaults”则可以完全省略掉这些步骤，只需要进行简单的读写就可以了。 NSUserDefaults支持的数据类型因为NSUserDefaults是创建的plist类型的文件，所以它支持的数据类型也必须是plist文件能够存储的数据类型，分别是：NSNumber（NSInteger、float、double），NSString，NSDate，NSArray，NSDictionary，BOOL。需要注意的是，就算是存储的对象是“NSArray”类型的，那也要保证“NSArray”中存储的数据必须是plist文件支持的类型。如果需要存储plist不支持的数据类型，比如说一张图片或者一个自定义对象（下文会提到），可以先将其归档为“NSDate”类型，在存储到plist文件中。 NSUserDefaults用法NSUserDefaults是一个单例，我们可以在程序的任何地方获取到它的唯一实例化对象： NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults]; 存储一个数据： [userDefault setObject:@"测试" forKey:@"test"]; 由于NSUserDefaults是隔一段时间将数据写到本地，所以为了保险起见，建议加上下面的代码，确保数据及时的存储。 [userDefault synchronize]; 取出一个数据也是非常的简单： NSString *str = [userDefault objectForKey:@"test"]; 使用NSUserDefaults存储自定义对象1.将自定义类型转换为NSDate类型其实不建议将数据这样存储，多数据复杂类型还是建议存到数据库中，如果非要这样存储的话，可以先将自定义类型归档为NSDate类型，因为plist文件是支持存储NSDate类型数据的，然后再通过NSUserDefaults进行存储。下面举个例子：假如我们要把书籍的对象存储起来。首先要在“.h”文件中声明“NSCoding”协议，并在“.m”文件中实现“encodeWithCoder”和“initWithCoder”两个方法。.h文件： // // Book.h // Book // // Created by Renhuachi on 16/3/22. // Copyright © 2016年 software. All rights reserved. // ＃import < Foundation/Foundation.h > @interface Book : NSObject ＃pragma mark - 属性 @property (nonatomic,copy) NSString *authorName; @property (nonatomic,copy) NSString *bookName; @end .m文件 // // Book.m // Book // // Created by Renhuachi on 16/3/22. // Copyright © 2016年 software. All rights reserved. // ＃import "Book.h" @implementation Book - (id)initWithCoder:(NSCoder *)aDecoder { if (self = [super init]) { _authorName = [aDecoder decodeObjectForKey:@"authorName"]; _bookName = [aDecoder decodeObjectForKey:@"bookName"]; } return self; } - (void)encodeWithCoder:(NSCoder *)aCoder { [aCoder encodeObject:_authorName forKey:@"authorName"]; [aCoder encodeObject:_bookName forKey:@"bookName"]; } @end 2.利用NSUserDefaults存储自定义类首先创建一个Book类型的对象，并将其归档为NSDate类型，然后存储到NSUserDefaults中。 Book *book = [[Book alloc]init]; book.authorName = @"书名"; book.bookName = @"作者"; NSData *data = [NSKeyedArchiver archivedDataWithRootObject:book]; NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults]; [userDefaults setObject:data forKey:@"book"]; 从NSUserDefaults中还原数据也很简单。 NSUserDefaults *user = [NSUserDefaults standardUserDefaults]; NSdData *data = [user objectForKey:@"book"]; Book *book = [NSKeyedUnarchiver unarchiveObjectWithData:data];]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS--使用UISearchController创建搜索框]]></title>
+    <url>%2F2016%2F08%2F29%2FiOS-%E4%BD%BF%E7%94%A8UISearchController%E5%88%9B%E5%BB%BA%E6%90%9C%E7%B4%A2%E6%A1%86%2F</url>
+    <content type="text"><![CDATA[在iOS8之前，我们一直利用UISearchBar和UISearchDisplayController来实现搜索框，但是在iOS8以后上述方法已经过时，改而实用UISearchController来替代，用起来比之前的方法要简单好多。 添加UISearchController变量在开始之前我们要添加UISearchController变量，并未搜索前的数据和搜索结果创建两个数组： @property(strong, nonatomic) UISearchController searchController;@property(strong, nonatomic) NSMutableArray bookArray;@property(strong, nonatomic) NSMutableArray *bookResult; 初始化UISearchController初始化UISearchController并设置其属性和默认文字 - (void)showSearchBar { _searchController = [[UISearchController alloc] initWithSearchResultsController:nil]; //搜索结果处理函数代理 _searchController.searchResultsUpdater = self; //是否显示背景 _searchController.dimsBackgroundDuringPresentation = false; [_searchController.searchBar sizeToFit]; //修改searchBar的默认文字 _searchController.searchBar.placeholder = @"搜索"; //修改“Cancle按钮的默认文字” [_searchController.searchBar setValue:@"取消" forKey:@"_cancelButtonText"]; //将搜索框添加到tableHeaderView中 _CheckBookViewtableView.tableHeaderView = self.searchController.searchBar; } 添加UISearchResultsUpdating协议如果要对搜索结果进行处理，那我们要为UISearchController添加一个搜索结果处理的协议，并实现其下的方法：添加协议： @interface CheckBookViewController ()&lt; UITableViewDataSource,UITableViewDelegate,UISearchResultsUpdating &gt; 实现方法： - (void)updateSearchResultsForSearchController:(UISearchController *)searchController { [searchResult removeAllObjects]; NSString *keyWord = [searchController .searchBar text]; [bookArray enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { Book *book = obj; if ([book.bookName.uppercaseString containsString:keyWord.uppercaseString]) { [searchResult addObject:book]; } }]; [_CheckBookViewtableView reloadData]; } UITableView代理方法下对搜索结果的处理因为搜索结果要复用界面的TableView，所以在TableView的代理方法下要进行判断当前是搜索的界面还是主界面： - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { // 判断是否是搜索结果的tableView if ([self.searchController isActive]) { return searchResult.count; } return [bookArray count]; } - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath { Book *books; CheckBookViewcell = [tableView dequeueReusableCellWithIdentifier:@"UIListTableViewCell"]; // 从缓存池中取出cell if (!CheckBookViewcell) { // 判断是否能取出cell CheckBookViewcell = [[ListTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UIListTableViewCell"]; // 如果cell为空则创建一个新的cell并放入缓存池中 }else{ // 如果cell不为空（注意：以下操作很重要，不然会造成cell数据错乱） [CheckBookViewcell removeCellView]; // 将之前cell界面上的view全部remove掉 [CheckBookViewcell initCellView]; // 重新初始化cell上的view } // 判断是否是搜索结果的tableView if ([self.searchController isActive]) { books = searchResult[indexPath.row]; }else { if (viewcode) { books = bookArray[indexPath.row]; }else { books = bookArray[indexPath.row]; } } [CheckBookViewcell setBookInfo:books]; return CheckBookViewcell; } - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { Book *book; if ([_searchController isActive]) { book = searchResult[indexPath.row]; }else { book = bookArray[indexPath.row]; } BookDetialViewController *bookDetialVC = [[BookDetialViewController alloc]init:book]; [self.navigationController pushViewController:bookDetialVC animated:YES]; [tableView deselectRowAtIndexPath:indexPath animated:YES]; // 取消选中的状态 } 最后注意!在离开界面时要销毁掉UISearchController，不然它会在其它界面一直存在： - (void)viewWillDisappear:(BOOL)animated { [super viewWillDisappear:animated]; if (self.searchController.active) { self.searchController.active = NO; [self.searchController.searchBar removeFromSuperview]; } }]]></content>
+      <categories>
+        <category>iOS 开发总结</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[安装CocoaPods过程以及踩过的坑]]></title>
+    <url>%2F2016%2F08%2F27%2F%E5%AE%89%E8%A3%85CocoaPods%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[为什么要用到CocoaPods&emsp;&emsp;以往在写iOS程序的时候，遇到好的第三方开源库都是将开源库下载下来，拷贝到项目中，然后再去使用，而且遇到开源库更新，我们还要重新执行一边操作。如果开源库数量很多，这个操作就显得非常麻烦了。&emsp;&emsp;现在有了CocoaPods，这些问题就都迎刃而解了，CocoaPods可以帮助我们下载，管理第三方的开源库，包括更新、系统依赖和编译参数等都能帮助我们处理。简直不能再方便，设置完CocoaPods后，以后我们只需要专心的敲代码就好了。 CocoaPods的原理&emsp;&emsp;CocoaPods是将所有的依赖库放到另一个名为Pods的项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。 安装CocoaPods&emsp;&emsp;现在Mac上似乎已经自带了Ruby，如果没有的话可以通过“如何在Mac OS X上安装 Ruby运行环境”这篇文章来安装。安装完ruby后，打开Terminal终端，输入以下命令：&emsp;&emsp;$ sudo gem install cocoapods（注意：在执行这条命令前请保证你的gem为最新版）&emsp;&emsp;然后执行安装操作，输入命令：&emsp;&emsp;$ pod setup&emsp;&emsp;此时Terminal终端会停留在“Setting up CocoaPods master repo”这个状态一段时间，因为这个时候是在下载安装开源库的文件，安装时间的长短由你的网速等决定。注意，在这里是一个很大的坑，我在这里折腾了一整天，最后才弄好。为了节省大家时间我直接说我的解决办法。&emsp;&emsp;如果你也是用了很多办法都下不来安装文件，或者下载一会儿就报错要重下的话，那么可以参考下这个办法：&emsp;&emsp;1. 访问 https://github.com/CocoaPods/Specs，然后将Specs项目fork到自己的github账户上。&emsp;&emsp;2. 下载GitHub Desktop, 然后clone Specs项目。&emsp;&emsp;3. 将clone的Specs项目的文件夹改名为master，然后拖到/Users/用户名/.cocoapods/repos目录下。&emsp;&emsp;4. 运行pod setup&emsp;&emsp;pod setup的本质就是将https://github.com/CocoaPods/Specs上的Specs项目clone到/Users/用户名/.cocoapods/repos目录下。若此目录下已有Specs项目，则会将项目更新到最新的状态。由于Specs很大，容易导致pod setup失败。这时就需要我们手动安装Specs。若直接从github上下载zip文件，由于缺少git文件，会导致cocoa pods不使用。若用git clone，由于文件过大，容易导致失败。但是使用GitHub Desktop软件，则会提高clone的成功率，并且会给出clone的进度，但是我也是下了三遍最后才clone下来。 使用CocoaPods&emsp;&emsp;废了好大劲安装完毕后，就是如何使用了，举个栗子：假如说我们要在项目中导入非常火的“AFNetworking”类库，我们先要确定AFNetworking是否支持CocoaPods，所以我们先利用CocoaPods的搜索功能搜索下，在Terminal终端上输入以下命令：&emsp;&emsp;$ pod search AFNetworking&emsp;&emsp;如果出现错误：“[!] Unable to find a pod with name, author, summary, or description matching AFNetworking”，可以通过执行下面的命令来解决：&emsp;&emsp;rm ~/Library/Caches/CocoaPods/search_index.json&emsp;&emsp;如果执行成功，会出现“AFNetworking”的相关信息，如下图。&emsp;&emsp;这说明“AFNetworking”是支持CocoaPods的。接下来我们就可以将“AFNetworking”导入到我们的项目中去。&emsp;&emsp;首先，我们通过Terminal终端进入到们已经创建好的项目目录下，执行下面的命令：&emsp;&emsp;$ vim Podfile&emsp;&emsp;这个命令的作用是在项目目录下生成一个名为“Podfile”的文件，这个文件的作用就是用来告诉CocoaPods需要下什么类库，然后我们在Podfile文件中添加以下文字：（注意：不要用文本编辑器进行编辑！） &emsp;&emsp;platform :ios, ‘9.0’&emsp;&emsp;&emsp;&emsp;target ‘MyApp’ do&emsp;&emsp;&emsp;&emsp;pod ‘AFNetworking’, ‘~&gt; 3.1’&emsp;&emsp;end&emsp;&emsp;然后保存退出，这时候在项目的目录里就会出现一个名为Podfile的文件，然后我们执行以下命令来将“AFNetworking”下载到项目中。（注意：下面的命令需要在项目目录中执行。）&emsp;&emsp;$ pod install&emsp;&emsp;执行成功后，项目中会多出来一个.xcworkspace类型的文件，如下图：&emsp;&emsp;以后需要用它来打开工程才会配置类库的相关文件。&emsp;&emsp;以上就是CocoaPods的安装和使用方法介绍，如果想要了解更多的使用方法，可以参考官方文档。]]></content>
+      <categories>
+        <category>CocoaPods</category>
+      </categories>
+      <tags>
+        <tag>类库管理</tag>
+        <tag>工具</tag>
+        <tag>Xcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hexo常用命令整理]]></title>
+    <url>%2F2016%2F08%2F27%2Fhexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86%2F</url>
+    <content type="text"><![CDATA[安装安装npm install hexo -g升级npm update hexo -g初始化hexo init 发表文章新建文章hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot;发表草稿hexo p == hexo publish生成静态文件hexo g == hexo generate启动服务预览hexo s == hexo server部署到远程hexo d == hexo deploy 清理缓存清除缓存文件 (db.json) 和已生成的静态文件 (public)hexo clean 版本查看Hexo运行版本hexo version]]></content>
+      <categories>
+        <category>网站搭建</category>
+      </categories>
+      <tags>
+        <tag>命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2016%2F08%2F26%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[&emsp;&emsp;作为一个程序员，“Hello World”可以说为我打开了新世界的大门。第一个程序，第一个网站，第一个脚本…都是从“Hello World”开始的。因为我已经决定要重新开启我的博客生涯，所以我的第一篇博文就叫“Hello World”！ &emsp;&emsp;人这一辈子最开心的事莫过于做自己喜欢的事情，很幸运，我的工作也是我的爱好，这也是支撑着我在周末来公司加班写博客的动力哈哈哈。 &emsp;&emsp;我觉得编程就像画画一样，键盘是画笔，代码是墨，编译器是画纸。我们在键盘上敲敲敲，就像拿着笔在纸上挥毫一样，最终我们都会创造出一个个无法复刻的作品。所以说编程是门艺术，一点都没错。 &emsp;&emsp;第一篇博客就不写太多，我要去创造我的艺术品啦～ &emsp;&emsp;“Hello World”！]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+  </entry>
+</search>

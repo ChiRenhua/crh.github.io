@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="为什么要用到CocoaPods&amp;emsp;&amp;emsp;以往在写iOS程序的时候，遇到好的第三方开源库都是将开源库下载下来，拷贝到项目中，然后再去使用，而且遇到开源库更新，我们还要重新执行一边操作。如果开源库数量很多，这个操作就显得非常麻烦了。&amp;emsp;&amp;emsp;现在有了CocoaPods，这些问题就都迎刃而解了，CocoaPods可以帮助我们下载，管理第三方的开源库，包括更新、系统依赖和">
+<meta name="keywords" content="类库管理,工具,Xcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装CocoaPods过程以及踩过的坑">
+<meta property="og:url" content="https://chirenhua.github.io/2016/08/27/安装CocoaPods过程以及踩过的坑/index.html">
+<meta property="og:site_name" content="Renhua&#39;s Blog">
+<meta property="og:description" content="为什么要用到CocoaPods&amp;emsp;&amp;emsp;以往在写iOS程序的时候，遇到好的第三方开源库都是将开源库下载下来，拷贝到项目中，然后再去使用，而且遇到开源库更新，我们还要重新执行一边操作。如果开源库数量很多，这个操作就显得非常麻烦了。&amp;emsp;&amp;emsp;现在有了CocoaPods，这些问题就都迎刃而解了，CocoaPods可以帮助我们下载，管理第三方的开源库，包括更新、系统依赖和">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/searchResult.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/project.png">
+<meta property="og:updated_time" content="2019-09-27T12:42:12.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安装CocoaPods过程以及踩过的坑">
+<meta name="twitter:description" content="为什么要用到CocoaPods&amp;emsp;&amp;emsp;以往在写iOS程序的时候，遇到好的第三方开源库都是将开源库下载下来，拷贝到项目中，然后再去使用，而且遇到开源库更新，我们还要重新执行一边操作。如果开源库数量很多，这个操作就显得非常麻烦了。&amp;emsp;&amp;emsp;现在有了CocoaPods，这些问题就都迎刃而解了，CocoaPods可以帮助我们下载，管理第三方的开源库，包括更新、系统依赖和">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg">
+  <link rel="canonical" href="https://chirenhua.github.io/2016/08/27/安装CocoaPods过程以及踩过的坑/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>安装CocoaPods过程以及踩过的坑 | Renhua's Blog</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Renhua's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Stay Hungry. Stay Foolish</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-wrapper">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://chirenhua.github.io/2016/08/27/安装CocoaPods过程以及踩过的坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Renhua Chi">
+      <meta itemprop="description" content="求知若渴，虚心若愚">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Renhua's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">安装CocoaPods过程以及踩过的坑
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2016-08-27 20:18:29" itemprop="dateCreated datePublished" datetime="2016-08-27T20:18:29+00:00">2016-08-27</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-27 12:42:12" itemprop="dateModified" datetime="2019-09-27T12:42:12+00:00">2019-09-27</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CocoaPods/" itemprop="url" rel="index"><span itemprop="name">CocoaPods</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/cocoapods-stickers.jpg" alt>  </p>
+<h2 id="为什么要用到CocoaPods"><a href="#为什么要用到CocoaPods" class="headerlink" title="为什么要用到CocoaPods"></a>为什么要用到CocoaPods</h2><p>&emsp;&emsp;以往在写iOS程序的时候，遇到好的第三方开源库都是将开源库下载下来，拷贝到项目中，然后再去使用，而且遇到开源库更新，我们还要重新执行一边操作。如果开源库数量很多，这个操作就显得非常麻烦了。<br>&emsp;&emsp;现在有了CocoaPods，这些问题就都迎刃而解了，CocoaPods可以帮助我们下载，管理第三方的开源库，包括更新、系统依赖和编译参数等都能帮助我们处理。简直不能再方便，设置完CocoaPods后，以后我们只需要专心的敲代码就好了。<br><a id="more"></a></p>
+<h2 id="CocoaPods的原理"><a href="#CocoaPods的原理" class="headerlink" title="CocoaPods的原理"></a>CocoaPods的原理</h2><p>&emsp;&emsp;CocoaPods是将所有的依赖库放到另一个名为Pods的项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。</p>
+<h2 id="安装CocoaPods"><a href="#安装CocoaPods" class="headerlink" title="安装CocoaPods"></a>安装CocoaPods</h2><p>&emsp;&emsp;现在Mac上似乎已经自带了Ruby，如果没有的话可以通过“<a href="http://www.cnblogs.com/daguo/p/4097263.html" target="_blank" rel="noopener">如何在Mac OS X上安装 Ruby运行环境</a>”这篇文章来安装。安装完ruby后，打开Terminal终端，输入以下命令：<br>&emsp;&emsp;<code>$ sudo gem install cocoapods</code>（注意：在执行这条命令前请保证你的gem为最新版）<br>&emsp;&emsp;然后执行安装操作，输入命令：<br>&emsp;&emsp;<code>$ pod setup</code><br>&emsp;&emsp;此时Terminal终端会停留在“Setting up CocoaPods master repo”这个状态一段时间，因为这个时候是在下载安装开源库的文件，安装时间的长短由你的网速等决定。注意，在这里是一个很大的坑，我在这里折腾了一整天，最后才弄好。为了节省大家时间我直接说我的解决办法。<br>&emsp;&emsp;如果你也是用了很多办法都下不来安装文件，或者下载一会儿就报错要重下的话，那么可以参考下这个办法：<br>&emsp;&emsp;1. 访问 <a href="https://github.com/CocoaPods/Specs" target="_blank" rel="noopener">https://github.com/CocoaPods/Specs</a>，然后将Specs项目fork到自己的github账户上。<br>&emsp;&emsp;2. 下载GitHub Desktop, 然后clone Specs项目。<br>&emsp;&emsp;3. 将clone的Specs项目的文件夹改名为master，然后拖到/Users/用户名/.cocoapods/repos目录下。<br>&emsp;&emsp;4. 运行pod setup<br>&emsp;&emsp;pod setup的本质就是将<a href="https://github.com/CocoaPods/Specs" target="_blank" rel="noopener">https://github.com/CocoaPods/Specs</a>上的Specs项目clone到/Users/用户名/.cocoapods/repos目录下。若此目录下已有Specs项目，则会将项目更新到最新的状态。由于Specs很大，容易导致pod setup失败。这时就需要我们手动安装Specs。若直接从github上下载zip文件，由于缺少git文件，会导致cocoa pods不使用。若用git clone，由于文件过大，容易导致失败。但是使用GitHub Desktop软件，则会提高clone的成功率，并且会给出clone的进度，但是我也是下了三遍最后才clone下来。</p>
+<h2 id="使用CocoaPods"><a href="#使用CocoaPods" class="headerlink" title="使用CocoaPods"></a>使用CocoaPods</h2><p>&emsp;&emsp;废了好大劲安装完毕后，就是如何使用了，举个栗子：假如说我们要在项目中导入非常火的“AFNetworking”类库，我们先要确定AFNetworking是否支持CocoaPods，所以我们先利用CocoaPods的搜索功能搜索下，在Terminal终端上输入以下命令：<br>&emsp;&emsp;<code>$ pod search AFNetworking</code><br>&emsp;&emsp;如果出现错误：“[!] Unable to find a pod with name, author, summary, or description matching AFNetworking”，可以通过执行下面的命令来解决：<br>&emsp;&emsp;<code>rm ~/Library/Caches/CocoaPods/search_index.json</code><br>&emsp;&emsp;如果执行成功，会出现“AFNetworking”的相关信息，如下图。<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/searchResult.png" alt><br>&emsp;&emsp;这说明“AFNetworking”是支持CocoaPods的。接下来我们就可以将“AFNetworking”导入到我们的项目中去。<br>&emsp;&emsp;首先，我们通过Terminal终端进入到们已经创建好的项目目录下，执行下面的命令：<br>&emsp;&emsp;<code>$ vim Podfile</code><br>&emsp;&emsp;这个命令的作用是在项目目录下生成一个名为“Podfile”的文件，这个文件的作用就是用来告诉CocoaPods需要下什么类库，然后我们在Podfile文件中添加以下文字：（注意：不要用文本编辑器进行编辑！）  </p>
+<p><pre>&emsp;&emsp;platform :ios, ‘9.0’<br>&emsp;&emsp;&emsp;&emsp;target ‘MyApp’ do<br>&emsp;&emsp;&emsp;&emsp;pod ‘AFNetworking’, ‘~&gt; 3.1’<br>&emsp;&emsp;end</pre><br>&emsp;&emsp;然后保存退出，这时候在项目的目录里就会出现一个名为Podfile的文件，然后我们执行以下命令来将“AFNetworking”下载到项目中。（注意：下面的命令需要在项目目录中执行。）<br>&emsp;&emsp;<code>$ pod install</code><br>&emsp;&emsp;执行成功后，项目中会多出来一个.xcworkspace类型的文件，如下图：<br><img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/安装CocoaPods过程以及踩过的坑/project.png" alt><br>&emsp;&emsp;以后需要用它来打开工程才会配置类库的相关文件。<br>&emsp;&emsp;以上就是CocoaPods的安装和使用方法介绍，如果想要了解更多的使用方法，可以参考<a href="https://github.com/CocoaPods/CocoaPods/wiki" target="_blank" rel="noopener">官方文档</a>。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/WeChat.jpg" alt="Renhua Chi 微信支付">
+        <p>微信支付</p>
+      </div>
+        
+      
+      <div style="display: inline-block">
+        <img src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/Pay/AliPay.jpg" alt="Renhua Chi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/类库管理/" rel="tag"># 类库管理</a>
+            
+              <a href="/tags/工具/" rel="tag"># 工具</a>
+            
+              <a href="/tags/Xcode/" rel="tag"># Xcode</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2016/08/27/hexo常用命令整理/" rel="next" title="Hexo常用命令整理">
+                  <i class="fa fa-chevron-left"></i> Hexo常用命令整理
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2016/08/29/iOS-使用UISearchController创建搜索框/" rel="prev" title="iOS--使用UISearchController创建搜索框">
+                  iOS--使用UISearchController创建搜索框 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用到CocoaPods"><span class="nav-number">1.</span> <span class="nav-text">为什么要用到CocoaPods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CocoaPods的原理"><span class="nav-number">2.</span> <span class="nav-text">CocoaPods的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装CocoaPods"><span class="nav-number">3.</span> <span class="nav-text">安装CocoaPods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用CocoaPods"><span class="nav-number">4.</span> <span class="nav-text">使用CocoaPods</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="https://raw.githubusercontent.com/ChiRenhua/Resource/master/WebImage/avatar.jpg"
+      alt="Renhua Chi">
+  <p class="site-author-name" itemprop="name">Renhua Chi</p>
+  <div class="site-description" itemprop="description">求知若渴，虚心若愚</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/ChiRenhua" title="GitHub &rarr; https://github.com/ChiRenhua" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/crh944015688@163.com" title="E-Mail &rarr; crh944015688@163.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Renhua Chi</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '17815167175c0f1b9432',
+      clientSecret: '0631cc8f27051d93cd0dde7da18062d403e0a689',
+      repo: 'chirenhua.github.io',
+      owner: 'ChiRenhua',
+      admin: ['ChiRenhua'],
+      id: 'cdee28e4fd9d42542bf4028d939d6ccf',
+        language: window.navigator.language || window.navigator.userLanguage,
+      
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>
